@@ -2,7 +2,7 @@
 
     function dprint($text)
     {
-        $debug = true;
+        $debug = false;
         
         if($debug)
         {

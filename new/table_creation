@@ -24,7 +24,7 @@ suborganization
 	documentsurl
 	scriptname
 	
-	
+
 	
 mysql> create database monroeminutes;
 Query OK, 1 row affected (0.00 sec)
