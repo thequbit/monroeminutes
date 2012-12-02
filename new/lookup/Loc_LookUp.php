@@ -5,7 +5,7 @@
 <body>
 <?php
 
-$debug = 1;
+$debug = 0;
 
 if ($debug == 1)
 {
@@ -115,6 +115,7 @@ if ($debug == 1)
 {
 	echo "url = $url<br>";
 	echo "data = $data<br>";
+	echo "--- --- --- --- ---<br>";
 }
 
 // Form up the POST Request 
@@ -135,7 +136,26 @@ if ($debug == 1)
 {
 	echo "RESP:<br>";
 	echo $result;
+	echo "--- --- --- --- ---<br>";
 }
+
+$mainBody = explode(';',$result);
+$DataValues = explode("\t",$mainBody[1]);
+
+
+if ($debug == 1)
+{
+	echo "Data Members:<br>";
+
+	foreach( $DataValues as &$val)
+	{
+		echo $val ;
+		echo '<br>' ;
+	}
+	echo "--- --- --- --- ---<br>";
+}
+
+echo "SCHOOL DIST = $DataValues[6]<br>SWIS =$DataValues[9]<br>" ;
 
 ?>
 </body>
