@@ -105,7 +105,7 @@
 				or die("Failed Query of " . $query);  			// TODO: something more elegant than this
 			
 			// pull the id from the result
-			retVal = mysql_result($result,0);
+			$retVal = mysql_result($result,0);
 			
 			return retVal;
 		}
@@ -121,7 +121,7 @@
 		
 		}
 		
-		function OrgNameFromID($suborgid)
+		function OrgNameFromID($orgid)
 		{
 		
 			$retVal = "Happy City!";
