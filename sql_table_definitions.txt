@@ -1,0 +1,30 @@
+tables
+
+organizations
+	organizationid
+	name
+	
+create table organizations( organizationid int not null auto_increment primary key, name text);
+	
+suborganizations
+	suborganizationid
+	organizationid
+	name
+	mainwebsite
+	minuteswebsite
+
+create table suborganizations(  suborganizationid int not null auto_increment primary key, organizationid int not null, name text, mainwebsite text, minuteswebsite text);
+	
+minutes
+	minuteid
+	suborganizationid
+	date
+	minutesurl
+	minutetext
+
+create table minutes( minuteid int not null auto_increment primary key, suborganizationid int not null, date datetime, minutesurl text, minutestext text);
+
+	
+taxlotorglut
+
+addresstaxlotlut
