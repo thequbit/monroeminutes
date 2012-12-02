@@ -20,7 +20,7 @@ minutes
 	suborganizationid
 	date
 	minutesurl
-	minutetext
+	minutestext
 
 create table minutes( minuteid int not null auto_increment primary key, suborganizationid int not null, date datetime, minutesurl text, minutestext text);
 
