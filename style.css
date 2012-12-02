@@ -1,0 +1,167 @@
+
+/*
+ * Global
+ */
+
+body
+{
+	font-size:12px;
+	color:#555555;
+	background-color:#ffffff;
+	margin-bottom:0px;
+	background-image:none;
+}
+
+div
+{
+	margin:0;
+	padding:0;	
+}
+
+#main
+{
+	position:relative;
+	width:100%;
+}
+
+#header-wrapper
+{
+	width:100%;
+	clear:both;
+	margin:0;
+	padding:0;
+	background-color:transparent;
+	position:relative;
+	top:10px;
+}
+
+#header
+{
+	width:800px;
+	margin-left:auto;
+	margin-right:auto;
+	height:110px;
+}
+
+#nav-links
+{
+	word-spacing:6px;
+	font-size:80%;
+	padding-left:5px;
+	padding-right:12px;
+	padding-top:15px;
+	float:left;
+	width:600px;
+	text-align:left;
+}
+
+/*
+ * Results page
+ */
+
+#search-results-wrapper
+{
+	width:800px;
+	margin-top:5px;
+	margin-left:auto;
+	margin-right:auto
+}
+
+#search-results
+{
+	width:800px;
+}
+
+#results-list
+{
+	width:509px;
+	float:left;
+	padding-left:25px;
+	padding-right:5px;
+}
+
+#result h1 a,
+{
+	text-decoration:none;
+	color:#555555;
+}
+
+#search-results a:link,#search-results a:visited
+{
+	text-decoration:none;
+	color:#404040;
+	background-color:transparent
+}
+#search-results a:hover,#search-results a:active
+{
+	text-decoration:underline;
+	color:#404040;
+	background-color:transparent
+}
+
+#search-results
+{
+	font-size:13px;
+	width:780px;
+	padding-bottom:8px;
+	padding-left:4px;
+	float:left
+}
+
+#result h1
+{
+	font-size:30px;
+	font-family:arial;
+	font-weight:bolder;
+}
+
+/*
+ * Search page
+ */
+ 
+#search-wrapper
+{
+	width:800px;
+	margin-top:5px;
+	margin-left:auto;
+	margin-right:auto
+}
+
+#search
+{
+	
+}
+
+/*
+ * About page
+ */
+ 
+ #about-wrapper
+ {
+	width:800px;
+	margin-top:5px;
+	margin-left:auto;
+	margin-right:auto
+ }
+ 
+ #about
+ {
+ 
+ }
+ 
+ /*
+ * Docs page
+ */
+ 
+ #docs-wrapper
+ {
+	width:800px;
+	margin-top:5px;
+	margin-left:auto;
+	margin-right:auto
+ }
+ 
+ #docs
+ {
+ 
+ }
