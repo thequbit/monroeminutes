@@ -26,7 +26,7 @@
 
 			//dprint("Connected to DB.");
 			
-			$query = "SELECT * FROM organizations";
+			$query = "SELECT * FROM organization";
 			
 			// pull from DB
 			$result = mysql_db_query(MYSQL_DATABASE, $query)
@@ -63,7 +63,7 @@
 
 			//dprint("Connected to DB.");
 			
-			$query = "SELECT * FROM suborganizations";
+			$query = "SELECT * FROM suborganization";
 			
 			// pull from DB
 			$result = mysql_db_query(MYSQL_DATABASE, $query)
@@ -85,6 +85,29 @@
 			}
 			
 			return $retVal;
+		}
+	
+		function SubOrgIdFromName($name)
+		{
+			$retVal = "-1";
+			
+			// connect to the mysql database server.  Constants taken from sqlcredentials.php
+			$chandle = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS)
+				or die("Connection Failure to Database");				// TODO: something more elegant than this
+
+			mysql_select_db(MYSQL_DATABASE, $chandle)
+				or die (MYSQL_DATABASE . " Database not found. " . MYSQL_USER);	// TODO: something more elegant than this
+			
+			$query = "SELECT suborganizationid FROM suborganization where name=" . $name;
+			
+			// pull from DB
+			$result = mysql_db_query(MYSQL_DATABASE, $query)
+				or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+			
+			// pull the id from the result
+			retVal = mysql_result($result,0);
+			
+			return retVal;
 		}
 	
 		function SubOrgNameFromID($suborgid)
