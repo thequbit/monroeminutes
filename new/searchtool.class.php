@@ -4,20 +4,7 @@
 	require_once("sqlcredentials.php");
 	require_once("Minutes.class.php");
 	require_once("OrganizationsTool.class.php");
-
-	// we need to deturmine what kind of search the user is doing.
-	// there are two main types of searches:
-	//
-	//	1. Search for minutes based on Organization
-	//		This will return all documents associated with the selected organizations
-	//
-	//	2. Search for minutes based on an Address
-	//		This will return all docuemtns associated with the given address (based on taxlot id code)
-	//
-	//
-	//	The two functions are SearchWithoutAddress() and SearchWithAddress respecively
-	//
-	//
+	require_once("DocumentTool.class.php");
 
 	// this class helps perform the search using the input values from the user
 	class SearchTool
@@ -35,8 +22,7 @@
 		{
 			dprint("keywordSearchWithTown()");
 			
-			// define our return array
-			$response = null;
+			
 			
 			dprint("Trying to connect to database ...");
 			
@@ -49,7 +35,7 @@
 
 			dprint("Connected to DB.");
 
-			
+			/*
 
 			// first we need to deturmine if we are looking based on a date range
 			if( $startdate == "" || $startdate == null || $enddate == "" || $enddate == null )
@@ -86,47 +72,130 @@
 				$usesearchstring = true;
 			}
 
-			//
-			// SQL query
-			//
-			
-			$query = "SELECT * FROM documents WHERE ";
-			
-			if( $useorganizations == true )
-			{
-			
-				// TODO: support multiple organizations
-			
-			}
-			
-			if( $usesearchstring == true )
-			{
-			
-				$query = $query . "minutestext LIKE '%" . $searchstring . "%'";
-			
-			}
+			*/
 
-			dprint("Query: '" . $query . "'");
-
-			// pull from DB
-			$result = mysql_db_query(MYSQL_DATABASE, $query)
-				or die("Failed Query of " . $query);  			// TODO: something more elegant than this
-
-			// generate an array to put our responses in
+			// define our return array
 			$response = array();
 			
-			// from Minutes.class.php ...
-			
-			/*
-			class Minutes
+			$docTool = new DocumentTool();
+			$documents = array();
+
+			// get all of the documents that are associated with the organization(s)
+			if( $organizations == "" || $organizations == null )
 			{
-				public $organizationname
-				public $suborganizationname
-				public $date
-				public $minutesurl
-				public $minutetext
+			
+				// there are more than one key word, we will be performing multiple searches
+				
+				$keywords = explode(" ",$searchstring);
+		
+				// see if there is more than one word
+				$pos = strpos($searchstring, " ");
+				if( $pos === false )
+				{
+					// single keyword
+					
+					$query = "select documents.* from documents, wordfrequency where wordfrequency.word=" . $keyword . " AND wordfrequency.documentid=documents.documentid"
+						
+					// pull from DB
+					$result = mysql_db_query(MYSQL_DATABASE, $query)
+						or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+						
+					//
+					//
+					//		TODO: add this result to the array to be returned
+					//
+					//
+					
+				}
+				else
+				{
+					foreach($keywords as $keyword)
+					{
+						
+						$query = "select documents.* from documents, wordfrequency where wordfrequency.word=" . $keyword . " AND wordfrequency.documentid=documents.documentid"
+						
+						// pull from DB
+						$result = mysql_db_query(MYSQL_DATABASE, $query)
+							or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+						
+
+						//
+						//
+						//		TODO: add this result to the array to be returned
+						//
+						//
+			
+					}
+					
+				}
+			
 			}
-			*/
+			else
+			{
+				
+				// get the id of the suborg
+				$orgTool = new OrganizationsTool();
+				
+				// itterate through the list of organizations adding their docs to the documents array
+				foreach($organizations as $org)
+				{
+					$id = $orgTool->SubOrgIdFromName($orgName);
+				
+					// see if there is more than one word
+					$pos = strpos($searchstring, " ");
+					if( $pos === false )
+					{
+						
+						// single keyword
+					
+						$query = "select documents.* from documents, wordfrequency where wordfrequency.word=" . $keyword . " AND wordfrequency.documentid=documents.documentid"
+							
+						// pull from DB
+						$result = mysql_db_query(MYSQL_DATABASE, $query)
+							or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+							
+						//
+						//
+						//		TODO: add this result to the array to be returned
+						//
+						//
+					
+					}
+					else
+					{
+					
+						// get the list of keywordss
+						$keywords = explode(" ",$searchstring);
+		
+						foreach($keywords as $keyword)
+						{
+							
+							$query = "select documents.* from documents, wordfrequency where wordfrequency.word=" . $keyword . " AND wordfrequency.documentid=documents.documentid"
+							
+							// pull from DB
+							$result = mysql_db_query(MYSQL_DATABASE, $query)
+								or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+							
+
+							//
+							//
+							//		TODO: add this result to the array to be returned
+							//
+							//
+				
+						}
+						
+					}
+					
+				}
+				
+			}
+
+
+			/*
+			
+			// generate an array to put our responses in
+			$response = array();
 		
 			// get responses and put them into an array of Minutes
 			while($r = mysql_fetch_assoc($result)) {
@@ -166,7 +235,9 @@
 				// add this object to the array of Minutes
 				$response[] = $minutes;
 			}
-
+	
+			*/
+	
 			//dprint("Returning response array");
 
 			// return the array of found minutes
