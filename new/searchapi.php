@@ -6,7 +6,7 @@
 	// this is the search api file where you can present it with POST data and
 	// it will return back a json object with an array of minutes in it
 
-	dprint("Running search and returning json with results ...");
+	//dprint("Running search and returning json with results ...");
 
 	// get our POST information
 	$searchstring = $_GET['keywordsearch'];
@@ -14,12 +14,6 @@
 	$startdate = $_GET['startdate'];
 	$enddate = $_GET['enddate'];
 	$organizations = $_GET['organizations'];
-	
-	dprint("Search String: '" . $searchstring . "'");
-	dprint("Address: '" . $address . "'");
-	dprint("Start Date: '" . $startdate . "'");
-	dprint("End Date: '" . $enddate . "'");
-	dprint("Organizations: '" . $organizations . "'");
 	
 	// create an instance of our search tool
 	$searchTool = new SearchTool();
@@ -29,12 +23,18 @@
 	{
 		dprint("Getting minutes list ...");
 	
-		// get minutes list
-		$results = $searchTool->SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring);
+		if( $searchstring == "" )
+		{
+			echo "nope.";
+		}
+		else
+		{
+			$results = $searchTool->SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring);
+		}
 	}
 	else
 	{
-		// TODO: do this.
+		// TODO: do this.  need to incorporate John Farnach's code for using the address
 		$results = null;
 	}
 	
