@@ -131,6 +131,16 @@
 			return $retVal;
 		
 		}
+		
+		function OrgNameFromSubOrgID($suborgid)
+		{
+			$retVal = "Happy County";
+			
+			// TODO: Pull org name from DB via suborgID
+			
+			return $retVal;
+		}
+
 	}
 
 ?>
