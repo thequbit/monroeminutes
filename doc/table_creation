@@ -1,0 +1,57 @@
+wordfrequency
+	wordfrequencyid
+	documentid
+	word
+	frequency
+	
+documents
+	documentid
+	suborganizationid
+	sourceurl
+	date
+	name
+	
+organization
+	organizationid
+	name
+	websiteurl
+	
+suborganization
+	suborganizationid
+	organizationid
+	name
+	websiteurl
+	documentsurl
+	scriptname
+	
+
+	
+mysql> create database monroeminutes;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use monroeminutes;
+Database changed
+mysql> create table wordfrequency (
+    -> wordfrequencyid int not null auto_increment primary key,
+    -> documentid int not null,
+    -> word text,
+    -> frequency int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table documents ( documentid int not null auto_increment primary key, suborganizationid int not null, sourceurl text, date datetime, name text);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table organization (
+    -> organizationid int not null auto_increment primary key,
+    -> name text,
+    -> websiteurl text);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table suborganization(
+    -> suborganizationid int not null auto_increment primary key,
+    -> organizationid int,
+    -> name text,
+    -> websiteurl text,
+    -> documentsurl text,
+	-> sciptname text);
+Query OK, 0 rows affected (0.05 sec)
