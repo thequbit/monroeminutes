@@ -3,7 +3,7 @@
 	require_once("debug.php");
 	require_once("sqlcredentials.php");
 	require_once("OrganizationsTool.class.php");
-	require_once("DocumentTool.class.php");
+	//require_once("DocumentTool.class.php");
 	require_once("SearchResult.class.php");
 
 	// this class helps perform the search using the input values from the user

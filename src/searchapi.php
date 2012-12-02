@@ -1,7 +1,7 @@
 <?php
 
 	require_once("debug.php");
-	require_once("searchtool.class.php");
+	require_once("SearchTool.class.php");
 
 	// this is the search api file where you can present it with POST data and
 	// it will return back a json object with an array of minutes in it
