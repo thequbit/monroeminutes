@@ -1,6 +1,13 @@
 <html>
 <head>
-<title>Monroe Minutes</title>
+	<title>Monroe Minutes</title>
+
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+	<script>
+		
+	</script>
+
 </head>
 <body>
 
@@ -58,6 +65,12 @@
 			<input type="submit">
 			
 			</form>
+		
+		</div>
+		
+		<div class="results">
+		
+			
 		
 		</div>
 		
