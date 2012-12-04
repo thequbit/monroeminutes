@@ -68,6 +68,12 @@
 		
 		</div>
 		
+		<div id="links" class="links">
+		
+			<a href="dashboard/dashboard.php">Dashboard</a>
+		
+		</div>
+		
 		<div class="results">
 		
 			

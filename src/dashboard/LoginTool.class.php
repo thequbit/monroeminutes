@@ -1,7 +1,7 @@
 <?php
 
-	require_once("debug.php");
-	require_once("sqlcredentials.php");
+	require_once("../debug.php");
+	require_once("../sqlcredentials.php");
 	require_once("Permissions.class.php");
 
 	class LoginTool
