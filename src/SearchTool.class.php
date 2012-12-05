@@ -10,7 +10,43 @@
 	// this class helps perform the search using the input values from the user
 	class SearchTool
 	{
-		
+	
+		// this function simply just increments the number of searches performed by 1
+		function IncrementNumberOfSearches()
+		{
+			
+			dprint("Trying to connect to database ...");
+			
+			// connect to the mysql database server.  Constants taken from sqlcredentials.php
+			$chandle = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS)
+				or die("Connection Failure to Database");				// TODO: something more elegant than this
+
+			mysql_select_db(MYSQL_DATABASE, $chandle)
+				or die (MYSQL_DATABASE . " Database not found. " . MYSQL_USER);	// TODO: something more elegant than this
+
+			dprint("Connected to DB.");
+			
+			$query = 'select totalsearches from searches';
+					
+			dprint("running: '" . $query . "'");
+			
+			// pull from DB
+			$result = mysql_db_query(MYSQL_DATABASE, $query)
+				or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+			
+			$r = mysql_fetch_assoc($result);
+			
+			$totalSearches = $r['totalsearches'];
+			
+			$query = 'update searches set totalsearches=' . $totalSearches + 1;
+					
+			dprint("running: '" . $query . "'");
+			
+			$result = mysql_db_query(MYSQL_DATABASE, $query)
+				or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+			
+		}
+	
 		//
 		// $startdate - date to start searching for documents
 		// $enddate - date to stop searching for docuemtns
