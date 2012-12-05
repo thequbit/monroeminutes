@@ -24,34 +24,36 @@ suborganization
 	documentsurl
 	scriptname
 	
+users
+	userid
+	username
+	passwordhash
+	permissionsid
 
+permissions
+	permissionsid
+	canlogin
+	isadmin
+	enabled	
 	
-mysql> create database monroeminutes;
-Query OK, 1 row affected (0.00 sec)
+searches
+	searchid
+	keyword
+	suborganizationid
+	date
 
-mysql> use monroeminutes;
-Database changed
-mysql> create table wordfrequency (
-    -> wordfrequencyid int not null auto_increment primary key,
-    -> documentid int not null,
-    -> word text,
-    -> frequency int);
-Query OK, 0 rows affected (0.02 sec)
+create database monroeminutes;
 
-mysql> create table documents ( documentid int not null auto_increment primary key, suborganizationid int not null, sourceurl text, date datetime, name text);
-Query OK, 0 rows affected (0.03 sec)
+create table wordfrequency (wordfrequencyid int not null auto_increment primary key, documentid int not null, word text, frequency int);
 
-mysql> create table organization (
-    -> organizationid int not null auto_increment primary key,
-    -> name text,
-    -> websiteurl text);
-Query OK, 0 rows affected (0.03 sec)
+create table documents ( documentid int not null auto_increment primary key, suborganizationid int not null, sourceurl text, date datetime, name text);
 
-mysql> create table suborganization(
-    -> suborganizationid int not null auto_increment primary key,
-    -> organizationid int,
-    -> name text,
-    -> websiteurl text,
-    -> documentsurl text,
-	-> sciptname text);
-Query OK, 0 rows affected (0.05 sec)
+create table organization (organizationid int not null auto_increment primary key, name text, websiteurl text);
+
+create table suborganization(suborganizationid int not null auto_increment primary key, organizationid int, name text, websiteurl text, documentsurl text, sciptname text);
+	
+create table users( userid int not null auto_increment primary key, displayname text not null, username text not null, passwordhash text not null, permissionsid int not null);
+
+create table permissions( permissionsid int not null auto_increment primary key, canlogin bool not null, isadmin bool not null, enabled bool not null);
+
+create table searches( searchid int not null auto_increment primary key, keyword text, suborganizationid int, date datetime);
