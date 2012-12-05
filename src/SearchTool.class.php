@@ -11,8 +11,7 @@
 	class SearchTool
 	{
 	
-		// this function simply just increments the number of searches performed by 1
-		function IncrementNumberOfSearches()
+		function GetTotalSearchCount()
 		{
 			
 			dprint("Trying to connect to database ...");
@@ -26,19 +25,38 @@
 
 			dprint("Connected to DB.");
 			
-			$query = 'select totalsearches from searches';
+			// add new search to db
+			$query = 'select count(*) from searches';
 					
 			dprint("running: '" . $query . "'");
 			
-			// pull from DB
 			$result = mysql_db_query(MYSQL_DATABASE, $query)
 				or die("Failed Query of " . $query);  			// TODO: something more elegant than this
-			
+				
 			$r = mysql_fetch_assoc($result);
+			$totalSearches = $r['count(*)'];
 			
-			$totalSearches = $r['totalsearches'];
+			return $totalSearches;
 			
-			$query = 'update searches set totalsearches=' . $totalSearches + 1;
+		}
+	
+		// this function simply just increments the number of searches performed by 1
+		function AddSearchToDatabase($keyword, $date)
+		{
+			
+			dprint("Trying to connect to database ...");
+			
+			// connect to the mysql database server.  Constants taken from sqlcredentials.php
+			$chandle = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS)
+				or die("Connection Failure to Database");				// TODO: something more elegant than this
+
+			mysql_select_db(MYSQL_DATABASE, $chandle)
+				or die (MYSQL_DATABASE . " Database not found. " . MYSQL_USER);	// TODO: something more elegant than this
+
+			dprint("Connected to DB.");
+			
+			// add new search to db
+			$query = 'insert into searches (keyword,date) values("' . $keyword . '", "' . $date . '")';
 					
 			dprint("running: '" . $query . "'");
 			
@@ -114,8 +132,6 @@
 					// pull from DB
 					$result = mysql_db_query(MYSQL_DATABASE, $query)
 						or die("Failed Query of " . $query);  			// TODO: something more elegant than this
-		
-					
 				
 					$orgTool = new OrganizationsTool();
 		
@@ -285,10 +301,10 @@
 					}
 					
 				}
-				
-				
-				
 			}
+			
+			$todaysDate = date( 'Y-m-d H:i:s' );
+			$this->AddSearchToDatabase($searchstring,$todaysDate);
 			
 			// return the array of found minutes
 			return $retVal;

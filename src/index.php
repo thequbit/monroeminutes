@@ -18,9 +18,25 @@
 
 		<div class="searchbar"></div>
 
-			<div class="header">
+			<div id="header "class="header">
 			
 			<h3>Monroe Minutes</h3></br>
+			
+			</div>
+
+			<div id="totalsearches" class="totalsearches">
+			
+			<?php
+			
+				require_once("SearchTool.class.php");
+				
+				$searchTool = new SearchTool();
+				
+				$totalSearches = $searchTool->GetTotalSearchCount();
+				
+				echo "Total number of searches to date: <b>" . $totalSearches . "</b></br></br>";
+			
+			?>
 			
 			</div>
 
