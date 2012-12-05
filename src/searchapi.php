@@ -37,7 +37,7 @@
 	else
 	{
 		// TODO: do this.  need to incorporate John Farnach's code for using the address
-		$results = null;
+		$results = array();
 	}
 	
 	//if( $results != null)
