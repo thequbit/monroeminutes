@@ -5,6 +5,7 @@
 	require_once("OrganizationsTool.class.php");
 	//require_once("DocumentTool.class.php");
 	require_once("SearchResult.class.php");
+	require_once("DatabaseTool.class.php");
 
 	// this class helps perform the search using the input values from the user
 	class SearchTool
@@ -32,6 +33,24 @@
 
 			dprint("Connected to DB.");
 
+			// use our database tool to sanitize inputs
+			$dbTool = new DatabaseTool();
+	
+			// perform sanitize
+			$startdate = $dbTool->SanitizeInput($startdate);
+			$enddate = $dbTool->SanitizeInput($enddate);
+			$organizations = $dbTool->SanitizeInput($organizations);
+			$searchstring = $dbTool->SanitizeInput($searchstring);
+
+
+			//
+			// TODO: check to see if inputs are of expected data type and format
+			//
+
+			dprint("startdate: " . $startdate);
+			dprint("enddate: " . $enddate);
+			dprint("organizations: " . $organizations);
+			dprint("searchstring: " . $searchstring);
 			
 			
 			// define our return array
@@ -44,11 +63,7 @@
 			if( $organizations == "" || $organizations == null )
 			{
 			
-				// there are more than one key word, we will be performing multiple searches
-				
-				
-				
-				
+				// there are more than one key word, we will be performing multiple searches	
 		
 				// see if there is more than one word
 				$pos = strpos($searchstring, " ");
