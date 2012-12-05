@@ -6,9 +6,7 @@
 
 	<div id="top" class="top">
 	
-		<a href="addorganization.php">Add Organization</a></br>
-		<a href="addsuborganization.php">Add SubOrganization</a></br>
-		<a href="addorganizationcategory.php">Add Organization Category</a></br>
+		
 		</br>
 		</br>
 	
@@ -16,48 +14,94 @@
 
 	<div id="organizations" class="organizations">
 	
+		<h4>Organizations:</h4>
+
+		<form action="">
 	
-		Organizations:</br>
-
-		<?
+			<select multiple="organization" name="organization[]">
 		
-			/////////////////////////////////////////////////
-			//
-			// Select Organization PHP Code
-			//
-			/////////////////////////////////////////////////
-			
-			require_once("../OrganizationsTool.class.php");
+			<?php
+				require_once("../OrganizationsTool.class.php");
+				
+				// use our tool to get all of the organization names from the database
+				$orgtool = new OrganizationsTool();	
+				$orgnames = $orgtool->GetAllOrganizationNames();
+				
+				// create the select multiple object based on DB into
+				foreach($orgnames as $name)
+				{
+					echo '<option value="' . $name . '">' . $name . '</option>';
+				}
+			?>
+	
+			</select></br>
+	
+		</form>
 
-			// start of select multiple
-			echo '<select multiple="organization" name="organization[]">';
-			
-			// use our tool to get all of the organization names from the database
-			$orgtool = new OrganizationsTool();	
-			$orgnames = $orgtool->GetAllOrganizationNames();
-			
-			// create the select multiple object based on DB into
-			foreach($orgnames as $name)
-			{
-				echo '<option value="' . $name . '">' . $name . '</option>';
-			}
-			
-			// end of select multiple
-			echo '</select></br>';
+	
+		<a href="addorganization.php">Add Organization</a></br>
 
-		?>
 	
 	</div>
 
 	<div id="suborganizations" class="suborganizations">
 	
+		<h4>Suborganizations:</h4>
 	
+		<form action="">
+	
+			<select multiple="suborganization" name="suborganization[]">
+		
+			<?php
+			
+				require_once("../OrganizationsTool.class.php");
+				
+				// use our tool to get all of the organization names from the database
+				$orgtool = new OrganizationsTool();	
+				$suborgnames = $orgtool->GetAllSubOrganizationNames();
+				
+				// create the select multiple object based on DB into
+				foreach($suborgnames as $subname)
+				{
+					echo '<option value="' . $subname . '">' . $subname . '</option>';
+				}
+			?>
+	
+			</select></br>
+	
+		</form>
+
+		<a href="addsuborganization.php">Add SubOrganization</a></br>
 	
 	</div>
 	
-	<div id="categrories" class="categrories">
+	<div id="categories" class="categories">
 	
+		<h4>Categories:</h4>
 	
+		<form action="">
+	
+			<select multiple="categories" name="categories[]">
+		
+			<?php
+				require_once("../OrganizationsTool.class.php");
+				
+				// use our tool to get all of the organization names from the database
+				$orgtool = new OrganizationsTool();	
+				$categories = $orgtool->GetAllCategoryNames();
+				
+				// create the select multiple object based on DB into
+				foreach($categories as $cat)
+				{
+					echo '<option value="' . $cat . '">' . $cat . '</option>';
+				}
+			?>
+	
+			</select></br>
+	
+		</form>
+	
+		<a href="addorganizationcategory.php">Add Organization Category</a></br>
 	
 	</div>
 
