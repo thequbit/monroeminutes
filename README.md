@@ -62,6 +62,7 @@ http api -
 		
 Search Modes
 	There are two distinct search modes:
+	
 		1. Search with address
 			This mode the user is providing an address and a series of on-the-fly look-up tables are used to deturmine what suborganizations are associated with this address.  We pull from the monroe county websites to get this data at search execution time.  Once the suborg list os populated the search continues just as it would without an address.  The address is only used to generate the list of suborgs.
 			
