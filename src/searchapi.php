@@ -9,7 +9,7 @@
 	//dprint("Running search and returning json with results ...");
 
 	// get our POST information
-	$searchstring = $_GET['keywordsearch'];
+	$searchstring = $_GET['searchstring'];
 	$address = $_GET['address'];
 	$startdate = $_GET['startdate'];
 	$enddate = $_GET['enddate'];
@@ -25,10 +25,12 @@
 	
 		if( $searchstring == "" )
 		{
-			echo "nope.";
+			dprint("Search string was empty, returning empty array.");
+			$results = array();
 		}
 		else
 		{
+			dprint("Performing search using POST data.");
 			$results = $searchTool->SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring);
 		}
 	}
@@ -38,8 +40,8 @@
 		$results = null;
 	}
 	
-	if( $results != null)
-	{
+	//if( $results != null)
+	//{
 		// we need to convert our php array of objects into a json object and echo it out as the 
 		// contents of the searchapi.php page
 		
@@ -50,11 +52,12 @@
 		
 		// print to the page
 		echo $json_result;
-	}
-	else
-	{
-		echo "nope.";
-	}
+	//}
+	//else
+	//{
+	//	$results = array();
+	//	
+	//}
 	
 	
 	
