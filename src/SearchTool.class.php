@@ -11,6 +11,17 @@
 	class SearchTool
 	{
 	
+	
+		// This function pulls the total number of rows in the search table within
+		// the database.  This number represents the total number of searches performed
+		// by the search API.
+		//
+		// takes in:
+		//		- none -
+		//
+		// returns
+		// 		$totalSearches - total number of searches in the database.
+		//
 		function GetTotalSearchCount()
 		{
 			
@@ -40,8 +51,18 @@
 			
 		}
 	
-		// this function simply just increments the number of searches performed by 1
-		function AddSearchToDatabase($keyword, $date)
+		// This function adds the search text and the date/time that the search was executed
+		// by the API into the database.  This is used to see how many searches are being 
+		// performed, and what keywords are being used.
+		// 
+		// takes in:
+		// 		$keyword - the string the API used to execute the search
+		// 		$date - the date and time of the search
+		//
+		// returns
+		//		- nonthing - 
+		//
+		function AddSearchToDatabase($keyword, $datetime)
 		{
 			
 			dprint("Trying to connect to database ...");
@@ -56,7 +77,7 @@
 			dprint("Connected to DB.");
 			
 			// add new search to db
-			$query = 'insert into searches (keyword,date) values("' . $keyword . '", "' . $date . '")';
+			$query = 'insert into searches (keyword,date) values("' . $keyword . '", "' . $datetime . '")';
 					
 			dprint("running: '" . $query . "'");
 			
@@ -65,13 +86,17 @@
 			
 		}
 	
+		// This function performs a search query based on a date range, an array of organizations to
+		// look in, and a search string which is a set of keywords seperated by commas.
 		//
-		// $startdate - date to start searching for documents
-		// $enddate - date to stop searching for docuemtns
-		// $organizations - array of organizations to search with
-		// $searchstring - the text entered by the user to search for within the minutes text
+		//	takes in:
+		// 		$startdate - date to start searching for documents
+		// 		$enddate - date to stop searching for docuemtns
+		// 		$organizations - array of organizations to search with
+		// 		$searchstring - the text entered by the user to search for within the minutes text
 		//
-		// returns - This returns an array of metting minutes pulled from the database
+		// returns:
+		// 		$retVal - This returns an array of documents pulled from the database
 		//
 		function SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring)
 		{
