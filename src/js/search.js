@@ -6,17 +6,20 @@ function performSearch()
 	// get values from the text boxes on the page
 	var searchString = document.getElementById('searchstring').value;
 	
-	// get start time
-	var startTime = new Date().getTime();
-	
-	//alert(searchString);
-	
 	// get json from api call
 	$.getJSON("searchapi.php",
 	{
 		searchstring: searchString
 	},
 		function(data) {
+			
+			// {
+			// 		"status":"0",
+			//		"errorText":"None",
+			//		"queryTime":"8",
+			//		"resultCount":4,
+			//		"results":[]
+			// }
 			
 			// init our html contents variable
 			var resultsHtml = "";
@@ -27,34 +30,48 @@ function performSearch()
 			// clear out any html that may have been put there already.
 			$("div.results").html("");
 			
-			// take current time
-			var endTime = new Date().getTime();
+			// check to see if there was an error
+			if( data.error != "0" )
+			{
+				// TODO: switch on error to see what we want to display to the user
+				
+				resultsHtml += "<br><p>There was an error processing your request, please try again later.  If the error persists, please contact the site administrator.</p><br>";
+			}
+			else
+			{
 			
-			// calculate how long it took for the search
-			var timeTaken = endTime - startTime;
+				// place the time it took to return the results as the first item in the div
+				resultsHtml = "<p>Search took: <b>" + data.queryTime + "</b> milliseconds</p></br>";	
 			
-			// place the time it took to return the results as the first item in the div
-			resultsHtml = "<p>Search took: <b>" + timeTaken + "</b> milliseconds</p></br>";	
+				alert(typeof data.results.length);
 			
-			// itterate through the returned json array and add each document to the div
-			$.each(data, 
-				function(i,item){
+				if( data.results.length == 0 )
+				{
 					
-					//alert(item.suborgname);
-					
-					resultsHtml += "<h3><a href=\"http://" + item.sourceurl + "\">" + item.orgname + " - " + item.suborgname + "</a></h3>\n";
-					//resultsHtml += "<p><b>Suborganization Name:</b> " + item.suborgname + "</p>\n";
-					//resultsHtml += "<p><b>Organization Name:</b> " + item.orgname + "</p>\n";
-					//resultsHtml += "<p><b>Source URL:</b> " + item.sourceurl + "</p>\n";
-					
-					resultsHtml += "<p><b>Document Name:</b> " + item.name + "</p>\n";
-					resultsHtml += "<p><b>Document Publication Date:</b> " + item.date + "</p>\n";
-					//resultsHtml += "<p><b>Word:</b> " + item.word + "</p>\n";
-					//resultsHtml += "<p><b>Frequency:</b> " + item.frequency + "</p></br></br>\n";
-					
-			});
-			
-			
+					resultsHtml += "<br><p>Your search criteria returned zero results.  Please refine your search and try again.</p><br>";
+				
+				}
+				else
+				{
+					// itterate through the returned json array and add each document to the div
+					$.each(data.results, 
+						function(i,item){
+							
+							//alert(item.suborgname);
+							
+							resultsHtml += "<h3><a href=\"http://" + item.sourceurl + "\">" + item.orgname + " - " + item.suborgname + "</a></h3>\n";
+							//resultsHtml += "<p><b>Suborganization Name:</b> " + item.suborgname + "</p>\n";
+							//resultsHtml += "<p><b>Organization Name:</b> " + item.orgname + "</p>\n";
+							//resultsHtml += "<p><b>Source URL:</b> " + item.sourceurl + "</p>\n";
+							
+							resultsHtml += "<p><b>Document Name:</b> " + item.name + "</p>\n";
+							resultsHtml += "<p><b>Document Publication Date:</b> " + item.date + "</p>\n";
+							//resultsHtml += "<p><b>Word:</b> " + item.word + "</p>\n";
+							//resultsHtml += "<p><b>Frequency:</b> " + item.frequency + "</p></br></br>\n";
+							
+					});
+				}
+			}
 			
 			// set new html for div
 			$("div.results").html(resultsHtml);
