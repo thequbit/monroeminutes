@@ -16,7 +16,10 @@
 		{
 		
 			// hide the results div since it isn't populated yet
-			$('#results').hide()
+			$('#results').hide();
+		
+			// hide search button
+			$('#searchbutton').hide();
 		
 			// setup searchstring text box to fire the button click event if the user hits enter
 			$("#searchstring").keyup(function(event){
