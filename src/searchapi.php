@@ -18,6 +18,12 @@
 	// create an instance of our search tool
 	$searchTool = new SearchTool();
 	
+	// record start time
+	$mtime = microtime(); 
+	$mtime = explode(" ",$mtime); 
+	$mtime = $mtime[1] + $mtime[0];
+	$starttime = $mtime; 
+	
 	// perform our search based on the two flows (address or no address)
 	if( $address == "" )
 	{
@@ -33,32 +39,44 @@
 			dprint("Performing search using POST data.");
 			$results = $searchTool->SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring);
 		}
+
 	}
 	else
 	{
 		// TODO: do this.  need to incorporate John Farnach's code for using the address
 		$results = array();
 	}
+				
+	// calculate time taken
+	$mtime = microtime(); 
+	$mtime = explode(" ",$mtime); 
+	$mtime = $mtime[1] + $mtime[0]; 
+	$endtime = $mtime; 
+	$totaltime = ($endtime - $starttime); 
 	
-	//if( $results != null)
-	//{
-		// we need to convert our php array of objects into a json object and echo it out as the 
-		// contents of the searchapi.php page
+	//
+	// Now that we have our results from the search, we need to place them into our return
+	// json object which looks like this:
+	//
+	// {
+	// 		"status":"0",
+	//		"errorText":"None",
+	//		"queryTime":"8",
+	//		"resultCount":4,
+	//		"results":...
+	// }
+	//
 		
-		dprint("converting to json and printing ...");
-		
-		// convery array to json
-		$json_result = json_encode($results);
-		
-		// print to the page
-		echo $json_result;
-	//}
-	//else
-	//{
-	//	$results = array();
-	//	
-	//}
+	dprint("converting to json and printing ...");
 	
+	// convery array to json
+	$jsonResults = json_encode($results);
 	
+	$resultsCount = count($results);
+	
+	$retVal = '{ "error":"0", "errorText":"None", "queryTime":"' . $totaltime . '", "retulsCount":"' . $resultsCount . '", "results":' . $jsonResults . '}';
+	
+	// print to the page
+	echo $retVal;
 	
 ?>
