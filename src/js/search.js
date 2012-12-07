@@ -18,11 +18,23 @@ function performSearch()
 	},
 		function(data) {
 			
-			// clear out any html that may have been put there already.
-			$("div.results").html(resultsHtml);
-			
 			// init our html contents variable
 			var resultsHtml = "";
+			
+			// hide info div since we don't need it any more
+			$('#info').hide()
+			
+			// clear out any html that may have been put there already.
+			$("div.results").html("");
+			
+			// take current time
+			var endTime = new Date().getTime();
+			
+			// calculate how long it took for the search
+			var timeTaken = endTime - startTime;
+			
+			// place the time it took to return the results as the first item in the div
+			resultsHtml = "<p>Search took: <b>" + timeTaken + "</b> milliseconds</p></br>";	
 			
 			// itterate through the returned json array and add each document to the div
 			$.each(data, 
@@ -42,15 +54,15 @@ function performSearch()
 					
 			});
 			
-			// take current time
-			var endTime = new Date().getTime();
 			
-			// calculate how long it took for the search
-			var timeTaken = endTime - startTime;
 			
-			$("div.timetaken").html("<p>Search took: " + timeTaken + " milliseconds</p>");
+			// set new html for div
 			$("div.results").html(resultsHtml);
-			
+		
+			// show our results to the user
+			$('#results').hide();
+			$('#results').show("slow");
+	
 		}
 	);
 
