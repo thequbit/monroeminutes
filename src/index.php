@@ -4,43 +4,49 @@
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="js/search.js"></script>
-
-	<script>
 	
-		
-		
-	</script>
+	<meta name="description" content="Meeting Minute Agrigator and Search Engine for Monroe County, NY">
+	<meta name="keywords" content="Monroe,Minutes,MonroeMinutes,Rochester,Meetings">
+
 
 </head>
 <body>
 
 	<div class="top">
 
-		<div class="searchbar"></div>
+		<div class="searchtop"></div>
 
 			<div id="header "class="header">
 			
 			<h3>Monroe Minutes</h3></br>
 			
+				<div id="links" class="links">
+			
+					<a href="dashboard/dashboard.php">Dashboard</a></br>
+			
+				</div>
+			
 			</div>
 
 			<div id="totalsearches" class="totalsearches">
 			
-			<?php
-			
-				require_once("SearchTool.class.php");
+				<?php
 				
-				$searchTool = new SearchTool();
+					// TODO: make this dynamicly update on search/page load ... add api maybe?
 				
-				$totalSearches = $searchTool->GetTotalSearchCount();
+					require_once("SearchTool.class.php");
+					
+					$searchTool = new SearchTool();
+					
+					$totalSearches = $searchTool->GetTotalSearchCount();
+					
+					echo "Total number of searches to date: <b>" . $totalSearches . "</b></br></br>";
 				
-				echo "Total number of searches to date: <b>" . $totalSearches . "</b></br></br>";
-			
-			?>
+				?>
 			
 			</div>
 
-			<!--<form action="searchapi.php">-->
+			<div id="search" class="search">
 
 				Keyword Search:</br>
 					<input type="text" id="searchstring" name="searchstring" size="25"><br>
@@ -52,14 +58,9 @@
 					<input type="text" id="startdate" name="startdate" size="8"> - <input type="text" name="enddate" size="8"></br>
 
 				Organizations:</br>
+				
 				<?
 				
-					/////////////////////////////////////////////////
-					//
-					// Select Organization PHP Code
-					//
-					/////////////////////////////////////////////////
-					
 					require_once("OrganizationsTool.class.php");
 
 					// start of select multiple
@@ -80,18 +81,14 @@
 
 				?>
 			
-			<!-- <input type="submit" > -->
+				</br>
+				Don't see the organization you are looking for?  Put in a request <a href="request.php">here</a></br>
 			
-			<button onclick="performSearch()">Search</button>
+				</br>
+				<button onclick="performSearch()">Search</button>
 			
-			<!--</form>-->
-		
-		</div>
-		
-		<div id="links" class="links">
-		
-			<a href="dashboard/dashboard.php">Dashboard</a>
-		
+			</div>
+			
 		</div>
 		
 		<div id="timetaken" class="timetaken">
