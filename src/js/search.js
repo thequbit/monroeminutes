@@ -43,7 +43,7 @@ function performSearch()
 				// place the time it took to return the results as the first item in the div
 				resultsHtml = "<p>Search took: <b>" + data.queryTime + "</b> milliseconds</p></br>";	
 			
-				alert(typeof data.results.length);
+				//alert(typeof data.results.length);
 			
 				if( data.results.length == 0 )
 				{
@@ -59,7 +59,8 @@ function performSearch()
 							
 							//alert(item.suborgname);
 							
-							resultsHtml += "<h3><a href=\"http://" + item.sourceurl + "\">" + item.orgname + " - " + item.suborgname + "</a></h3>\n";
+							resultsHtml += '<div class="searchresult">\n';
+							resultsHtml += '<h3><a href="http://' + item.sourceurl + '">' + item.orgname + ' - ' + item.suborgname + '</a></h3>\n';
 							//resultsHtml += "<p><b>Suborganization Name:</b> " + item.suborgname + "</p>\n";
 							//resultsHtml += "<p><b>Organization Name:</b> " + item.orgname + "</p>\n";
 							//resultsHtml += "<p><b>Source URL:</b> " + item.sourceurl + "</p>\n";
@@ -68,6 +69,8 @@ function performSearch()
 							resultsHtml += "<p><b>Document Publication Date:</b> " + item.date + "</p>\n";
 							//resultsHtml += "<p><b>Word:</b> " + item.word + "</p>\n";
 							//resultsHtml += "<p><b>Frequency:</b> " + item.frequency + "</p></br></br>\n";
+							
+							resultsHtml += '</div><br>\n';
 							
 					});
 				}
