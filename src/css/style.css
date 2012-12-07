@@ -1,0 +1,54 @@
+
+/* Set repeating background */
+/*
+body
+{
+	background-image:url('media/white_wall.png');
+	background-repeat:repeat-y;
+}
+*/
+/* top most div that centers everything */
+
+div.topwrapper
+{
+	width:800px;
+	margin:0 auto;
+}
+
+/* This will wrap the searchtop class with a border, and give it a shadow */
+div.searchtop
+{
+	position:relative;
+	top:15px;
+	left:15px;
+	border:2px solid #a1a1a1;
+	padding:10px 30px; 
+	background:#dddddd;
+	width:700px;
+	height:200px;
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+div.requestnote
+{
+	position: relative;
+	top: -150px;
+	left: 350px;
+	width: 300px;
+	height: 100px;
+}
+
+/* This will wrap the results with a box, and give it a shadow */
+div.results
+{
+	position:relative;
+	top:30px;
+	left:15px;
+	border:2px solid #a1a1a1;
+	padding:10px 30px; 
+	background:#dddddd;
+	width:700px;
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+}
