@@ -41,6 +41,7 @@ div.topwrapper
 div.navbar
 {
 	padding-top:15px;
+	height:30px;
 }
 
 /* boxes for address bar that brings you to other pages */
