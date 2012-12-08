@@ -18,6 +18,9 @@
 	// create an instance of our search tool
 	$searchTool = new SearchTool();
 	
+	// setup var as default empty array
+	$searchresults = array();
+	
 	// record start time
 	$mtime = microtime(); 
 	$mtime = explode(" ",$mtime); 
@@ -27,24 +30,46 @@
 	// perform our search based on the two flows (address or no address)
 	if( $address == "" )
 	{
-		dprint("Getting minutes list ...");
+		//dprint("Getting minutes list ...");
 	
 		if( $searchstring == "" )
 		{
 			dprint("Search string was empty, returning empty array.");
-			$results = array();
+			$searchresults = array();
 		}
 		else
 		{
 			dprint("Performing search using POST data.");
-			$results = $searchTool->SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring);
+			
+			
+			$searchresults = $searchTool->SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring);
+			//dprint("Result from SearchWithoutAddress(): " . $searchresults);
+			
+			/*
+			dprint("");
+			if( empty($searchresults) )
+			{
+				dprint("Return Array is EMPTY");
+			}
+			else
+			{
+				dprint("Return Array is NOT EMPTY");
+			}
+			dprint("");
+			*/
+			//$temp = json_encode($searchresults);
+			//dprint($searchresults);
+			
+			//$resultCount = count($searchresults);
+			//dprint("Search complete!  result count = " . $resultCount);
 		}
 
 	}
 	else
 	{
 		// TODO: do this.  need to incorporate John Farnach's code for using the address
-		$results = array();
+		dprint("Using address input.  NOTE: NOT IMPLEMENTED.");
+		$searchresults = array();
 	}
 				
 	// calculate time taken
@@ -74,9 +99,9 @@
 	dprint("converting to json and printing ...");
 	
 	// convery array to json
-	$jsonResults = json_encode($results);
+	$jsonResults = json_encode($searchresults);
 	
-	$resultsCount = count($results);
+	$resultsCount = count($searchresults);
 	
 	$retVal = '{ "error":"0", "errorText":"None", "queryTime":"' . $totaltime . '", "resultsCount":"' . $resultsCount . '", "results":' . $jsonResults . '}';
 	
