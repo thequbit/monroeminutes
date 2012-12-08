@@ -74,7 +74,7 @@
 	
 	$resultsCount = count($results);
 	
-	$retVal = '{ "error":"0", "errorText":"None", "queryTime":"' . $totaltime . '", "retulsCount":"' . $resultsCount . '", "results":' . $jsonResults . '}';
+	$retVal = '{ "error":"0", "errorText":"None", "queryTime":"' . $totaltime . '", "resultsCount":"' . $resultsCount . '", "results":' . $jsonResults . '}';
 	
 	// print to the page
 	echo $retVal;
