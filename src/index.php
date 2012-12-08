@@ -69,7 +69,7 @@
 						else
 						{
 							echo '<div id="login" class="navlink">';
-							echo '<a href="dashboard/logout.php">Logout</a>';
+							echo '<a href="dashboard/dashboard.php">Dashboard</a>';
 							echo '</div>';
 						}
 						
