@@ -24,8 +24,8 @@ div.topwrapper
 	/*background-color: #DDDDFF;*/
 }
 
-/* make the dashboard link float so login will go next to it. */
-#dashboard
+/* make the login link float right */
+#login
 {
 	float: right;
 	padding-left: 15px;
@@ -44,7 +44,7 @@ div.navbar
 }
 
 /* boxes for address bar that brings you to other pages */
-div.navbox
+div.navlink
 {
 	position: relative;
 	top: 0px;
