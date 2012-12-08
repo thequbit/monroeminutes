@@ -173,7 +173,7 @@
 							echo "Oranization(s):<br>";
 
 							// start of select multiple
-							echo '<select multiple="organization" id="organizations" name="organization[]" style="width: 210px">'; // TODO: set this width to a set value
+							echo '<select multiple="organization" id="organizations" name="organization[]">'; // TODO: set this width to a set value
 							
 							// use our tool to get all of the organization names from the database
 							$orgtool = new OrganizationsTool();	
