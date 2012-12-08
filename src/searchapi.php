@@ -13,7 +13,9 @@
 	$address = $_GET['address'];
 	$startdate = $_GET['startdate'];
 	$enddate = $_GET['enddate'];
-	$organizations = $_GET['organizations'];
+	$organizations = $_GET['organization'];
+	
+	dprint("org type: " . gettype($organizations));
 	
 	// create an instance of our search tool
 	$searchTool = new SearchTool();
@@ -40,28 +42,9 @@
 		else
 		{
 			dprint("Performing search using POST data.");
-			
-			
+		
 			$searchresults = $searchTool->SearchWithoutAddress($startdate, $enddate, $organizations, $searchstring);
-			//dprint("Result from SearchWithoutAddress(): " . $searchresults);
 			
-			/*
-			dprint("");
-			if( empty($searchresults) )
-			{
-				dprint("Return Array is EMPTY");
-			}
-			else
-			{
-				dprint("Return Array is NOT EMPTY");
-			}
-			dprint("");
-			*/
-			//$temp = json_encode($searchresults);
-			//dprint($searchresults);
-			
-			//$resultCount = count($searchresults);
-			//dprint("Search complete!  result count = " . $resultCount);
 		}
 
 	}

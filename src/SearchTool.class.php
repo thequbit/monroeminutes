@@ -127,6 +127,8 @@
 			
 			}
 			
+			dprint("Number of suborgs found: " . count($suborgids));
+			
 			dprint("calling PerformSearch('" . $startdate . "', '" . $enddate . "', '" . $suborgids . "', '" . $searchstring . "')");
 			
 			// call performSearch with array of suborgs
@@ -237,7 +239,7 @@
 
 			// test to see if there are any suborg id's passed in with the function call.  If there are none,
 			// then we will process the search query as 
-			if( $suborganizations == null || count($suborganizations) == 0)
+			if( $suborganizationids == null || count($suborganizationids) == 0)
 			{
 			
 				// see if there is a space in the string, if there is then 
