@@ -73,7 +73,7 @@
 	dprint("permissions table created.");
 
 	// searches table
-	$query("create table searches( searchid int not null auto_increment primary key, keyword text, date datetime)");
+	$query("create table searches( searchid int not null auto_increment primary key, searchstring text, date datetime, querytime float)");
 	$result = mysql_db_query(MYSQL_DATABASE, $query)
 		or die("Failed Query of " . $query);  			// TODO: something more elegant than this
 	dprint("permissions table created.");

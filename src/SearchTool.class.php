@@ -62,7 +62,7 @@
 		// returns
 		//		- nonthing - 
 		//
-		function AddSearchToDatabase($keyword, $datetime)
+		function AddSearchToDatabase($keyword, $datetime, $querytime)
 		{
 			
 			dprint("Trying to connect to database ...");
@@ -77,7 +77,7 @@
 			dprint("Connected to DB.");
 			
 			// add new search to db
-			$query = 'insert into searches (keyword,date) values("' . $keyword . '", "' . $datetime . '")';
+			$query = 'insert into searches (searchstring,date,querytime) values("' . $keyword . '", "' . $datetime . '", ' . $querytime . ')';
 					
 			dprint("running: '" . $query . "'");
 			
@@ -327,9 +327,6 @@
 					
 				}
 			}
-			
-			$todaysDate = date( 'Y-m-d H:i:s' );
-			$this->AddSearchToDatabase($searchstring,$todaysDate);
 			
 			// return the array of found minutes
 			return $retVal;

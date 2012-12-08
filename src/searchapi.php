@@ -54,6 +54,10 @@
 	$endtime = $mtime; 
 	$totaltime = ($endtime - $starttime); 
 	
+	// capture todays date and place this search into the database with the amount of time it took to perform it
+	$todaysDate = date( 'Y-m-d H:i:s' );
+	$searchTool->AddSearchToDatabase($searchstring,$todaysDate,$totaltime);
+	
 	//
 	// Now that we have our results from the search, we need to place them into our return
 	// json object which looks like this:
