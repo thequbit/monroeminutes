@@ -40,8 +40,10 @@ function performSearch()
 			else
 			{
 			
+				var rounderQueryTime = Math.round(data.queryTime*10000)/10000
+			
 				// place the time it took to return the results as the first item in the div
-				resultsHtml = "<p>Search took: <b>" + data.queryTime + "</b> milliseconds</p></br>";	
+				$("#searchtime").html("<p>Search took: <b>" + rounderQueryTime + "</b> seconds</p></br>");	
 			
 				//alert(typeof data.results.length);
 			

@@ -1,18 +1,74 @@
 
 /* Set repeating background */
-/*
+
 body
 {
-	background-image:url('media/white_wall.png');
-	background-repeat:repeat-y;
+	background-image:url('/media/white_wall.png');
+	background-repeat:repeat-y repeat-x;
 }
-*/
+
 /* top most div that centers everything */
 
+/* reset browser defaults */
+*
+{
+	margin:0;
+	padding:0;
+}
+
+/* set the width of our site, and center it */
 div.topwrapper
 {
 	width:800px;
 	margin:0 auto;
+	/*background-color: #DDDDFF;*/
+}
+
+/* make the dashboard link float so login will go next to it. */
+#dashboard
+{
+	float: right;
+	padding-left: 15px;
+}
+
+/* Wrapper for our links in the upper right */
+#navlinks
+{
+	float: right;
+	width: 300px;
+}
+
+div.navbar
+{
+	padding-top:15px;
+}
+
+/* boxes for address bar that brings you to other pages */
+div.navbox
+{
+	position: relative;
+	top: 0px;
+	right: 0px;
+	text-align: right;
+}
+
+div.title
+{
+	position:relative;
+	margin-left: auto;
+    margin-right: auto;
+	width:800px;
+	border:2px solid #A1A1A1;
+	background:#DDDDDD;
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+img.titleimg
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* This will wrap the searchtop class with a border, and give it a shadow */
@@ -20,16 +76,23 @@ div.searchtop
 {
 	position:relative;
 	top:15px;
-	left:15px;
+	/*left:15px;*/
 	border:2px solid #a1a1a1;
-	padding:10px 30px; 
+	padding:30px 30px; 
 	background:#dddddd;
-	width:700px;
-	height:200px;
+	width:230px;
+	height:340px;
 	border-radius:25px;
 	box-shadow: 10px 10px 5px #888888;
 }
 
+div.userinput
+{
+	padding: 2px 2px;
+}
+
+/*  */
+/*
 div.requestnote
 {
 	position: relative;
@@ -38,19 +101,26 @@ div.requestnote
 	width: 300px;
 	height: 100px;
 }
+*/
+
+div.organizationlist
+{
+	
+}
 
 /* This will wrap the results with a box, and give it a shadow */
 div.results
 {
 	position:relative;
-	top:30px;
-	left:15px;
+	top:-385px;
+	/*left:270px;*/
 	border:2px solid #a1a1a1;
 	padding:10px 30px; 
 	background:#dddddd;
-	width:700px;
+	width:400px;
 	border-radius:25px;
 	box-shadow: 10px 10px 5px #888888;
+	float: right;
 }
 
 /* result box */
