@@ -57,9 +57,18 @@ http api -
 		word is the word that was used to generate the result (searches are split on " " and seperate searches are performed)
 		frequency is the number of times the word showed up in the document
 
-	The above was generated with this command:
-		http://monroeminutes.org/new/searchapi.php?keywordsearch=test&address=&startdate=&enddate=&organization%5B%5D=Henrietta
+		The json object returned looks like this:
 		
+		{
+	 		"status":"0",
+			"errorText":"None",
+			"queryTime":".00612",
+			"resultCount":4,
+			"results":[]
+		}
+	
+		Where the [] is the array of json objects that are defined as the document structure above.
+	
 Search Modes
 	There are two distinct search modes:
 	
