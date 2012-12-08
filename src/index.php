@@ -15,18 +15,12 @@
 	<meta name="description" content="Meeting Minute Agrigator and Search Engine for Monroe County, NY">
 	<meta name="keywords" content="Monroe,Minutes,MonroeMinutes,Rochester,Meetings">
 
-	<LINK href="css/style.css" rel="stylesheet" type="text/css">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
 
 	<script>
 	
 		function initPage()
 		{
-		
-			// hide the results div since it isn't populated yet
-			//$('#results').hide();
-		
-			// hide search button
-			//$('#searchbutton').hide();
 		
 			// setup searchstring text box to fire the button click event if the user hits enter
 			$("#searchstring").keyup(function(event){
@@ -62,20 +56,45 @@
 			<div id="navbar" class="navbar">
 
 				<div id="navlinks" class="navlinks">
-
-					<div id="dashboard" class="navbox">
-						<a href="dashboard/dashboard.php">Dashboard</a>
-					</div>
 					
 					<?php
 					
 						// test to see if a user is logged in, if so display the logout option
-						if( isset($_SESSION['username']) == true && $_SESSION['username'] != "" );
+						if( isset($_SESSION['username']) == false )
 						{
-							echo '<div id="login" class="navbox">';
+							echo '<div id="login" class="navlink">';
+							echo '<a href="dashboard/login.php">Login</a>';
+							echo '</div>';
+						}
+						else
+						{
+							echo '<div id="login" class="navlink">';
 							echo '<a href="dashboard/logout.php">Logout</a>';
 							echo '</div>';
 						}
+						
+					?>
+				
+				</div>
+
+				<div id="submitrequest" class="submitrequest">
+				
+					<?php
+					
+						/*
+				
+						if( isset($_SESSION['username']) == false )
+						{
+							echo '<!-- login to submit a request -->';
+						}
+						else
+						{
+							echo '<div id="requestlink" class="navlink">';
+							echo '<a href="dashboard/request.php">Submit Request</a>';
+							echo '</div>';
+						}
+						
+						*/
 						
 					?>
 				
@@ -133,8 +152,6 @@
 					
 					<div id="organizationlist" class="userinput">
 					
-						Organizations:<br>
-					
 						<?
 						
 							require_once("OrganizationsTool.class.php");
@@ -188,6 +205,12 @@
 			
 				<br>
 				<p>Enter a search string, an addres, a date range, and/or an organization to search the database.</p><br>
+			
+			</div>
+			
+			<div id="footer" class="footer">
+			
+				<!-- Footer information here -->
 			
 			</div>
 			

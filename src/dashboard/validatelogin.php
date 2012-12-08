@@ -82,7 +82,7 @@
 				dprint("Login accepted, forward to dashboard page");
 				
 				// redirect to admin.php
-				header("Location: dashboard.php");
+				header("Location: ../index.php");
 				
 			}
 			else

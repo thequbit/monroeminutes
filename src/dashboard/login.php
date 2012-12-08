@@ -17,28 +17,52 @@
 
 <html>
 <head>
-<title>Monroe Minutes Admin Login</title>
+	<title>Monroe Minutes Admin Login</title>
+
+	<meta name="description" content="Meeting Minute Agrigator and Search Engine for Monroe County, NY">
+	<meta name="keywords" content="Monroe,Minutes,MonroeMinutes,Rochester,Meetings">
+
+	<link href="../css/main.css" rel="stylesheet" type="text/css">
+	<link href="../css/dashboard.css" rel="stylesheet" type="text/css">
+
 </head>
+
+
 
 <body>
 
-	<div id="loginbox" class="loginbox">
+	<div id="sitetop" class="sitetop">
 
-		<h4>Please Login</h4>
+		<div id="topwrapper" class="topwrapper">
 	
-		<form action="validatelogin.php">
+			<div id="loginbox" class="loginbox">
 
-			Username:</br>
-				<input type="text" name="username" size="25"><br>
+				<h4>Please Login</h4>
+			
+				<form action="validatelogin.php">
 
-			Password:</br>
-				<input type="password" name="password" size="25"><br>
-		
-			<input type="submit">
-		
-		</form>
+					<div id="username" class="userinput">
+					Username:<br>
+						<input type="text" name="username" style="width=80%"><br>
+					</div>
+
+					<div id="password" class="userinput">
+					Password:<br>
+						<input type="password" name="password" style="width=80%"><br>
+					</div>
+				
+					<div id="submit" class="userinput">
+						<input type="submit" text="Login" id="login">
+					</div>
+				
+				</form>
+			
+			</div>
+	
+		</div>
 	
 	</div>
-
+		
+	
 </body>
 </html>
