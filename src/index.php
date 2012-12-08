@@ -142,12 +142,12 @@
 					
 					<div id="startdate" class="userinput">
 						Start Date:<br>
-							<input type="date" name="bday" width="20"><br>
+							<input type="date" name="startdate" width="20"><br>
 					</div>
 					
 					<div id="address" class="userinput">
 						End Date:<br>
-							<input type="date" name="bday" width="20"><br>
+							<input type="date" name="enddate" width="20"><br>
 					</div>
 					
 					<div id="organizationlist" class="userinput">
