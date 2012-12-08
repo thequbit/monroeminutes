@@ -5,14 +5,26 @@ function performSearch()
 
 	// get values from the text boxes on the page
 	var searchString = document.getElementById('searchstring').value;
+	var startDate = document.getElementById('startdateinput').value;
+	var endDate = document.getElementById('enddateinput').value;
+	var address = document.getElementById('addressinput').value;
+	
+	// generate our data to be used in the http POST method to get back our json object
+	var postData = {
+						searchstring: searchString,
+						startdate: startDate,
+						enddate: endDate,
+						address: address
+					};
 	
 	// get json from api call
 	$.getJSON("searchapi.php",
-	{
-		searchstring: searchString
-	},
+		postData,
 		function(data) {
 			
+			//
+			// this is the format of the resturned json object
+			//
 			// {
 			// 		"status":"0",
 			//		"errorText":"None",

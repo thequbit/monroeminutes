@@ -151,17 +151,17 @@
 					
 					<div id="address" class="userinput">
 						Address:<br>
-							<input type="text" id="address" name="address" size="30"><br>
+							<input type="text" id="addressinput" name="address" size="30"><br>
 					</div>
 					
 					<div id="startdate" class="userinput">
 						Start Date:<br>
-							<input type="date" name="startdate" width="20"><br>
+							<input type="date" id="startdateinput" name="startdate" width="20"><br>
 					</div>
 					
 					<div id="address" class="userinput">
 						End Date:<br>
-							<input type="date" name="enddate" width="20"><br>
+							<input type="date" id="enddateinput" name="enddate" width="20"><br>
 					</div>
 					
 					<div id="organizationlist" class="userinput">
