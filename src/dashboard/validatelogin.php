@@ -74,7 +74,13 @@
 				// register session variables for later use
 				$_SESSION['username'] = $username;
 				if( $permissions->isadmin == "1" )
+				{
 					$_SESSION['isadmin'] = true;
+				}
+				else
+				{
+					$_SESSION['isadmin'] = false;
+				}
 
 				dprint("Username: " . $_SESSION['username']);
 				dprint("IsAdmin: " . $_SESSION['isadmin']);
