@@ -161,6 +161,9 @@
 				$searchResult->word = $r['word'];
 				$searchResult->frequency = $r['frequency'];
 				
+				dprint("Sub Org Name: " . $searchResult->suborgname );
+				dprint("Org Name: " . $searchResult->orgname );
+				
 				dprint("Adding doc to result array");
 				
 				// add the result to the list of results
@@ -255,6 +258,16 @@
 					$query = 'select * from documents, wordfrequency where wordfrequency.word="' . $searchstring . '" AND wordfrequency.documentid=documents.documentid' . $datepart;
 					$result = $dbtool->Query($query,$chandle);
 		
+					$rowcount = mysql_num_rows($result);
+					dprint("Parsing results for " . $rowcount . " rows");
+						
+					// parse output from query and add to return array
+					$results=$this->GetResultsFromQuery($result);
+					foreach($results as $r)
+					{
+						$returnArray[] = $r;
+					}
+	
 				}
 				// multiple keyword search
 				else
@@ -272,6 +285,15 @@
 						$query = 'select * from documents, wordfrequency where wordfrequency.word="' . $keyword . '" AND wordfrequency.documentid=documents.documentid' . $datepart;
 						$result = $dbtool->Query($query,$chandle);						
 			
+						$rowcount = mysql_num_rows($result);
+						dprint("Parsing results for " . $rowcount . " rows");
+						
+						// parse output from query and add to return array
+						$results=$this->GetResultsFromQuery($result);
+						foreach($results as $r)
+						{
+							$returnArray[] = $r;
+						}
 					}
 					
 				}
@@ -281,7 +303,7 @@
 			else
 			{
 				
-				dprint("generating query based on multiple orgs");
+				dprint("found " . count($suborganizationids) . " suborgid's");
 				
 				// get the id of the suborg
 				$orgTool = new OrganizationsTool();
@@ -296,16 +318,30 @@
 					// single keyword
 					if( $pos === false )
 					{
+					
+						dprint("Found single keyword, performing query");
 						
 						// single keyword	
 						$datepart = $this->DecodeDate($startdate, $enddate);				
 						$query = 'select * from documents, wordfrequency where wordfrequency.word="' . $searchstring . '" AND wordfrequency.documentid=documents.documentid AND suborganizationid=' . $suborgid . $datepart;
 						$result = $dbtool->Query($query,$chandle);
 						
+						$rowcount = mysql_num_rows($result);
+						dprint("Parsing results for " . $rowcount . " rows");
+						
+						// parse output from query and add to return array
+						$results=$this->GetResultsFromQuery($result);
+						foreach($results as $r)
+						{
+							$returnArray[] = $r;
+						}
+						
 					}
 					// multiple keywords
 					else
 					{
+					
+						dprint("Found multiple keywrods, running against all");
 					
 						// get the list of keywordss
 						$keywords = explode(" ",$searchstring);
@@ -320,18 +356,22 @@
 							$query = 'select * from documents, wordfrequency where wordfrequency.word="' . $keyword . '" AND wordfrequency.documentid=documents.documentid AND suborganizationid=' . $id . $datepart;
 							$result = $dbtool->Query($query,$chandle);
 				
+							$rowcount = mysql_num_rows($result);
+							dprint("Parsing results for " . $rowcount . " rows");
+							
+							// parse output from query and add to return array
+							$results=$this->GetResultsFromQuery($result);
+							foreach($results as $r)
+							{
+								$returnArray[] = $r;
+							}
+				
 						}
 						
 					}
 					
 				}
 			}
-			
-			$rowcount = mysql_num_rows($result);
-			dprint("Parsing results for " . $rowcount . " rows");
-			
-			// parse output from query
-			$returnArray = $this->GetResultsFromQuery($result);
 			
 			// return the array of found minutes
 			return $returnArray;

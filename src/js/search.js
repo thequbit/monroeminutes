@@ -8,16 +8,46 @@ function performSearch()
 	var startDate = document.getElementById('startdateinput').value;
 	var endDate = document.getElementById('enddateinput').value;
 	var address = document.getElementById('addressinput').value;
-	var organizations = document.getElementById('organizations').value;
 	
+	var organizations = new Array();
+	var orgcount = 0;
+	for( i=0; i<document.getElementById('organizations').options.length;i++)
+	{
+		if( document.getElementById('organizations').options[i].selected == true )
+		{
+			organizations[orgcount] = document.getElementById('organizations').options[i].text;
+			orgcount++;
+		}
+	}
+	
+	//var organizations = document.getElementById('organizations').value;
+	
+	var postData = {};
+	
+	postData.searchstring = searchString;
+	postData.startdate = startDate;
+	postData.enddate = endDate;
+	postData.address = address;
+	postData.organization = organizations;
+	
+	/*
+	$('select#organizationlist > option:selected').each(function() {
+		selectedOrganizations.push($(this).html());
+	});
+	*/
+	
+	/*
 	// generate our data to be used in the http POST method to get back our json object
 	var postData = {
 						searchstring: searchString,
 						startdate: startDate,
 						enddate: endDate,
 						address: address,
+						//organization: $('select#organizationlist').find(':selected')
 						organization: organizations
 					};
+	*/
+	
 	
 	// get json from api call
 	$.getJSON("searchapi.php",

@@ -16,6 +16,7 @@
 	$organizations = $_GET['organization'];
 	
 	dprint("org type: " . gettype($organizations));
+	dprint("org length: " . count($organizations));
 	
 	// create an instance of our search tool
 	$searchTool = new SearchTool();
