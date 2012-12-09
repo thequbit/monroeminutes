@@ -8,13 +8,15 @@ function performSearch()
 	var startDate = document.getElementById('startdateinput').value;
 	var endDate = document.getElementById('enddateinput').value;
 	var address = document.getElementById('addressinput').value;
+	var organizations = document.getElementById('organizations').value;
 	
 	// generate our data to be used in the http POST method to get back our json object
 	var postData = {
 						searchstring: searchString,
 						startdate: startDate,
 						enddate: endDate,
-						address: address
+						address: address,
+						organization: organizations
 					};
 	
 	// get json from api call
