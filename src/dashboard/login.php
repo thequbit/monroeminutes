@@ -37,7 +37,9 @@
 	
 			<div id="loginbox" class="loginbox">
 
-				<h4>Please Login</h4>
+				<div id="userinform" class="userinform">
+					<p><b>To access this resource, please login</b></p>
+				</div>
 			
 				<form action="validatelogin.php">
 
@@ -51,7 +53,9 @@
 						<input type="password" name="password" style="width=80%"><br>
 					</div>
 				
-					<div id="submit" class="userinput">
+					<input type="hidden" name="redirecturl" value="<?php echo urlencode($_GET['redirecturl']); ?>">
+				
+					<div id="submit" class="submit">
 						<input type="submit" text="Login" id="login">
 					</div>
 				

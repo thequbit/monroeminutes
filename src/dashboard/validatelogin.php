@@ -87,9 +87,23 @@
 				
 				dprint("Login accepted, forward to dashboard page");
 				
-				// redirect to admin.php
-				header("Location: ../index.php");
+				//echo "redirecturl: " . $_GET['redirecturl'];
 				
+				$redirecturl = $_GET['redirecturl'];
+				
+				// check to see where we are supposed to redirect to
+				if( $redirecturl == "" )
+				{
+					// if there is no redirecturl, then go to our index page
+					header("Location: ../index.php");
+					//echo "index.php";
+				}
+				else
+				{
+					// if there is, then redirect there
+					header("Location: ../" . urldecode($redirecturl));
+					//echo "redirecturl";
+				}
 			}
 			else
 			{

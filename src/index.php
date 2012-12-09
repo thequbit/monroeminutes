@@ -91,29 +91,6 @@
 				
 				</div>
 
-				<div id="submitrequest" class="submitrequest">
-				
-					<?php
-					
-						/*
-				
-						if( isset($_SESSION['username']) == false )
-						{
-							echo '<!-- login to submit a request -->';
-						}
-						else
-						{
-							echo '<div id="requestlink" class="navlink">';
-							echo '<a href="dashboard/request.php">Submit Request</a>';
-							echo '</div>';
-						}
-						
-						*/
-						
-					?>
-				
-				</div>
-
 				<div id="totalsearches" class="totalsearches">
 				
 					<?php
@@ -201,6 +178,10 @@
 				
 					<div id="searchtime" class="searchtime">
 					
+					</div>
+				
+					<div id="submitrequest" class="submitrequest">
+						<p>Don't see your organization? Submit a request to add it <a href="dashboard/request.php">here</a></p>
 					</div>
 				
 				</div>
