@@ -10,8 +10,34 @@
 
 ?>
 
-<?php
+<html>
+<head>
 
-	echo "You have made it to the request page!";
+	<title>Monroe Minutes - Request Page</title>
 
-?>
+	<meta name="description" content="Meeting Minute Agrigator and Search Engine for Monroe County, NY">
+	<meta name="keywords" content="Monroe,Minutes,MonroeMinutes,Rochester,Meetings">
+
+	<link href="../css/main.css" rel="stylesheet" type="text/css">
+	<link href="../css/dashboard.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+
+	<div id="sitetop class="sitetop">
+	
+		<div id="topwrapper" class="topwrapper">
+		
+			<div id="requestinfo" class="requestinfo">
+			
+				test.
+			
+			</div>
+		
+		</div>
+		
+	</div>
+
+</body>
+</html>
+
