@@ -97,6 +97,11 @@ div.userinput
 	padding: 2px 2px;
 }
 
+#searchtime
+{
+	padding: 4px 4px;
+}
+
 #submitrequest
 {
 	padding: 4px 4px;
