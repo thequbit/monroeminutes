@@ -1,0 +1,40 @@
+
+/* This is the div that holds the org name of the org/suborg list */
+div.orgdiv
+{
+	padding: 4px 4px;
+}
+
+div.suborgdiv
+{
+	padding-top: 4px;
+	padding-left: 10px;
+	padding-right: 4px;
+	padding-bottom: 10px;
+}
+
+div.existingorgs
+{
+	position:relative;
+	top:15px;
+	/*left:15px;*/
+	border:2px solid #a1a1a1;
+	padding:30px 30px; 
+	background:#dddddd;
+	width:220px;
+	/*height:340px;*/
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+div.requesttitle
+{
+	position:relative;
+	margin-left: auto;
+    margin-right: auto;
+	width:800px;
+	border:2px solid #A1A1A1;
+	background:#DDDDDD;
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+}
