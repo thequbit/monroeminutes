@@ -87,7 +87,7 @@ function performSearch()
 				var rounderQueryTime = Math.round(data.queryTime*10000)/10000
 			
 				// place the time it took to return the results as the first item in the div
-				$("#searchtime").html("<p>Search took: <b>" + rounderQueryTime + "</b> seconds</p></br>");	
+				$("#searchtime").html("<p>Search took: <b>" + rounderQueryTime + "</b> seconds</p>");	
 			
 				//alert(typeof data.results.length);
 			
@@ -111,8 +111,8 @@ function performSearch()
 							//resultsHtml += "<p><b>Organization Name:</b> " + item.orgname + "</p>\n";
 							//resultsHtml += "<p><b>Source URL:</b> " + item.sourceurl + "</p>\n";
 							
-							resultsHtml += "<p><b>Document Name:</b> " + item.name + "</p>\n";
-							resultsHtml += "<p><b>Document Publication Date:</b> " + item.date + "</p>\n";
+							resultsHtml += "<p><b>Name:</b> " + item.name + "</p>\n";
+							resultsHtml += "<p><b>Publication Date:</b> " + item.date + "</p>\n";
 							//resultsHtml += "<p><b>Word:</b> " + item.word + "</p>\n";
 							//resultsHtml += "<p><b>Frequency:</b> " + item.frequency + "</p></br></br>\n";
 							
