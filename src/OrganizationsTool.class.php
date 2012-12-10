@@ -3,6 +3,7 @@
 	require_once("debug.php");
 	//require_once("sqlcredentials.php");
 	require_once("DatabaseTool.class.php");
+	require_once("Suborganization.class.php");
 
 	class OrganizationsTool
 	{
@@ -24,15 +25,22 @@
 			
 			// get the total number of organizations from the data base
 			$query = "SELECT name FROM organizations";
-			$result = $dbtool->Query($query,$chandle);
+			$results = $dbtool->Query($query,$chandle);
 			
 			dprint("itterating through db response and creating return array");
 			
-			// itterate through the results and populate an array
-			while($r = mysql_fetch_assoc($result)) {
+			dprint("Count = " . mysql_num_rows($results));
 			
-				// using the sub organizations id pull it's name from the database
+			// create return array
+			$retVal = array();
+			
+			// itterate through the results and populate an array
+			while($r = mysql_fetch_assoc($results)) {
+			
+				// using the sub organizations id pull its name from the database
 				$orgName = $r['name'];
+			
+				dprint("added " . $orgName);
 			
 				// add the new name to the list of names
 				$retVal[] = $orgName;			
@@ -42,7 +50,7 @@
 			return $retVal;
 		}
 	
-		function GetAllSubOrganizationNames()
+		function GetAllSubOrganizationNames($orgname)
 		{
 			$retVal = array();
 			
@@ -50,14 +58,17 @@
 			$dbtool = new DatabaseTool();
 			$chandle = $dbtool->Connect();
 			
+			// get orgid from orgname
+			$orgid = $this->OrgIdFromName($orgname);
+			
 			// select all suborganizations
-			$query = "SELECT name FROM suborganizations";
-			$result = $dbtool->Query($query,$chandle);
+			$query = "SELECT name FROM suborganizations WHERE organizationid =" . $orgid;
+			$results = $dbtool->Query($query,$chandle);
 			
 			dprint("itterating through db response and creating return array");
 			
 			// itterate through the results and populate an array
-			while($r = mysql_fetch_assoc($result)) {
+			while($r = mysql_fetch_assoc($results)) {
 			
 				// using the sub organizations id pull it's name from the database
 				$orgName = $r['name'];
@@ -70,44 +81,36 @@
 			return $retVal;
 		}
 	
-		function GetAllCategoryNames()
+		function GetAllSubOrganizations($orgname)
 		{
-		
 			$retVal = array();
-		
-			/*
-	
-			// connect to the mysql database server.  Constants taken from sqlcredentials.php
-			$chandle = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS)
-				or die("Connection Failure to Database");				// TODO: something more elegant than this
-
-			mysql_select_db(MYSQL_DATABASE, $chandle)
-				or die (MYSQL_DATABASE . " Database not found. " . MYSQL_USER);	// TODO: something more elegant than this
-
-			//dprint("Connected to DB.");
 			
-			$query = "SELECT * FROM suborganization";
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
 			
-			// pull from DB
-			$result = mysql_db_query(MYSQL_DATABASE, $query)
-				or die("Failed Query of " . $query);  			// TODO: something more elegant than this
+			// get orgid from orgname
+			$orgid = $this->OrgIdFromName($orgname);
 			
-			//dprint("itterating through db response and creating return array");
+			// select all suborganizations
+			$query = "SELECT name,websiteurl FROM suborganizations WHERE organizationid =" . $orgid;
+			$results = $dbtool->Query($query,$chandle);
+			
+			dprint("itterating through db response and creating return array");
 			
 			// itterate through the results and populate an array
-			while($r = mysql_fetch_assoc($result)) {
+			while($r = mysql_fetch_assoc($results)) {
+			
+				$suborg = new Suborganization();
 			
 				// using the sub organizations id pull it's name from the database
-				$orgName = $r['name'];
-			
-				//dprint("Found: '" .$orgName ."'");
+				$suborg->name = $r['name'];
+				$suborg->url = $r['websiteurl'];
 			
 				// add the new name to the list of names
-				$retVal[] = $orgName;
+				$retVal[] = $suborg;
 			
 			}
-			
-			*/
 			
 			return $retVal;
 		}
@@ -142,8 +145,9 @@
 			$query = "SELECT organizationid FROM organizations where name='" . $name . "'";
 			$result = $dbtool->Query($query,$chandle);
 			
-			// pull the id from the result
-			$retVal = mysql_result($result,0);
+			$r = mysql_fetch_row($result);
+		
+			$retVal = $r[0];
 			
 			return $retVal;
 		}
