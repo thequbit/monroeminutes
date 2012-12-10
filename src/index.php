@@ -63,7 +63,7 @@
 </head>
 <body onload="javascript:initPage()">
 
-	<div id="sitetop class="sitetop">
+	<div id="sitetop" class="sitetop">
 	
 		<div id="topwrapper" class="topwrapper">
 
