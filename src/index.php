@@ -31,7 +31,7 @@
 
 	</script>
 
-	<script>
+	<script type="text/javascript">
 	
 		function initPage()
 		{
