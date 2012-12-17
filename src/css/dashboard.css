@@ -13,6 +13,47 @@ div.loginbox
 	box-shadow: 10px 10px 5px #888888;
 }
 
+div.neworg
+{
+	/*position:relative;*/
+	margin-left: auto;
+    margin-right: auto;
+	border:2px solid #a1a1a1;
+	padding:10px 30px; 
+	background:#dddddd;
+	width:400px;
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+	/*float: right;*/
+}
+
+div.submitstatus
+{
+	position:relative;
+	/*top: 30px;*/
+	margin-left: auto;
+    margin-right: auto;
+	border:2px solid #a1a1a1;
+	padding:10px 30px; 
+	background:#dddddd;
+	width:400px;
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+}
+/*
+div.orginput
+{
+	position:relative;
+	margin-left: auto;
+    margin-right: auto;
+	border:2px solid #a1a1a1;
+	padding:10px 30px; 
+	background:#dddddd;
+	width:400px;
+	border-radius:25px;
+	box-shadow: 10px 10px 5px #888888;
+}
+*/
 #loginbox
 {
 }

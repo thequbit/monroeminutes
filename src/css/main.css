@@ -5,11 +5,11 @@ body
 {
 	background-image:url('/media/white_wall.png');
 	background-repeat:repeat-y repeat-x;
-}
+}/* reset browser defaults */
 
 /* top most div that centers everything */
 
-/* reset browser defaults */
+
 *
 {
 	margin:0;
