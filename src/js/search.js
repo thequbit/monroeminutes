@@ -50,7 +50,7 @@ function performSearch()
 	
 	
 	// get json from api call
-	$.getJSON("searchapi.php",
+	$.getJSON("./api/searchapi.php",
 		postData,
 		function(data) {
 			
