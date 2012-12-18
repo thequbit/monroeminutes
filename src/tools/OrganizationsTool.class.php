@@ -93,7 +93,7 @@
 			$orgid = $this->OrgIdFromName($orgname);
 			
 			// select all suborganizations
-			$query = "SELECT name,websiteurl FROM suborganizations WHERE organizationid =" . $orgid;
+			$query = "SELECT * FROM suborganizations WHERE organizationid =" . $orgid;
 			$results = $dbtool->Query($query,$chandle);
 			
 			dprint("itterating through db response and creating return array");
@@ -103,9 +103,13 @@
 			
 				$suborg = new Suborganization();
 			
-				// using the sub organizations id pull it's name from the database
+				// populate our object with the database results
+				$suborg->organiztionname = $this->OrgNameFromID($r['organizationid']);
 				$suborg->name = $r['name'];
-				$suborg->url = $r['websiteurl'];
+				$suborg->websiteurl = $r['websiteurl'];
+				$suborg->documentsurl = $r['documentsurl'];
+				$suborg->scriptname = $r['scriptname'];
+				$suborg->dbpopulated = $r['dbpopulated'];
 			
 				// add the new name to the list of names
 				$retVal[] = $suborg;
@@ -113,6 +117,43 @@
 			}
 			
 			return $retVal;
+		}
+
+		function SubOrgFromName($name)
+		{
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
+			
+			// get sub org id from name
+			$query = "SELECT * FROM suborganizations where name='" . $name . "'";
+			$result = $dbtool->Query($query,$chandle);
+			
+			// create an object to return
+			$suborg = new Suborganization();
+			
+			// pull the id from the result
+			//$r = mysql_fetch_row($result);
+			
+			// get result
+			$r = mysql_fetch_assoc($result);
+		
+			dprint("Org ID: " . $r['organizationid']);
+			dprint("Name: " . $r['name']);
+			dprint("Website URL: " . $r['websiteurl']);
+			dprint("Documents URL: " . $r['documentsurl']);
+			dprint("Script Name: " . $r['scriptname']);
+			dprint("DB Populated: " . $r['dbpopulated']);
+			
+			// populate our object with the database results
+			$suborg->organiztionname = $this->OrgNameFromID($r['organizationid']);
+			$suborg->name = $r['name'];
+			$suborg->websiteurl = $r['websiteurl'];
+			$suborg->documentsurl = $r['documentsurl'];
+			$suborg->scriptname = $r['scriptname'];
+			$suborg->dbpopulated = $r['dbpopulated'];
+			
+			return $suborg;
 		}
 	
 		function SubOrgIdFromName($name)
