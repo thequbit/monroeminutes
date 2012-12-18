@@ -2,8 +2,12 @@
 
 	class Suborganization
 	{
+		public $organiztionname;
 		public $name;
-		public $url;
+		public $websiteurl;
+		public $documentsurl;
+		public $scriptname;
+		public $dbpopulated;
 	}
 
 ?>
