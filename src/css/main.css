@@ -90,6 +90,7 @@ div.searchtop
 	height:340px;
 	border-radius:25px;
 	box-shadow: 10px 10px 5px #888888;
+	float: left;
 }
 
 div.userinput
@@ -128,7 +129,7 @@ div.organizationlist
 div.results
 {
 	position:relative;
-	top:-385px;
+	top:15px;
 	/*left:270px;*/
 	border:2px solid #a1a1a1;
 	padding:10px 30px; 
