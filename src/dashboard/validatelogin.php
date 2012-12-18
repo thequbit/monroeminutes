@@ -6,10 +6,6 @@
 	require_once("../tools/Permissions.class.php");
 	require_once("../tools/debug.php");
 
-	echo "test.";
-
-	
-
 	// check to see if we are already logined in
 	if( isset($_SESSION['username']) == true )
 	{

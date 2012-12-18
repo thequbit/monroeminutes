@@ -141,6 +141,7 @@
 			return $retVal;
 		}
 	
+		// this function will change the password for the username supplied
 		function ChangePassword($username, $oldpassword, $newpassword, $newpasswordagain)
 		{
 			$success = false;
@@ -163,7 +164,7 @@
 				dprint("Old Hash: " . $oldhash);
 				dprint("New Hash: " . $newhash);
 			
-				// get the number of rows in the searches table
+				// get the passwordhash of the username
 				$query = 'select passwordhash from users where username="' . $username . '"';
 				$result = $dbtool->Query($query,$chandle);
 				
@@ -197,6 +198,39 @@
 			}
 		
 			return $success;
+		}
+	
+		// this function will create a user with the supplied values and permissions
+		function CreateUser($displayName, $username, $password, $canlogin, $isadmin, $enabled)
+		{
+			
+			dprint("CreateUser()");
+		
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
+		
+			// get hash of password
+			$passwordhash = md5($password);
+			
+			dprint("Password Hash: " . $passwordhash);
+		
+			// create a permissions entry for the user
+			$query = 'insert into permissions(canlogin, isadmin, enabled) values(' . $canlogin . ', ' . $isadmin . ', ' . $enabled . ')';
+			$result = $dbtool->Query($query,$chandle);
+		
+			// get id of the permissions entry added
+			$permissionsid = mysql_insert_id();
+
+			dprint("Created permissions entry, id = " . $permissionsid);
+		
+			// insert the user into the database
+			$query = 'insert into users(displayname, username,passwordhash,permissionsid) values("' . $displayname . '", "' . $username . '", "' . $passwordhash . '", ' . $permissionsid . ')';
+			$result = $dbtool->Query($query,$chandle);
+			
+			dprint("User '" . $username . "'added to the database.");
+			
+			return true;
 		}
 	
 	}

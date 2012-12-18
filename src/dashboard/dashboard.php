@@ -25,15 +25,19 @@
 
 			<?php
 			
-				echo "Welcome " . $_SESSION['username'] . "</br>";
-
+				echo "<br><br>Welcome " . $_SESSION['username'] . "</br>";
+	
+				// all users
+				echo '<a href="changepassword.php">Change Password</a></br>';
 				echo '<a href="logout.php">Logout</a></br>';
 				
-				echo '<a href="changepassword.php">Change Password</a></br>';
-				
+				// admin-only users
 				if( isset($_SESSION['isadmin']) && $_SESSION['isadmin'] == true )
 				{
-					echo '<a href="admin.php">Admin Page</a></br>';
+					echo "<br><br><br>-- Admin --<br>";
+					echo '<a href="addentity.php">Add Organization/Suborganization/Category</a><br>';
+					echo '<a href="status.php">Status</a><br>';
+					echo '<a href="createuser.php">Create User</a?<br>';
 				}
 
 			?>
