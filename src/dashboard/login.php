@@ -41,7 +41,7 @@
 					<p><b>To access this resource, please login</b></p>
 				</div>
 			
-				<form action="validatelogin.php">
+				<form action="validatelogin.php" method="post">
 
 					<div id="username" class="userinput">
 					Username:<br>

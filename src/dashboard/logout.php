@@ -1,6 +1,6 @@
 <?php
 
-	require_once("debug.php");
+	require_once("../tools/debug.php");
 
 	// stat our session so we have access to our session variables
 	session_start();

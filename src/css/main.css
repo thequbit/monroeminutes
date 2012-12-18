@@ -25,7 +25,7 @@ div.topwrapper
 }
 
 /* make the login link float right */
-#login
+#loginlink
 {
 	float: right;
 	padding-left: 15px;

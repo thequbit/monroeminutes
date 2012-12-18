@@ -2,8 +2,13 @@
 
 	session_start();
 	
-	require_once("LoginTool.class.php");
-	require_once("Permissions.class.php");
+	require_once("../tools/LoginTool.class.php");
+	require_once("../tools/Permissions.class.php");
+	require_once("../tools/debug.php");
+
+	echo "test.";
+
+	
 
 	// check to see if we are already logined in
 	if( isset($_SESSION['username']) == true )
@@ -19,8 +24,9 @@
 	// we are not loged in, we need to validate the credentials posted to us
 
 	// decode our username and password from our POST event from our login form
-	$username = $_GET['username'];
-	$password = $_GET['password'];
+	$username = $_POST['username'];
+	$password = $_POST['password'];
+	$redirecturl = $_POST['redirecturl'];
 	
 	dprint("username: " . $username);
 	
@@ -89,7 +95,7 @@
 				
 				//echo "redirecturl: " . $_GET['redirecturl'];
 				
-				$redirecturl = $_GET['redirecturl'];
+				
 				
 				// check to see where we are supposed to redirect to
 				if( $redirecturl == "" )
@@ -102,7 +108,7 @@
 				{
 					// if there is, then redirect there
 					header("Location: ../" . urldecode($redirecturl));
-					//echo "redirecturl";
+					//echo $redirecturl;
 				}
 			}
 			else

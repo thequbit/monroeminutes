@@ -29,6 +29,8 @@
 
 				echo '<a href="logout.php">Logout</a></br>';
 				
+				echo '<a href="changepassword.php">Change Password</a></br>';
+				
 				if( isset($_SESSION['isadmin']) && $_SESSION['isadmin'] == true )
 				{
 					echo '<a href="admin.php">Admin Page</a></br>';
