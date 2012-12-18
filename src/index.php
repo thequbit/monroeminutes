@@ -76,7 +76,7 @@
 						// test to see if a user is logged in, if so display the logout option
 						if( isset($_SESSION['username']) == false )
 						{
-							echo '<div id="login" class="navlink">';
+							echo '<div id="loginlink" class="navlink">';
 							echo '<a href="dashboard/login.php">Login</a>';
 							echo '</div>';
 						}
@@ -97,7 +97,7 @@
 					
 						// TODO: make this dynamicly update on search/page load ... add api maybe?
 					
-						require_once("SearchTool.class.php");
+						require_once("./tools/SearchTool.class.php");
 						
 						$searchTool = new SearchTool();
 						
@@ -145,7 +145,7 @@
 					
 						<?
 						
-							require_once("OrganizationsTool.class.php");
+							require_once("./tools/OrganizationsTool.class.php");
 
 							echo "Oranization(s):<br>";
 

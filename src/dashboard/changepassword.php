@@ -37,7 +37,7 @@
 
 					<div id="oldpassworddiv" class="userinput">
 					Old Password:<br>
-						<input type="text" name="oldpassword" style="width=80%"><br>
+						<input type="password" name="oldpassword" style="width=80%"><br>
 					</div>
 
 					<div id="mewpassworddiv" class="userinput">

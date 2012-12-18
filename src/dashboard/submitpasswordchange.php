@@ -18,16 +18,18 @@
 	$oldpassword = $_POST['oldpassword'];
 	$newpassword = $_POST['newpassword'];
 	$newpasswordagain = $_POST['newpasswordagain'];
+	$username = $_SESSION['username'];
 
-	dprint("Old Password: " + $oldpassword);
-	dprint("New Password: " + $newpassword);
-	dprint("New Password Again: " + $newpasswordagain);
+	dprint("Old Password: " . $oldpassword);
+	dprint("New Password: " . $newpassword);
+	dprint("New Password Again: " . $newpasswordagain);
+	dprint("Username: " . $username);
 
 	// create a login tool to help us change the users password
 	$loginTool = new LoginTool();
 	
 	// change the password
-	$success = true; $loginTool->ChangePassword($oldpassword, $newpassword, $newpasswordagain);
+	$success = $loginTool->ChangePassword($username, $oldpassword, $newpassword, $newpasswordagain);
 
 	// print html header data
 	echo '<html>';

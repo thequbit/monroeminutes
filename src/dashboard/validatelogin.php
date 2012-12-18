@@ -29,6 +29,8 @@
 	$redirecturl = $_POST['redirecturl'];
 	
 	dprint("username: " . $username);
+	dprint("password: " . $password);
+	dprint("hash: " . md5($password));
 	
 	// create an instance of the LoginTool to help with authentication and permissions
 	$loginTool = new LoginTool();
@@ -37,8 +39,8 @@
 	$permissions = new Permissions();
 	
 	// get permissionsid of credentials
-	$passwordhash = md5($password);
-	$permissionsid = $loginTool->CheckCredentials($username,$passwordhash);
+	//$passwordhash = md5($password);
+	$permissionsid = $loginTool->CheckCredentials($username,$password);
 	
 	// check credentials and pull permissions
 	if( $permissionsid != -1 )
