@@ -35,8 +35,10 @@
 				if( isset($_SESSION['isadmin']) && $_SESSION['isadmin'] == true )
 				{
 					echo "<br><br><br>-- Admin --<br>";
-					echo '<a href="addentity.php">Add Organization/Suborganization/Category</a><br>';
-					echo '<a href="status.php">Status</a><br>';
+					echo '<a href="addorganization.php">Add Town</a>';
+					echo '<a href="addsuborganization.php">Add Sub-Organization to a Town</a><br>';
+					echo '<a href="addcategory.php">Add Category</a><br>';
+					echo '<a href="status.php">MonroeMinutes.Org Status</a><br>';
 					echo '<a href="createuser.php">Create User</a?<br>';
 				}
 

@@ -147,7 +147,7 @@
 						
 							require_once("./tools/OrganizationsTool.class.php");
 
-							echo "Oranization(s):<br>";
+							echo "Towns/Villages/Cities:<br>";
 
 							// start of select multiple
 							echo '<select multiple="organization" id="organizations" name="organization[]">'; // TODO: set this width to a set value
