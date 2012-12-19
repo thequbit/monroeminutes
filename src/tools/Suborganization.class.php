@@ -8,6 +8,7 @@
 		public $documentsurl;
 		public $scriptname;
 		public $dbpopulated;
+		public $indexeddocs;
 	}
 
 ?>

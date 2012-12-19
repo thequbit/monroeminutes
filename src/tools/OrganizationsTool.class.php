@@ -109,14 +109,38 @@
 				$suborg->websiteurl = $r['websiteurl'];
 				$suborg->documentsurl = $r['documentsurl'];
 				$suborg->scriptname = $r['scriptname'];
-				$suborg->dbpopulated = $r['dbpopulated'];
-			
+				if( $r['dbpopulated'] == 1 )
+				{
+					$suborg->dbpopulated = "true";
+				}
+				else
+				{
+					$suborg->dbpopulated = "false";
+				}
+				$suborg->indexeddocs = $this->NumberOfIndexedDocsFromId($r['suborganizationid']);
+				
 				// add the new name to the list of names
 				$retVal[] = $suborg;
 			
 			}
 			
 			return $retVal;
+		}
+
+		function NumberOfIndexedDocsFromId($id)
+		{
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
+			
+			// get sub org id from name
+			$query = "SELECT count(*) FROM documents where suborganizationid='" . $id . "'";
+			$result = $dbtool->Query($query,$chandle);
+			
+			// get row
+			$r = mysql_fetch_assoc($result);
+			
+			return $r['count(*)'];
 		}
 
 		function SubOrgFromName($name)
@@ -151,7 +175,15 @@
 			$suborg->websiteurl = $r['websiteurl'];
 			$suborg->documentsurl = $r['documentsurl'];
 			$suborg->scriptname = $r['scriptname'];
-			$suborg->dbpopulated = $r['dbpopulated'];
+			if( $r['dbpopulated'] == 1 )
+				{
+					$suborg->dbpopulated = "true";
+				}
+				else
+				{
+					$suborg->dbpopulated = "false";
+				}
+			$suborg->indexeddocs = $this->NumberOfIndexedDocsFromId($r['suborganizationid']);
 			
 			return $suborg;
 		}
@@ -263,6 +295,36 @@
 			$retVal = $this->OrgNameFromID($orgid);
 			
 			// return orgname
+			return $retVal;
+		}
+		
+		function IsIndexed($suborgname)
+		{
+			
+			$retVal = false;
+		
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
+			
+			// get the name of the suborg from the id
+			$query = 'SELECT dbpopulated FROM suborganizations WHERE name="' . $suborgname . '"';
+			$result = $dbtool->Query($query,$chandle);
+			
+			// get row
+			$r = mysql_fetch_assoc($result);
+		
+			// pull out the dbpopulated field, as it represents if the suborg has been indexed fully
+			if( $r['dbpopulated'] == '1' )
+			{
+				$retVal = true;
+			}
+			else
+			{
+				$retVal = false;
+			}
+			
+			// return the suborg name
 			return $retVal;
 		}
 

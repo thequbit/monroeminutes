@@ -107,19 +107,25 @@
 							echo '<div id="' . $orgname . 'div" class="org">';
 							echo '<b>' . $orgname . '</b><br>';
 							
-							//dprint("getting suborg list for org: " . $orgname);
-							
-							
-							
 							// get all of the suborgs within this org
 							$suborgnames = $orgtool->GetAllSubOrganizations($orgname);
-							
-							
 							
 							// iterate through the list of sub orgs for the org and display them
 							foreach($suborgnames as $suborgname)
 							{
-								echo '|- <a id="' . $suborgname->name . '" class="suborglink" onclick="displaySubOrg(\'' . $suborgname->name . '\');">' . $suborgname->name . '</a><br>';
+								echo '|- <a id="' . $suborgname->name . '" class="suborglink" onclick="displaySubOrg(\'' . $suborgname->name . '\');">' . $suborgname->name . '</a>';
+								
+								// test to see if the suborg has been indexed (dbpopulated == true)
+								$isIndexed = $orgtool->IsIndexed($suborgname->name);
+								
+								//echo "Is Indexed? = " . $isIndexed;
+								
+								if( $isIndexed == false )
+								{
+									echo '<font size="1" color="red"> (Not Indexed)</font>';
+								}
+								
+								echo '<br>';
 							}
 							
 							echo '</div>';
