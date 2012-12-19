@@ -156,7 +156,8 @@
 				$searchResult->suborgname = $orgTool->SubOrgNameFromID($r['suborganizationid']);
 				$searchResult->orgname = $orgTool->OrgNameFromSubOrgID($r['suborganizationid']);
 				$searchResult->sourceurl = $r['sourceurl'];
-				$searchResult->date = $r['date'];
+				$searchResult->docdate = $r['documentdate'];
+				$searchResult->scrapedate = $r['scrapedate'];
 				$searchResult->name = $r['name'];
 				$searchResult->word = $r['word'];
 				$searchResult->frequency = $r['frequency'];

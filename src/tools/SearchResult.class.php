@@ -5,7 +5,8 @@
 		public $suborgname;
 		public $orgname;
 		public $sourceurl;
-		public $date;
+		public $docdate;
+		public $scrapedate;
 		public $name;
 		public $word;
 		public $frequency;

@@ -112,7 +112,8 @@ function performSearch()
 							//resultsHtml += "<p><b>Source URL:</b> " + item.sourceurl + "</p>\n";
 							
 							resultsHtml += "<p><b>Name:</b> " + item.name + "</p>\n";
-							resultsHtml += "<p><b>Publication Date:</b> " + item.date + "</p>\n";
+							resultsHtml += "<p><b>Publication Date:</b> " + item.docdate + "</p>\n";
+							resultsHtml += "<p><b>Indexed Date:</b> " + item.scrapedate + "</p>\n";
 							//resultsHtml += "<p><b>Word:</b> " + item.word + "</p>\n";
 							//resultsHtml += "<p><b>Frequency:</b> " + item.frequency + "</p></br></br>\n";
 							
