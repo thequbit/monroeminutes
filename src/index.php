@@ -196,20 +196,20 @@
 			</div>
 			-->
 			
-			<div id="results" class="results">
+			<div id="resultswrapper" class="resultswrapper">
 			
-				<br>
-				<p>Enter a search string, an addres, a date range, and/or an organization to search the database.</p><br>
+				<div id="results" class="results">
+				
+					<br>
+					<p>Enter a search string, an addres, a date range, and/or an organization to search the database.</p><br>
 			
+				</div>
+
 			</div>
-			
-			<div id="footer" class="footer">
-			
-				<!-- Footer information here -->
-			
-			</div>
-			
+				
 		</div>
+	
+		
 	
 	</div>
 	
