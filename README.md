@@ -30,44 +30,69 @@ Overview
 		
 		Token data is transparent to the user, and not accessable via API (yet).  Token data is simply just a histogram of words with their respective number of times they shown up in a the document.  This data can be used to sort the responces with respect to relavence.
 		
-http api - 
-	There is a single simple to use search API provided.  Pass in one or more of the following:
-	
-		keyword
-		startdate
-		enddate
-		organization (note: multiple organizations supported)
-
-	The result will be a json object that will hold the objects that are a "Document".  A document is defined as:
-	
-		suborgname : 'Happy Town!'string
-		orgname : 'Happy County'string
-		sourceurl : 'www.henrietta.org/doccenter/doc_download/1987-sep-19-2012-tb-agenda-a-minutes.html'string
-		date : '0000-00-00 00:00:00'string
-		name : '1987-sep-19-2012-tb-agenda-a-minutes.html'string
-		word : 'test'string
-		frequency : '23'
-
-	Where:
-		suborgname is the name of the sub organization that the document belongs to.
-		orgname is the parrent name to the sub organization
-		sourceurl is the location that the document was pulled from
-		date is the date of the document (note: should be the date of publish, not the date of scrape)
-		name is the name of the document (note: may not be unique)
-		word is the word that was used to generate the result (searches are split on " " and seperate searches are performed)
-		frequency is the number of times the word showed up in the document
-
-		The json object returned looks like this:
+http api's - 
 		
-		{
-	 		"status":"0",
-			"errorText":"None",
-			"queryTime":".00612",
-			"resultCount":4,
-			"results":[]
-		}
-	
-		Where the [] is the array of json objects that are defined as the document structure above.
+	orgapi.php
+		This allows you to pull down suborganization data by passing in the name of the suborg.
+		
+		Pass in the following:
+		
+			orgname
+			
+		And you will get back a json like this:
+			"organiztionname":"Henrietta"
+			"name":"Town of Henrietta"
+			"websiteurl":"http:\/\/www.henrietta.org"
+			"documentsurl":"http:\/\/www.henrietta.org\/doccenter\/cat_view\/3-town-board-documents\/150-2012-agenda-a-minutes.html"
+			"scriptname":"simpledifscrapper.py"
+			"dbpopulated":"true"
+			"indexeddocs":"32"
+		
+		Example data:
+			http://monroeminutes.org/api/orgapi.php?orgname=Town+of+Henrietta
+			
+				- returns -
+			
+			{"organiztionname":"Henrietta","name":"Town of Henrietta","websiteurl":"http:\/\/www.henrietta.org","documentsurl":"http:\/\/www.henrietta.org\/doccenter\/cat_view\/3-town-board-documents\/150-2012-agenda-a-minutes.html","scriptname":"simpledifscrapper.py","dbpopulated":"true","indexeddocs":"32"}
+		
+	searchapi.php
+		Pass in one or more of the following:
+		
+			keyword
+			startdate
+			enddate
+			organization (note: multiple organizations supported)
+
+		The result will be a json object that will hold the objects that are a "Document".  A document is defined as:
+		
+			suborgname : 'Happy Town!'string
+			orgname : 'Happy County'string
+			sourceurl : 'www.henrietta.org/doccenter/doc_download/1987-sep-19-2012-tb-agenda-a-minutes.html'string
+			date : '0000-00-00 00:00:00'string
+			name : '1987-sep-19-2012-tb-agenda-a-minutes.html'string
+			word : 'test'string
+			frequency : '23'
+
+		Where:
+			suborgname is the name of the sub organization that the document belongs to.
+			orgname is the parrent name to the sub organization
+			sourceurl is the location that the document was pulled from
+			date is the date of the document (note: should be the date of publish, not the date of scrape)
+			name is the name of the document (note: may not be unique)
+			word is the word that was used to generate the result (searches are split on " " and seperate searches are performed)
+			frequency is the number of times the word showed up in the document
+
+			The json object returned looks like this:
+			
+			{
+				"status":"0",
+				"errorText":"None",
+				"queryTime":".00612",
+				"resultCount":4,
+				"results":[]
+			}
+		
+			Where the [] is the array of json objects that are defined as the document structure above.
 	
 Search Modes
 	There are two distinct search modes:
@@ -80,7 +105,7 @@ Search Modes
 		
 Different input interpretation
 	The user can provide 0 - n organizations
-	The user can provide 1 - n keywords (seperated by commas in the searchstring)
+	The user can provide 1 - n keywords (seperated by spaces in the searchstring)
 	
 A very simple front-end is provided as index.php.  This is a simple webform that POST's to the searchapi.php api php script.
 	
