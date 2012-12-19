@@ -55,7 +55,11 @@
 				
 					<input type="hidden" name="redirecturl" value="<?php echo urlencode($_GET['redirecturl']); ?>">
 				
-					<div id="submit" class="submit">
+					<div id="registerlink" class="userinput">
+						Don't have a login?  Register <a href="./register.php">here</a>.
+					</div>
+				
+					<div id="submit" class="userinput">
 						<input type="submit" text="Login" id="login">
 					</div>
 				

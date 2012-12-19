@@ -181,7 +181,7 @@
 					</div>
 				
 					<div id="submitrequest" class="submitrequest">
-						<p>Don't see your organization? Submit a request to add it <a href="dashboard/request.php">here</a></p>
+						<p>See more information about the organizations above <a href="orgpage.php">here</a></p>
 					</div>
 				
 				</div>
