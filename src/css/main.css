@@ -19,9 +19,38 @@ body
 /* set the width of our site, and center it */
 div.topwrapper
 {
-	width:800px;
+	min-width:800px;
+	max-width:1500px;
+	width:85%;
 	margin:0 auto;
 	/*background-color: #DDDDFF;*/
+}
+
+div.resultswrapper
+{
+	position:relative;
+	padding-left:15px;
+	
+	display: inline-block;
+}
+
+/* This will wrap the results with a box, and give it a shadow */
+div.results
+{
+	position:relative;
+	top:15px;
+	/*left:270px;*/
+	border:2px solid #a1a1a1;
+	padding:30px 30px; 
+	background:#dddddd;
+	/*padding-left:30px;*/
+	/*width:100%;*/
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
+	/*margin-left:auto;
+	margin-right:auto;*/
+	/* float: right; */
+	
 }
 
 /* make the login link float right */
@@ -63,11 +92,11 @@ div.title
 	position:relative;
 	margin-left: auto;
     margin-right: auto;
-	width:800px;
+	width:100%;
 	border:2px solid #A1A1A1;
 	background:#DDDDDD;
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
 }
 
 img.titleimg
@@ -88,8 +117,8 @@ div.searchtop
 	background:#dddddd;
 	width:230px;
 	height:340px;
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
 	float: left;
 }
 
@@ -125,24 +154,11 @@ div.organizationlist
 	
 }
 
-/* This will wrap the results with a box, and give it a shadow */
-div.results
-{
-	position:relative;
-	top:15px;
-	/*left:270px;*/
-	border:2px solid #a1a1a1;
-	padding:10px 30px; 
-	background:#dddddd;
-	width:400px;
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
-	float: right;
-}
+
 
 /* result box */
 div.searchresult
 {
 	border:2px solid #FFFFDD;
-	padding: 4px 4px;
+	padding: 8px 8px;
 }

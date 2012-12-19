@@ -15,8 +15,8 @@ div.orglist
 	background:#dddddd;
 	width:230px;
 	/* height:340px; */
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
 	float: left;
 }
 
@@ -29,8 +29,8 @@ div.orginfo
 	padding:30px 30px; 
 	background:#dddddd;
 	width:400px;
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
 	float: right;
 	display: inline-block;
 }

@@ -9,8 +9,8 @@ div.loginbox
 	border:2px solid #A1A1A1;
 	background:#DDDDDD;
 	padding:30px 30px;
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
 }
 
 div.neworg
@@ -22,8 +22,8 @@ div.neworg
 	padding:10px 30px; 
 	background:#dddddd;
 	width:400px;
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
 	/*float: right;*/
 }
 
@@ -37,8 +37,8 @@ div.submitstatus
 	padding:10px 30px; 
 	background:#dddddd;
 	width:400px;
-	border-radius:25px;
-	box-shadow: 10px 10px 5px #888888;
+	border-radius:15px;
+	box-shadow: 5px 5px 5px #888888;
 }
 /*
 div.orginput
