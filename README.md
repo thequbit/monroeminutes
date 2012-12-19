@@ -68,7 +68,8 @@ http api's -
 			suborgname : 'Happy Town!'string
 			orgname : 'Happy County'string
 			sourceurl : 'www.henrietta.org/doccenter/doc_download/1987-sep-19-2012-tb-agenda-a-minutes.html'string
-			date : '0000-00-00 00:00:00'string
+			docdate : '0000-00-00'string
+			scrapedate : '0000-00-00'string
 			name : '1987-sep-19-2012-tb-agenda-a-minutes.html'string
 			word : 'test'string
 			frequency : '23'
@@ -77,7 +78,8 @@ http api's -
 			suborgname is the name of the sub organization that the document belongs to.
 			orgname is the parrent name to the sub organization
 			sourceurl is the location that the document was pulled from
-			date is the date of the document (note: should be the date of publish, not the date of scrape)
+			docdate is the date of the document (note: should be the date of publish, not the date of scrape)
+			scrapedate is the date the tool pulled the doc from the net and indexed it
 			name is the name of the document (note: may not be unique)
 			word is the word that was used to generate the result (searches are split on " " and seperate searches are performed)
 			frequency is the number of times the word showed up in the document
