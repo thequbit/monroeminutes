@@ -11,12 +11,12 @@ documents
 	documentdate
 	scrapedate
 	name
-	fulltext
+	documenttext
 	
 organization
 	organizationid
 	name
-	websiteurl
+	type
 	
 suborganization
 	suborganizationid
@@ -49,11 +49,11 @@ create database monroeminutes;
 
 create table wordfrequency (wordfrequencyid int not null auto_increment primary key, documentid int not null, word text, frequency int);
 
-create table documents ( documentid int not null auto_increment primary key, suborganizationid int not null, sourceurl text, documentdate date, scrapedate datetime, name text, fulltext text);
+create table documents (documentid int not null auto_increment primary key, suborganizationid int not null, sourceurl text not null, documentdate date not null, scrapedate date not null, name text not null, documenttext text not null);
 
-create table organization (organizationid int not null auto_increment primary key, name text, websiteurl text);
+create table organizations (organizationid int not null auto_increment primary key, name text, type text not null);
 
-create table suborganization(suborganizationid int not null auto_increment primary key, organizationid int, name text, websiteurl text, documentsurl text, sciptname text, dbpopulated bool);
+create table suborganizations (suborganizationid int not null auto_increment primary key, organizationid int, name text, websiteurl text, documentsurl text, scriptname text, dbpopulated bool);
 	
 create table users( userid int not null auto_increment primary key, displayname text not null, username text not null, passwordhash text not null, permissionsid int not null);
 
