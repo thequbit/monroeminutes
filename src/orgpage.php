@@ -86,10 +86,10 @@
 				<div id="orglist" class="orglist">
 					
 					<div id="requestlinka" class="userinput">
-						Don't see the organization you're looking for?<br>
+						Don't see what you're looking for?<br>
 					</div>
 					<div id="requestlinkb" class="userinput">
-						Submit a request to add it <a href="dashboard/request.php">here</a> (requires login).<br>
+						Request it <a href="dashboard/request.php">here</a> (requires login).<br>
 					</div>
 					
 					<?

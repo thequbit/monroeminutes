@@ -7,6 +7,79 @@
 
 	class OrganizationsTool
 	{
+		
+		function CreateOrganization($orgname)
+		{
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
+			
+			// see if the orgname already exists
+			$query = 'SELECT name FROM organizations WHERE name="' . $orgname . '"';
+			$results = $dbtool->Query($query,$chandle);
+			
+			// get result count
+			$numrows = mysql_num_rows($results);
+			
+			// check to see if there was a org with the name already
+			if( $numrows > 0 )
+			{
+				$retVal = false;
+			}
+			else
+			{			
+				// add the org 
+				$query = 'INSERT INTO organizations (name) values("' . $orgname . '")';
+				$results = $dbtool->Query($query,$chandle);
+
+				$retVal = true;
+			}
+			
+			return $retVal;
+		}
+	
+		function CreateSubOrganization($suborgname,$orgname,$websiteurl,$documentsurl,$scriptname)
+		{
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
+		
+			dprint("checking to ensure sub org doesn't already exist");
+		
+			// decode orgid from orgname
+			$orgid = $this->OrgIdFromName($orgname);
+		
+			// see if the orgname already exists
+			$query = 'SELECT name FROM suborganizations WHERE name="' . $suborgname . '" and organizationid=' . $orgid;
+			$results = $dbtool->Query($query,$chandle);
+			
+			// get result count
+			$numrows = mysql_num_rows($results);
+			
+			dprint("Returned Result Count: " . $numrows);
+			
+			// check to see if there was a org with the name already
+			if( $numrows > 0 )
+			{
+				$retVal = false;
+			}
+			else
+			{		
+			
+				dprint("Adding new suborg");
+			
+				// add the suborg to the db
+				$query = 'INSERT INTO suborganizations (organizationid,name,websiteurl,documentsurl,scriptname,dbpopulated) ';
+				$query .= 'values(' . $orgid . ', "' . $suborgname . '", "' . $websiteurl . '", "' . $documentsurl . '", "' . $scriptname . '", 0)';
+				$results = $dbtool->Query($query,$chandle);
+			
+				$retVal = true;
+			
+			}
+			
+			return $retVal;
+		}
+	
 		function GetAllOrganizationNames()
 		{
 			$retVal = array();
