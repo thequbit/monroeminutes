@@ -14,6 +14,8 @@
 			$dbtool = new DatabaseTool();
 			$chandle = $dbtool->Connect();
 			
+			$orgname = $dbtool->SanitizeInput($orgname);
+			
 			// see if the orgname already exists
 			$query = 'SELECT name FROM organizations WHERE name="' . $orgname . '"';
 			$results = $dbtool->Query($query,$chandle);
@@ -45,6 +47,13 @@
 			$chandle = $dbtool->Connect();
 		
 			dprint("checking to ensure sub org doesn't already exist");
+		
+			//sanitize inputs
+			$suborgname = $dbtool->SanitizeInput($suborgname);
+			$orgname = $dbtool->SanitizeInput($orgname);
+			$websiteurl = $dbtool->SanitizeInput($websiteurl);
+			$documentsurl = $dbtool->SanitizeInput($documentsurl);
+			$scriptname = $dbtool->SanitizeInput($scriptname);
 		
 			// decode orgid from orgname
 			$orgid = $this->OrgIdFromName($orgname);
