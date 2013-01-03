@@ -17,6 +17,8 @@ import _mysql as mysql
 
 import datetime
 
+from random import randint
+
 def get_mysql_credentials():
         # read in credentials file
         lines = tuple(open('mysqlcreds.txt', 'r'))
@@ -162,12 +164,19 @@ def main(argv):
 
 			# generate some url and file names
 			linkurl = baseurl + tag['href']
-			filename = "./pdfs/" + tag['href'] + ".pdf"
+			urlfile = tag['href'][tag['href'].rfind("/")+1:]
+			filename = "./pdfs/{0}_{1}.pdf".format(urlfile,randint(0,1000000))
 
 			# pull down the pdf file
 			print "\tGetting '" + linkurl + "' ..."
 			filename,headers = urllib.urlretrieve(linkurl,filename)
 			print "\tDone."
+
+			# get the document name from the pdf text
+			print "\tPulling document date from PDF ..."
+			docname = tag.get_text()
+			print "\tDone."
+
 
 			# get the text of the pdf file
 			print "\tConverting PDF to text ..."
@@ -198,11 +207,6 @@ def main(argv):
 				# get publication date from pdf text
 				print "\tPulling publication date from PDF ..."
 				publicationdate = "1970-01-01";
-				print "\tDone."
-
-				# get the document name from the pdf text
-				print "\tPulling document date from PDF ..."
-				docname = linkurl # TODO: implement this correctly
 				print "\tDone."
 
 				# push the data to the database
