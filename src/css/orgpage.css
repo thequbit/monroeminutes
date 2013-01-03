@@ -28,7 +28,7 @@ div.orginfo
 	border:2px solid #a1a1a1;
 	padding:30px 30px; 
 	background:#dddddd;
-	width:400px;
+	/*width:500px;*/
 	border-radius:15px;
 	box-shadow: 5px 5px 5px #888888;
 	float: right;

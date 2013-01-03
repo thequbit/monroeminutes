@@ -149,6 +149,11 @@ div.requestnote
 }
 */
 
+div.statclass
+{
+	display: inline-block;
+}
+
 div.organizationlist
 {
 	

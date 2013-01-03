@@ -132,6 +132,26 @@
 			return $retVal;
 		}
 	
+		function GetNumberOfSubOrgs()
+		{
+			// connect to DB
+			$dbtool = new DatabaseTool();
+			$chandle = $dbtool->Connect();
+			
+			$orgname = $dbtool->SanitizeInput($orgname);
+			
+			// see if the orgname already exists
+			$query = 'SELECT count(*) FROM suborganizations';
+			$results = $dbtool->Query($query,$chandle);
+			
+			// get count
+			$r = mysql_fetch_assoc($results);
+			$retVal = $r["count(*)"];
+			
+			// return the number of documents
+			return $retVal;
+		}
+	
 		function GetAllSubOrganizationNames($orgname)
 		{
 			$retVal = array();
