@@ -38,7 +38,7 @@ def get_mysql_credentials():
 
 def convert_pdf(path):
 
-	#try:
+	try:
 		rsrcmgr = PDFResourceManager()
 		retstr = StringIO()
 		codec = 'ascii'
@@ -64,12 +64,12 @@ def convert_pdf(path):
 		#	retVal += page.extractText()
 		#	print page.extractText()
 
-	#except:
-	#	print "PDF is not formatted correctly, aborting."
-	#	retVal = ("", False)
-	#	pass
+	except:
+		print "PDF is not formatted correctly, aborting."
+		retVal = ("", False)
+		pass
 
-		return retVal
+	return retVal
 
 trans_table = ''.join( [chr(i) for i in range(128)] + ['?'] * 128 )
 def ascii(s):
