@@ -19,6 +19,10 @@ import datetime
 
 from random import randint
 
+import unicodedata
+from unidecode import unidecode
+import codecs
+
 def get_mysql_credentials():
         # read in credentials file
         lines = tuple(open('mysqlcreds.txt', 'r'))
@@ -34,10 +38,10 @@ def get_mysql_credentials():
 
 def convert_pdf(path):
 
-	try:
+	#try:
 		rsrcmgr = PDFResourceManager()
 		retstr = StringIO()
-		codec = 'utf-8'
+		codec = 'ascii'
 		laparams = LAParams()
 		laparams.all_texts = True
 		device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
@@ -46,8 +50,11 @@ def convert_pdf(path):
 		with open(path, 'rb') as fp:
 			process_pdf(rsrcmgr, device, fp)
 		device.close()
+
+		# un-fuck the non-utf8 string ...
+		txt = retstr.getvalue()
 	
-		retVal = (retstr.getvalue(),True)
+		retVal = (txt,True)
 		retstr.close()
 		
 		#retVal = ""
@@ -57,41 +64,91 @@ def convert_pdf(path):
 		#	retVal += page.extractText()
 		#	print page.extractText()
 
-	except:
-		print "PDF is not formatted correctly, aborting."
-		retVal = ("", False)
-		pass
+	#except:
+	#	print "PDF is not formatted correctly, aborting."
+	#	retVal = ("", False)
+	#	pass
 
-	return retVal
+		return retVal
+
+trans_table = ''.join( [chr(i) for i in range(128)] + ['?'] * 128 )
+def ascii(s):
+    if isinstance(s, unicode):
+        return s.encode('ascii', 'replace')
+    else:
+        return s.translate(trans_table)
 
 def push_to_database(suborgid, database, fdist, sourceurl, publicationdate, docname, pdftext):
 	
 	print "\t\tPushing document to DB ..."
 	
+	# unicodeify the pdftext to prepare it for the database
+	#pdftext = pdftext.encode('utf-8');
+	#docname = unicode(docname, errors='ignore')
+	#pdftext = unicode(pdftext, errors='ignore')
+	#pdftext = pdftext.encode('utf-8','ignore')
+
+	#sourceurl = unicode(sourceurl,errors='ignore')
+	#sourceurl = sourceurl.encode('utf-8','ignore')
+
+	#sourceurl = sourceurl.encode('utf-16','error')
+	#pdftext = pdftext.encode('utf-16','error')
+
+	#print pdftext
+
+	#pdfascii = unicodedata.normalize('NFKD', unicode(pdftext)).encode('ASCII', 'ignore')
+	#pdfascii = unidecode(u"{0}".format(pdftext))
+
+	#bom = unicode(codecs.BOM_UTF8, "utf8")
+	pdfascii = pdftext
+
+	#pdfascii = pdfascii.encode("ascii","ignore")
+
 	# get current date
 	now = datetime.datetime.now()
 	str_now = now.date().isoformat()
 
-	# insert the doc into the database
-	query = 'insert into documents (suborganizationid,sourceurl,documentdate,scrapedate,name,documenttext) values({0},"{1}","{2}","{3}","{4}","{5}")'.format(suborgid,mysql.escape_string(sourceurl),publicationdate,str_now,mysql.escape_string(docname),mysql.escape_string(pdftext))
+	# test to make sure we have not already inserted the document
+	query = 'select count(*) from documents where sourceurl="{0}"'.format(mysql.escape_string(sourceurl))
 	database.query(query)
-
-	# get the id of the doc we just inserted
-	query = 'select documentid from documents where sourceurl="%s"' % sourceurl
-	database.query(query)
-	dbresult=database.store_result()
-	(documentid,),=dbresult.fetch_row()
-
-	print "\t\tDone."
-
-	print "\t\tPushing %i tokens to DB ..." % len(fdist)
+        dbresult=database.store_result()
+        (count,),=dbresult.fetch_row()
 	
-	# insert all of the words into the database
-	for token,frequency in fdist.items():	
-		query = 'insert into wordfrequency (documentid,word,frequency) values("{0}","{1}","{2}")'.format(documentid,mysql.escape_string(token),frequency)
+	# see if the URL is already in the database by checking the count
+	if count != "0":
+		print "\t\t\tDocument already exists in DB, skipping"
+	else:
+
+		#print "suborgid: {0}".format(suborgid)
+		#print "sourceurl: {0}".format(sourceurl)
+		sourceurl = sourceurl.encode('ascii','ignore')
+		#print "publicaiondate: {0}".format(publicationdate)
+		docname = docname.encode('ascii','ignore')
+		#print "docname: {0}".format(docname)
+		pdfascii = pdfascii.encode('ascii','ignore')
+		#print "pdfascii: {0}".format(pdfascii)
+
+		# insert the doc into the database
+		query = 'insert into documents (suborganizationid,sourceurl,documentdate,scrapedate,name,documenttext) values({0},"{1}","{2}","{3}","{4}","{5}")'.format(suborgid,mysql.escape_string(sourceurl),publicationdate,str_now,mysql.escape_string(docname),mysql.escape_string(pdfascii))
+		#query = query.encode('ascii','ignore')	
 		database.query(query)
 
-	print "\t\tDone."
+		# get the id of the doc we just inserted
+		query = 'select documentid from documents where sourceurl="%s"' % sourceurl
+		database.query(query)
+		dbresult=database.store_result()
+		(documentid,),=dbresult.fetch_row()
+
+		print "\t\tDone."
+
+		print "\t\tPushing %i tokens to DB ..." % len(fdist)
+	
+		# insert all of the words into the database
+		for token,frequency in fdist.items():	
+			query = 'insert into wordfrequency (documentid,word,frequency) values("{0}","{1}","{2}")'.format(documentid,mysql.escape_string(token),frequency)
+			database.query(query)
+
+		print "\t\tDone."
 
 	# all done
 	return
@@ -161,9 +218,13 @@ def main(argv):
 		if textpatern in tag['href']:
 
 			print "\tDocument Found!"
-
+			#print tag['href'][0:7]
 			# generate some url and file names
-			linkurl = baseurl + tag['href']
+			if tag['href'][0:7].lower() == "http://":
+				linkurl = tag['href']
+			else:
+				linkurl = baseurl + tag['href']
+
 			urlfile = tag['href'][tag['href'].rfind("/")+1:]
 			filename = "./pdfs/{0}_{1}.pdf".format(urlfile,randint(0,1000000))
 
