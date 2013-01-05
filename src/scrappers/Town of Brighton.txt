@@ -1,0 +1,16 @@
+Town of Brightion:
+
+2012:
+python getpdfs.py 1 ADID http://www.townofbrighton.org/Archive.aspx?AMID=67 http://www.townofbrighton.org/
+
+2011:
+python getpdfs.py 1 ADID http://www.townofbrighton.org/Archive.aspx?AMID=63 http://www.townofbrighton.org/
+
+2010:
+python getpdfs.py 1 ADID http://www.townofbrighton.org/Archive.aspx?AMID=54 http://www.townofbrighton.org/
+
+2009:
+python getpdfs.py 1 ADID http://www.townofbrighton.org/Archive.aspx?AMID=55 http://www.townofbrighton.org/
+
+2008:
+python getpdfs.py 1 ADID http://www.townofbrighton.org/Archive.aspx?AMID=56 http://www.townofbrighton.org/

@@ -91,21 +91,85 @@
 				
 				</div>
 
-				<div id="totalsearches" class="totalsearches">
+				<div id="stats" class="stats">
 				
-					<?php
+					<div id="totalsearches" class="statclass">
 					
-						// TODO: make this dynamicly update on search/page load ... add api maybe?
+						<?php
+						
+							// TODO: make this dynamicly update on search/page load ... add api maybe?
+						
+							require_once("./tools/SearchTool.class.php");
+							
+							$searchTool = new SearchTool();
+							
+							$totalSearches = $searchTool->GetTotalSearchCount();
+							
+							echo "Searches to date: <b>" . $totalSearches . "</b>";
+						
+						?>
+
+					</div>
 					
-						require_once("./tools/SearchTool.class.php");
-						
-						$searchTool = new SearchTool();
-						
-						$totalSearches = $searchTool->GetTotalSearchCount();
-						
-						echo "Total number of searches to date: <b>" . $totalSearches . "</b>";
+					<div class="statclass"> | </div>
 					
-					?>
+					<div id="totaldocuments" class="statclass">
+					
+						<?php
+						
+							// TODO: make this dynamicly update on search/page load ... add api maybe?
+						
+							require_once("./tools/DocumentTool.class.php");
+							
+							$docTool = new DocumentTool();
+							
+							$totalDocuments = $docTool->GetTotalNumberOfDocuments();
+							
+							echo "Documents Parsed: <b>" . $totalDocuments . "</b>";
+						
+						?>
+
+					</div>
+				
+					<div class="statclass"> | </div>
+					
+					<div id="totaldocuments" class="statclass">
+					
+						<?php
+						
+							// TODO: make this dynamicly update on search/page load ... add api maybe?
+						
+							require_once("./tools/DocumentTool.class.php");
+							
+							$docTool = new DocumentTool();
+							
+							$totalWords = $docTool->GetTotalNumberOfWords();
+							
+							echo "Words Indexed: <b>" . $totalWords . "</b>";
+						
+						?>
+
+					</div>
+				
+					<div class="statclass"> | </div>
+					
+					<div id="totaldocuments" class="statclass">
+					
+						<?php
+						
+							// TODO: make this dynamicly update on search/page load ... add api maybe?
+						
+							require_once("./tools/OrganizationsTool.class.php");
+							
+							$orgTool = new OrganizationsTool();
+							
+							$totalSubOrgs = $orgTool->GetNumberOfSubOrgs();
+							
+							echo "Organizations Scraped: <b>" . $totalSubOrgs . "</b>";
+						
+						?>
+
+					</div>
 				
 				</div>
 

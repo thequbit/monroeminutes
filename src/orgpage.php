@@ -131,6 +131,10 @@
 								{
 									echo '<font size="1" color="red"> (Not Indexed)</font>';
 								}
+								else
+								{
+									echo '<font size="1" color="green"> (Fully Indexed)</font>';
+								}
 								
 								echo '<br>';
 							}

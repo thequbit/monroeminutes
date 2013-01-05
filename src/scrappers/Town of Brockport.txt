@@ -1,0 +1,2 @@
+All of Brockport:
+python getpdfs.py 2 20xx http://www.brockportny.org/html/government/minutes.html http://www.brockportny.org/html/government/

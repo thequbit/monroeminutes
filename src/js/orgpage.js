@@ -22,9 +22,9 @@
 				resultsHtml += 'Website: <a href="' + data.websiteurl + '">' + data.websiteurl + '</a><br>';
 				resultsHtml += 'Documents Website: <a href="' + data.documentsurl + '">' + data.documentsurl + '</a><br>';
 				resultsHtml += 'Number of Indexed Documents: ' + data.indexeddocs + '<br>';
-				resultsHtml += '----<br>';
-				resultsHtml += 'Script Name: ' + data.scriptname + '<br>';
-				resultsHtml += 'DB Populated: ' + data.dbpopulated + '<br>';
+				//resultsHtml += '----<br>';
+				//resultsHtml += 'Script Name: ' + data.scriptname + '<br>';
+				//resultsHtml += 'DB Populated: ' + data.dbpopulated + '<br>';
 				
 				$("#orginfo").html(resultsHtml);
 			

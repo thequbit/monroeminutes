@@ -106,7 +106,7 @@ function performSearch()
 							//alert(item.suborgname);
 							
 							resultsHtml += '<div class="searchresult">\n';
-							resultsHtml += '<h3><a href="http://' + item.sourceurl + '">' + item.orgname + ' - ' + item.suborgname + '</a></h3>\n';
+							resultsHtml += '<h3><a href="' + item.sourceurl + '">' + item.orgname + ' - ' + item.suborgname + '</a></h3>\n';
 							//resultsHtml += "<p><b>Suborganization Name:</b> " + item.suborgname + "</p>\n";
 							//resultsHtml += "<p><b>Organization Name:</b> " + item.orgname + "</p>\n";
 							//resultsHtml += "<p><b>Source URL:</b> " + item.sourceurl + "</p>\n";
