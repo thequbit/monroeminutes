@@ -19,6 +19,8 @@ import datetime
 
 import nltk
 
+import hashlib
+
 def convert_pdf(path):
 
         try:
@@ -48,7 +50,7 @@ def convert_pdf(path):
                 #       print page.extractText()
 
         except:
-                print "\tERROR: PDF is not formatted correctly, aborting."
+                #print "\tERROR: PDF is not formatted correctly, aborting."
                 retVal = ("", False)
                 pass
 
@@ -83,7 +85,7 @@ def parse_org(text,orgs):
 
 	return (retName,retID,success)
 
-def get_orgs():
+def get_orgs(bodyid):
 
 	orgNames = []
 
@@ -94,16 +96,20 @@ def get_orgs():
 	with con:
 
 		cur = con.cursor()
-		cur.execute("SELECT docparsename,organizationid FROM Organizations")
+		query = "SELECT docparsename,organizationid FROM Organizations WHERE bodyid={0}".format(bodyid)
+		cur.execute(query)
 		rows = cur.fetchall()
 
 		for row in rows:
 			parseName,orgId, = row
-			orgNames.append((parseName,orgId))
+			# and org may exist in the DB that does not yet have any minutes, so we don't
+			# know what the parse string match will be
+			if parseName != "":
+				orgNames.append((parseName,orgId))
 			
 	return orgNames
 
-def push_document(pdfText,sourceURL,publishDate,organizationID):
+def push_document(pdfText,sourceURL,publishDate,organizationID,scrapurlid,textHash,bodyid):
 
 	pdfText = pdfText.encode('ascii','ignore')
 	sourceURL = sourceURL.encode('ascii','ignore')
@@ -115,7 +121,7 @@ def push_document(pdfText,sourceURL,publishDate,organizationID):
         with con:
 
                 cur = con.cursor()
-		query = 'INSERT INTO Documents(scrapdt,publishdate,docname,organizationid,sourceurl,doctext) VALUES("{0}", "{1}", "{2}", {3}, "{4}", "{5}")'.format(datetime.datetime.now().date().isoformat(),publishDate.date(),"",organizationID,mysql.escape_string(sourceURL),mysql.escape_string(pdfText))
+		query = 'INSERT INTO Documents(scrapdt,publishdate,docname,organizationid,sourceurl,doctext,scrapurlid,hash,bodyid) VALUES("{0}", "{1}", "{2}", {3}, "{4}", "{5}",{6},"{7}","{8}")'.format(datetime.datetime.now().isoformat(),publishDate,"",organizationID,mysql.escape_string(sourceURL),mysql.escape_string(pdfText),scrapurlid,textHash,bodyid)
 		cur.execute(query)
 
 		query = 'SELECT documentid FROM Documents WHERE sourceurl="{0}" AND organizationid={1}'.format(sourceURL,organizationID)
@@ -160,13 +166,13 @@ def push_words(pdfText,docid):
                 cur = con.cursor()
 		
 		for token,frequency in fdist.items():
-			if len(token) > 4:
+			if len(token) > 3: # why 3? because fuck you thats why
 		                query = 'INSERT INTO Words(word,documentid,frequency) VALUES("{0}","{1}","{2}")'.format(token,docid,frequency)
         		        cur.execute(query)
 
-	print "\tPushed {0} Words to DB.".format(len(fdist.items()))
+	print "\t\t\tPARSER: Pushed {0} Words to DB.".format(len(fdist.items()))
 
-def check_exists(sourceURL):        
+def check_url_exists(sourceURL):
 
 	exists = False
 
@@ -190,7 +196,34 @@ def check_exists(sourceURL):
 
 	return exists
 
-def parsepdf(sourceURL):
+def check_hash_exists(pdfText):
+
+	exists = False
+
+	# get hash
+	textHash = hashlib.md5(pdfText).hexdigest()
+
+	auth = get_mysql_credentials()
+
+        con = mdb.connect(auth[0].strip(), auth[2].strip(), auth[3].strip(), auth[1].strip());
+
+        with con:
+
+                cur = con.cursor()
+                query = 'SELECT count(documentid) as count FROM Documents WHERE hash="{0}"'.format(textHash)
+                cur.execute(query)
+                row = cur.fetchone()
+
+                count, = row
+
+                if count == 0:
+                        exists = False
+                else:
+                        exists = True
+
+	return exists
+
+def parsepdf(sourceURL,scrapurlid,bodyid):
 
 	#f( len(argv) != 3 ):
 	#print "Usage: {0} <pdf_file> <source_url>".format(argv[0])
@@ -201,54 +234,65 @@ def parsepdf(sourceURL):
 	#dfFileName = argv[1];
 	#ourceURL = argv[2];
 
-	print "Checking if Document Already Exists in DB"
+	#print "Checking if Document Already Exists in DB"
 
-	exists = check_exists(sourceURL)
+	exists = check_url_exists(sourceURL)
 
 	if exists == True:
-		print "\tDocument Already Parsed, Ignoring."
-		print "Done."
-		return True
+		print "\t\t\tPARSER: Document Already Parsed, Ignoring."
+		#print "\t\t\tPARSER: Done."
+		return "Ignore"
 
-	print "Done."
+	#print "Done."
 
-	print "Downloading PDF"
+	#print "\t\t\tPARSER: Downloading PDF ..."
 	
 	# get the filename off of the url, then set the local file to that + a random number .pdf, and download it
 	urlfile = sourceURL[sourceURL.rfind("/")+1:]
 	filename = "./pdfs/{0}_{1}.pdf".format(urlfile,randint(0,1000000))
 
-	print "\tSource URL = {0}".format(sourceURL)
+	print "\t\t\tPARSER: Source URL = {0}".format(sourceURL)
 	#print "URL File = {0}".format(urlfile)
 	#print "Filename = {0}".format(filename)
 
 	pdfFileName,headers = urllib.urlretrieve(sourceURL,filename)
 
-	print "Done."
+	#print "Done."
 
-	print "Converting PDF ..."
+	#print "Converting PDF ..."
 
 	pdfText,success = convert_pdf(pdfFileName)
 
 	if success == False:
-		print "\tFailed to Convert PDF."
-		print "Done."
-		return False
+		print "\t\t\tPARSER: Failed to Convert PDF."
+		#print "Done."
+		return "NonPDF"
 
 	pdfText = pdfText.encode('ascii','ignore');
 
-	print "Done."
+	#print "Done."
 
-	print "Pulling Org List From DB"
+	#print "Testing to see if Hash exists in DB"
 
-	orgs = get_orgs()
+	exists = check_hash_exists(pdfText)
 
-	print "Done."
+	if exists == True:
+		print "\t\t\tPARSER: PDF Already Parsed, Hash Exists."
+		#print "Done."
+		return "Ignore";
 
-	print "Pulling Out Header Information ..."
+	#print "Done."
+
+	#print "Pulling Org List From DB"
+
+	orgs = get_orgs(bodyid)
+
+	#print "Done."
+
+	#print "Pulling Out Header Information ..."
 
 	# take first 1024 charictors of the pdf
-	headerText = pdfText[:256];
+	headerText = pdfText[:1024];
 
 	# split the smaller portion into lines
 	headerLines = headerText.split("\n")
@@ -265,63 +309,87 @@ def parsepdf(sourceURL):
 	for line in headerLines:
 
 		# make sure there is actually data in the line
-		if( line.strip() != "" ):
+		if line.strip() != "":
 
-			#print "Trying to Parse: '{0}'".format(line)
-			
+			#print "Trying to Parse: '{0}'".format(line)	
+		
 			# 
 			# Parse as Date
 			#
 			if( publishDate == None ):
-				dtResult,retType = p.parse(line);
 
-				if retType == 1:
-					publishDate = datetime.datetime( *dtResult[:6] )
-				elif retType == 3:	
-					publishDate = dtResult				
-	
+				# attempt to parse the date ...
+				try:
+					dtResult = p.parseDate(line)
+				except:
+					try:
+						dtResult = p.parseDateText(line)
+					except:
+						dtResult = None
+		
+				if dtResult != None:
+					publishDate = datetime.datetime( *dtResult[:6] ).date().isoformat()
+
+				#if retType = 0
+				#	# no date found
+				#	publishDate = None
+				#elif retType in (1,2):
+				#	publishDate = datetime.datetime( *dtResult[:6] )
+				#elif retType == 3:	
+				#	publishDate = dtResult.datetime
+						
+				# parsed as a time, not a date	
 				if( publishDate != None ):
-					print "\tDate/Time Parsed as: {0}".format(publishDate.date().isoformat())
-			#else:
-			#	print "\tNot a Date"
-
+					print "\t\t\tPARSER: Date/Time Parsed as: {0}".format(publishDate)
+				#else:
+				#	print "\tNot a Date"
+		
 			#
 			# Parse as Organization
 			# 
-			orgName,orgID,success = parse_org(line,orgs)
+			if organizationName == None:
+				orgName,orgID,success = parse_org(line,orgs)
+	
+				if success == True:
+					organizationName = orgName
+					organizationID = orgID
+					print "\t\t\tPARSER: Organization Name: {0}, ID: {1}".format(organizationName,organizationID)
 
-			if success == True:
-				organizationName = orgName
-				organizationID = orgID
-				print "\tOrganization Name Parsed as: {0}".format(organizationName)
-				print "\tOrganization ID decoded as: {0}".format(organizationID)
+			if publishDate != None and organizationName != None:
+				#print "\t\t\tPARSER: Header Successfully Parsed."
+				break
 
 
-	#rint ""
+	#print ""
 	#print "\tOrganization Name = {0}".format(organizationName)
 	#print "\tOrganization ID = {0}".format(organizationID)
 	#print "\tPublish Date = {0}".format(publishDate.date())
 	#rint ""
 
 	if organizationID == None or publishDate == None:
-		print "\t???? Bad PDF Header Formating ??????"
-		print "Done."
-		return False
+		print "\t\t\tPARSER: ERROR: Bad PDF Header Formating!!!"
+		#print "Done."
+		return "Error"
 
-	print "Done."
+	#print "Done."
 
-	print "Pushing Document to Database"
+	#print "Pushing Document to Database"
+
+	# get hash of the pdf text
+	textHash = hashlib.md5(pdfText).hexdigest()
 
 	# push the doc to the DB
-	docid = push_document(pdfText, sourceURL, publishDate, organizationID)
+	docid = push_document(pdfText, sourceURL, publishDate, organizationID, scrapurlid, textHash, bodyid)
 
-	print "Done."
+	#print "Done."
 
-	print "Pushing Document Word Frequency Histogram to DB."
+	#print "Pushing Document Word Frequency Histogram to DB."
 
 	push_words(pdfText,docid)
 
-	print "Done."
+	#print "Done."
 
-	return True
+	print "\t\t\tPARSER: Parse Successful."
+
+	return "Successful"
 
