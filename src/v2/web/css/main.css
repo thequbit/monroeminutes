@@ -1,0 +1,196 @@
+*
+{
+	
+}
+
+body
+{
+	background-image:url('../media/white_wall.png');
+	background-repeat:repeat-y repeat-x;
+}
+
+div
+{
+	display: block;
+}
+
+div.titlewrapper
+{
+	
+	/*margin: auto;*/
+}
+
+div.title
+{
+	background: -webkit-linear-gradient(top, rgba(96,108,136,1) 0%,rgba(63,76,107,1) 100%); /* Chrome10+,Safari5.1+ */
+	height: 70px;
+	width: 1000px;
+	margin: auto;
+	padding: 15px 15px 15px 15px;
+}
+
+div.logo
+{
+	color: white;
+	font: 34px Gabriela;
+	/*margin: auto;*/
+	vertical-align: middle;
+}
+
+div.sublogo
+{
+	color: lightgray;
+	font: 14px Gabriela;
+}
+
+div.navwrapper
+{
+	margin: 8px auto;
+	height: 30px;
+	width: 1000px;
+}
+
+div.nav
+{
+	margin: 0px auto;
+}
+
+#nav
+{
+	clear:left;
+	height: 25px;
+	/*float:left;*/
+	width:1000px;
+}
+
+#nav ul
+{
+	font-weight:bold;
+	display:block;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+#nav li
+{
+	float:left;
+}
+
+#nav li.active a
+{
+	color: #005494;
+}
+
+#nav a
+{
+	padding:4px 15px 6px 15px;
+	display:block;
+	float:left;
+	border-left:1px solid #b9b9b9;
+	color:#494949;
+	text-decoration:none;
+	height:14px;
+	line-height:15px;
+}
+
+div.contentwrapper
+{
+	
+}
+
+div.content
+{
+	background: #fafafa;
+	width: 1000px;
+	margin: auto;
+	padding: 15px 15px 15px 15px;
+}
+
+div.footerwrapper
+{
+}
+
+div.footer
+{
+	padding: 10px;
+	width: 1000px;
+	margin: auto;
+	font: 10px Arial;
+	text-align: center;
+}
+
+div.searchwrapper
+{
+	width: 920px;
+	margin: auto;
+}
+
+div.searchresults
+{
+	padding: 10px 10px 10px 10px;
+	margin: auto;
+	background-color: #f6f6f6;
+}
+
+div.searchresult
+{
+	padding: 5px 2px 10px 2px;
+}
+
+div.spacer
+{
+	height:35px;
+}
+
+div.infoheader
+{
+	font: 14px Arial;
+	font-weight:bold;
+	padding: 2px 6px 2px 6px;
+	/*margin: auto;*/
+	text-align: center;
+}
+
+div.textinput
+{
+	padding: 2px 2px 2px 2px;
+	/*margin: auto;*/
+	text-align: center;
+}
+
+div.buttoninput
+{
+	padding: 2px 2px 2px 2px;
+	/*margin: auto;*/
+	text-align: center;
+}
+
+div.searchinput
+{
+	padding: 2px 2px 2px 2px;
+}
+
+div.dropdowninput
+{
+	padding: 8px 20px 20px 10px;
+	float: left;
+	/*display: inline;*/
+}
+
+/* haxzor ... */
+div.clear
+{
+	clear: both;
+}
+
+/* body and org drop downs */
+#bodies
+{
+	width: 150px;
+}
+
+#organizations
+{
+	width: 150px;
+}
