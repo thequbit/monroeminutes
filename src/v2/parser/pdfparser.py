@@ -77,7 +77,9 @@ def parse_org(text,orgs):
 
 	for org in orgs:
 		orgName,orgID = org
-		if orgName in text:
+		# check for orgname in pdftext ... note it is looked at reguardless of case because
+		# it is often different between docs ....
+		if orgName.lower() in text.lower():
 			retName = orgName
 			retID = orgID
 			success = True
@@ -109,7 +111,7 @@ def get_orgs(bodyid):
 			
 	return orgNames
 
-def push_document(pdfText,sourceURL,publishDate,organizationID,scrapurlid,textHash,bodyid):
+def push_document(pdfText,docname,sourceURL,publishDate,organizationID,scrapurlid,textHash,bodyid):
 
 	pdfText = pdfText.encode('ascii','ignore')
 	sourceURL = sourceURL.encode('ascii','ignore')
@@ -121,7 +123,7 @@ def push_document(pdfText,sourceURL,publishDate,organizationID,scrapurlid,textHa
         with con:
 
                 cur = con.cursor()
-		query = 'INSERT INTO Documents(scrapdt,publishdate,docname,organizationid,sourceurl,doctext,scrapurlid,hash,bodyid) VALUES("{0}", "{1}", "{2}", {3}, "{4}", "{5}",{6},"{7}","{8}")'.format(datetime.datetime.now().isoformat(),publishDate,"",organizationID,mysql.escape_string(sourceURL),mysql.escape_string(pdfText),scrapurlid,textHash,bodyid)
+		query = 'INSERT INTO Documents(scrapdt,publishdate,docname,organizationid,sourceurl,doctext,scrapurlid,hash,bodyid) VALUES("{0}", "{1}", "{2}", {3}, "{4}", "{5}",{6},"{7}","{8}")'.format(datetime.datetime.now().isoformat(),publishDate,docname,organizationID,mysql.escape_string(sourceURL),mysql.escape_string(pdfText),scrapurlid,textHash,bodyid)
 		cur.execute(query)
 
 		query = 'SELECT documentid FROM Documents WHERE sourceurl="{0}" AND organizationid={1}'.format(sourceURL,organizationID)
@@ -196,7 +198,7 @@ def check_url_exists(sourceURL):
 
 	return exists
 
-def check_hash_exists(pdfText):
+def check_hash_exists(pdfText,url):
 
 	exists = False
 
@@ -210,7 +212,9 @@ def check_hash_exists(pdfText):
         with con:
 
                 cur = con.cursor()
-                query = 'SELECT count(documentid) as count FROM Documents WHERE hash="{0}"'.format(textHash)
+                
+		# see if the hash exists in the DB
+		query = 'SELECT count(documentid) as count FROM Documents WHERE hash="{0}"'.format(textHash)
                 cur.execute(query)
                 row = cur.fetchone()
 
@@ -221,9 +225,21 @@ def check_hash_exists(pdfText):
                 else:
                         exists = True
 
-	return exists
+		query = 'SELECT count(documentid) as count FROM Documents WHERE hash="{0}" and sourceurl = "{1}"'.format(textHash,url)
+                cur.execute(query)
+                row = cur.fetchone()
 
-def parsepdf(sourceURL,scrapurlid,bodyid):
+                count, = row
+
+                if count == 0:
+                        samelink = False
+                else:
+                        samelink = True
+
+
+	return (exists,samelink)
+
+def parsepdf(sourceURL,docname,scrapurlid,bodyid):
 
 	#f( len(argv) != 3 ):
 	#print "Usage: {0} <pdf_file> <source_url>".format(argv[0])
@@ -268,18 +284,22 @@ def parsepdf(sourceURL,scrapurlid,bodyid):
 		#print "Done."
 		return "NonPDF"
 
-	pdfText = pdfText.encode('ascii','ignore');
+	pdfText = pdfText.encode('ascii','ignore')
 
 	#print "Done."
 
 	#print "Testing to see if Hash exists in DB"
 
-	exists = check_hash_exists(pdfText)
+	exists,samelink = check_hash_exists(pdfText,sourceURL)
 
 	if exists == True:
-		print "\t\t\tPARSER: PDF Already Parsed, Hash Exists."
-		#print "Done."
-		return "Ignore";
+		print "\t\t\tPARSER: PDF Already Parsed, Ignoring."	
+		if samelink == True:
+			# this means that the pdf is linked on the page 
+			return "DuplicateLink"
+		else:
+			# this means that it's the same pdf, but a different url.  I'm looking at you Henrietta ...
+			return "Ignore"
 
 	#print "Done."
 
@@ -311,7 +331,7 @@ def parsepdf(sourceURL,scrapurlid,bodyid):
 		# make sure there is actually data in the line
 		if line.strip() != "":
 
-			#print "Trying to Parse: '{0}'".format(line)	
+			print "Trying to Parse: '{0}'".format(line)	
 		
 			# 
 			# Parse as Date
@@ -328,6 +348,7 @@ def parsepdf(sourceURL,scrapurlid,bodyid):
 						dtResult = None
 		
 				if dtResult != None:
+					print "Date = {0}, Time = {1}".format( datetime.datetime( *dtResult[:6] ).date(),datetime.datetime( *dtResult[:6] ).time() )
 					publishDate = datetime.datetime( *dtResult[:6] ).date().isoformat()
 
 				#if retType = 0
@@ -379,7 +400,7 @@ def parsepdf(sourceURL,scrapurlid,bodyid):
 	textHash = hashlib.md5(pdfText).hexdigest()
 
 	# push the doc to the DB
-	docid = push_document(pdfText, sourceURL, publishDate, organizationID, scrapurlid, textHash, bodyid)
+	docid = push_document(pdfText, docname, sourceURL, publishDate, organizationID, scrapurlid, textHash, bodyid)
 
 	#print "Done."
 

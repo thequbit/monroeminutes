@@ -115,6 +115,21 @@ def get_orphans(bodyid):
 
         return orphanlinkurls
 
+def decode_link_url(tag,siteurl,baseurl):
+
+	# make sure the URL is formatted correctly
+	if tag['href'][0:7].lower() == "http://":
+		linkurl = tag['href']
+	else:
+		if tag['href'][0:1] == "/":
+			# absolute link
+			linkurl = siteurl + tag['href']
+		else:
+			# relative link
+			linkurl = baseurl + tag['href']
+
+	return linkurl
+
 def main(argv):
 
 	print "Application Started."
@@ -123,7 +138,7 @@ def main(argv):
 
 	urldatas = get_scrap_urls()
 
-	print "Done."
+	print "Done.\n"
 
 	#print "Processing Link URLs."
 
@@ -144,19 +159,50 @@ def main(argv):
 		atags = soup.find_all('a', href=True)
 
 		print "\tFound {0} Links on Page".format(len(atags))
-		
+
+		print "Done.\n"
+
+		print "Getting List of Bad URLs and Orphan Documents"
+
+	        # get the list of known bad linkurl's
+        	badlinkurls = get_bad_linkurls(bodyid)
+
+	        # get the list of known orphans
+        	orphanlinkurls = get_orphans(bodyid)
+	
+		badlinkurlcount = 0
+	        orphanlinkurlcount = 0
+
+        	for tag in atags:
+			linkurl = decode_link_url(tag,siteurl,baseurl)
+
+                	if linkurl in badlinkurls:
+	                        badlinkurlcount += 1
+        	        if linkurl in orphanlinkurls:
+                	        orphanlinkurlcount += 1
+	
+		print "\tIgnoring {0} Bad URLs, and {1} Orphaned Documents.".format(badlinkurlcount,orphanlinkurlcount)	
+
+		print "Done.\n"
+
+		print "Processing {0} Links on Page".format(len(atags) - (badlinkurlcount + orphanlinkurlcount))
+
 		for tag in atags:
 
+			docname = tag.get_text().strip()
+
+			linkurl = decode_link_url(tag,siteurl,baseurl)
+
 			# make sure the URL is formatted correctly
-			if tag['href'][0:7].lower() == "http://":
-                                linkurl = tag['href']
-                        else:
-				if tag['href'][0:1] == "/":
-					# absolute link
-					linkurl = siteurl + tag['href']
-				else: 
-					# relative link
-                                	linkurl = baseurl + tag['href']
+			#f tag['href'][0:7].lower() == "http://":
+                        #       linkurl = tag['href']
+                        #lse:
+			#if tag['href'][0:1] == "/":
+			#		# absolute link
+			#		linkurl = siteurl + tag['href']
+			#	else: 
+			#		# relative link
+                        #        	linkurl = baseurl + tag['href']
 
 			# get the list of known bad linkurl's
 			badlinkurls = get_bad_linkurls(bodyid)
@@ -169,7 +215,7 @@ def main(argv):
 				
 			#else:
 				# send it to be parsed
-				success = pdfparser.parsepdf(linkurl,scrapurlid,bodyid)
+				success = pdfparser.parsepdf(linkurl,docname,scrapurlid,bodyid)
 
 				if success == "Successful":
 					docCount += 1
@@ -177,6 +223,8 @@ def main(argv):
 				elif success == "Ignore":
 					print "\t\tINFO: Valid PDF, but duplicate hash.  Adding to Bad URL List."
 					report_bad_linkurl(scrapurlid,linkurl,bodyid,True)
+				elif success == "DuplicateLink":
+					print "\t\tINFO: Document Linked Twice on Page, Ignoring."
 				elif success == "NonPDF":
 					print "\t\tINFO: Bad Link.  Adding to Bad URL List."
 					report_bad_linkurl(scrapurlid,linkurl,bodyid,False)
@@ -186,14 +234,14 @@ def main(argv):
 				else:
 					print "\t\tINFO: !!! PDFParser Returned something weird ..."
 					
-		print "Done."	
+		print "Done.\n"	
 
 
 	print ""
 	print "\t{0} Documents Processed.".format(docCount)
 	print ""
 
-	print "Done."
+	print "Done.\n"
 
 	print "Application Exiting."
 
