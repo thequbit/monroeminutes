@@ -3,9 +3,12 @@
 ?>
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="js/date.format.js"></script>
 	<script src="js/search.js"></script>
 	
 	<script type="text/javascript">
+	
+		
 	
 		$(document).ready(function() {
 		
@@ -14,7 +17,7 @@
 				if(event.keyCode == 13){
 				
 					// execute search with inputs
-					performSearch()
+					performSearch();
 				}
 			});
 			
@@ -23,9 +26,18 @@
 			// TODO: that ^
 			//
 			
+			if( searchOnPost == false && $('#searchstring').value != "" )
+			{
+				performSearch();
+				searchOnPost = true;
+			}
+
+			setInterval(function(){searching()},250);
+			$("#searchingdiv").hide();
+			
 		});
 	
-		
+		var searchOnPost = false;
 		
 	</script>
 
@@ -56,18 +68,25 @@
 				<option value="3">Youth Board</option>
 			</select>
 		</div>
+		<br>
+		<div id="querytime"></div>
 	
 		<!-- haxzor ... -->
 		<div class="clear"></div>
 	
 	</div>
 
+	
+
 	<div class="searchwrapper">
+
+		<div id="searchingdiv" class="searchingdiv"></div>
 
 		<div id="searchresults" class="searchresults">
 		
 			<!-- this is where the jquery search results will show up -->
-
+			
+			<!--
 			<div class="searchresult">
 				<a href="#">Henrietta - Town Board</a><br>
 				<b>March 4th, 2012</b><br>
@@ -79,7 +98,8 @@
 				<b>April 11th, 2011</b><br>
 				"... to a vote the purchasing of <b>Kodak</b> build number 7 for use by the town youth group ..."<br>
 			</div>
-		
+			-->
+			
 		</div>
 
 	</div>

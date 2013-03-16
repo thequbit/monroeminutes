@@ -133,6 +133,13 @@ div.searchresults
 	background-color: #f6f6f6;
 }
 
+div.searchingdiv
+{
+	height: 120px;
+	margin: auto;
+	text-align: center;
+}
+
 div.searchresult
 {
 	padding: 5px 2px 10px 2px;
