@@ -1,0 +1,184 @@
+
+/**********************************************/
+/***                                        ***/
+/***           CSS For All pages            ***/
+/***                                        ***/
+/***                                        ***/
+/**********************************************/
+
+*
+{
+	
+}
+
+body
+{
+	background-image:url('../media/white_wall.png');
+	background-repeat:repeat-y repeat-x;
+	font-family: 'Noto Sans', sans-serif;
+	font-size: 14px;
+}
+
+div
+{
+	display: block;
+}
+
+div.titlewrapper
+{
+}
+
+div.title
+{
+	background: -webkit-linear-gradient(top, rgba(96,108,136,1) 0%,rgba(63,76,107,1) 100%); /* Chrome10+,Safari5.1+ */
+	height: 70px;
+	width: 1000px;
+	margin: auto;
+	padding: 15px 15px 15px 15px;
+}
+
+div.logo
+{
+	color: white;
+	font: 34px Gabriela;
+	/*margin: auto;*/
+	vertical-align: middle;
+}
+
+div.sublogo
+{
+	color: lightgray;
+	font: 14px Gabriela;
+}
+
+div.navwrapper
+{
+	margin: 8px auto;
+	height: 30px;
+	width: 1000px;
+}
+
+div.nav
+{
+	margin: 0px auto;
+}
+
+#nav
+{
+	clear:left;
+	height: 25px;
+	/*float:left;*/
+	width:1000px;
+}
+
+#nav ul
+{
+	font-weight:bold;
+	display:block;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+#nav li
+{
+	float:left;
+}
+
+#nav li.active a
+{
+	color: #005494;
+}
+
+#nav a
+{
+	padding:4px 15px 6px 15px;
+	display:block;
+	float:left;
+	border-left:1px solid #b9b9b9;
+	color:#494949;
+	text-decoration:none;
+	height:14px;
+	line-height:15px;
+}
+
+div.contentwrapper
+{
+	
+}
+
+div.content
+{
+	background: #fafafa;
+	width: 1000px;
+	margin: auto;
+	padding: 15px 15px 15px 15px;
+}
+
+div.footerwrapper
+{
+}
+
+div.footer
+{
+	padding: 10px;
+	width: 1000px;
+	margin: auto;
+	font: 10px Arial;
+	text-align: center;
+}
+
+
+
+/**********************************************/
+/***                                        ***/
+/***           Rest of Site                 ***/
+/***                                        ***/
+/***                                        ***/
+/**********************************************/
+
+
+div.searchwrapper
+{
+	width: 920px;
+	margin: auto;
+}
+
+div.searchresults
+{
+	padding: 10px 10px 10px 10px;
+	margin: auto;
+	background-color: #f6f6f6;
+}
+
+div.searchresult
+{
+	padding: 10px 10px 10px 10px;
+	text-align: left;
+	margin: auto;
+	background-color: #f0f0f0;
+}
+
+div.srheader
+{
+	font-size: 16px;
+	
+}
+
+div.srsubheader
+{
+	font-size: 12px;
+	padding-left: 2px;
+	color: #2020202
+}
+
+div.smallpadding
+{
+	display: inline;
+	padding: 4px 4px 4px 4px;
+}
+
+div.righttext
+{
+	text-align: right;
+}
