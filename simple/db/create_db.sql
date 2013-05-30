@@ -51,6 +51,23 @@ scriptname text,
 dbpopulated bool not null
 );
 
+create table scrapeurls(
+scrapurlid int not null auto_increment primary key,
+url text not null,
+name varchar(255) not null,
+organizationid int not null,
+foreign key (organizationid) references organizations(organizationid),
+enabled bool not null
+);
+
+create table ignoreurls(
+ignoreurlid int not null auto_increment primary key,
+url text not null,
+ignoredt datetime not null,
+scrapeurlid int not null,
+foreign key (scrapeurlid) references scrapeurls(scrapeurlid)
+);
+
 create table documents(
 documentid int not null auto_increment primary key,
 suborganizationid int not null,
@@ -61,7 +78,13 @@ sourceurl text not null,
 documentdate date not null,
 scrapedate date not null,
 name text not null,
-documenttext text not null
+);
+
+create table documenttexts(
+documenttextid int not null auto_increment primary key,
+documentid int not null,
+foreign key (documentid) references documents(documentid),
+fulltext text not null
 );
 
 create table words(
