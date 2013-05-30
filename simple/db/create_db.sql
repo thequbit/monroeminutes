@@ -1,9 +1,9 @@
 drop database monroeminutesdb;
 create database monroeminutesdb;
 
-grant usage on monroeminutesdb.* to `username` identified by 'password';
+grant usage on monroeminutesdb.* to mmuser identified by 'password123%%%';
 
-grant all privileges on monroeminutesdb.* to `username`;
+grant all privileges on monroeminutesdb.* to mmuser;
 
 use monroeminutesdb;
 
@@ -77,14 +77,14 @@ foreign key (organizationid) references organizations(organizationid),
 sourceurl text not null,
 documentdate date not null,
 scrapedate date not null,
-name text not null,
+name text not null
 );
 
 create table documenttexts(
 documenttextid int not null auto_increment primary key,
 documentid int not null,
 foreign key (documentid) references documents(documentid),
-fulltext text not null
+documenttext text not null
 );
 
 create table words(
@@ -115,7 +115,7 @@ successful bool not null,
 organizationid int not null,
 foreign key (organizationid) references organizations(organizationid),
 suborganizationid int not null,
-foreign key (suborganizationid) references suborganizations(suborganizationid),
+foreign key (suborganizationid) references suborganizations(suborganizationid)
 );
 
 INSERT INTO organizations VALUES
