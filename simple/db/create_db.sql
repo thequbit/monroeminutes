@@ -52,7 +52,7 @@ dbpopulated bool not null
 );
 
 create table scrapeurls(
-scrapurlid int not null auto_increment primary key,
+scrapeurlid int not null auto_increment primary key,
 url text not null,
 name varchar(255) not null,
 organizationid int not null,
