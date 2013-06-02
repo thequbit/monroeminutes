@@ -65,6 +65,6 @@ class organizations:
             cur.execute("UPDATE organizations SET name = %s,type = %s,websiteurl = %s WHERE organizationid = %s",(name,type,websiteurl,organizationid))
             cur.close()
 
-
+##### Application Specific Functions #####
 
 
