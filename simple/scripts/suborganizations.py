@@ -68,5 +68,3 @@ class suborganizations:
             cur.close()
 
 
-
-
