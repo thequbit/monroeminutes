@@ -10,7 +10,7 @@ from suborganizations import suborganizations
 
 def _pdf_to_text(path):
 
-    #try:
+    try:
         rsrcmgr = PDFResourceManager()
         retstr = StringIO()
         codec = 'ascii'
@@ -29,12 +29,13 @@ def _pdf_to_text(path):
             retVal = (txt,True)
             retstr.close()
 
-    #except:
-        #print "\tERROR: PDF is not formatted correctly, aborting."
-        #retVal = ("", False)
-        #pass
+    except Exception,e:
+        #print str(e)
+        print "\tERROR: PDF is not formatted correctly, aborting."
+        retVal = ("", False)
+        pass
 
-        return retVal
+    return retVal
 
 def scrubtext(text):
     scrubstr = text.replace(',','').replace('.','').replace('?','').replace('/',' ').replace(':','').replace(';','').replace('<','').replace('>','').replace('[','').replace(']','').replace('\\',' ').replace('"','').replace("'",'').replace('`','')
