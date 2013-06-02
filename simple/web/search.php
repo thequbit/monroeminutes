@@ -14,17 +14,17 @@
 		<form name="input" action="search.php" method="get">
 		
 			Enter a Search Term</br>
-			<input type="text" id="searchterm" name="searchterm" size="80" value=""></br>
+			<input type="text" id="keyword" name="keyword" size="80" value=""></br>
 			
 			Select a Specific Organization</br>
 			<select id="organization" name="organization">
 			
 				<?php
 				
-					require_once("./tools/OrganizationManager.class.php");
+					require_once("./tools/OrganizationsManager.class.php");
 					
-					$orgmgr = new OrganizationManager();
-					$orgs = $orgmgr->GetAllOrganizations();
+					$orgmgr = new OrganizationsManager();
+					$orgs = $orgmgr->getall();
 					foreach($orgs as $org)
 					{
 						echo '<option value="' . $org->id . '">' . $org->name . '</option>\n';
@@ -47,7 +47,8 @@
 		
 			<?php
 			
-				if( isset($_GET['searchterm']) && isset($_GET['organization']) )
+				// see if we actually are performing a search
+				if( isset($_GET['keyword']) && isset($_GET['organization']) )
 				{
 					
 					// decode page number, if set
@@ -65,28 +66,24 @@
 					}
 					
 					// decode search term and org id
-					$searchterm = $_GET['searchterm'];
+					$keyword = $_GET['keyword'];
 					$organizationid = $_GET['organization'];
 			
-					//echo "Searching for '" . $searchterm . "' within org #" . $organizationid . ", returning page #" . $page . " ...</br>";
+					//echo "Searching for '" . $keyword . "' within org #" . $organizationid . ", returning page #" . $page . " ...</br>";
 			
-					require_once("./tools/SearchManager.class.php");
+					require_once("./tools/WordsManager.class.php");
 					
 					// perform the search
-					$searchmgr = new SearchManager();
-					$documents = $searchmgr->PerformSearch($searchterm,$organizationid,$page);
-				
-					$totalcount = $searchmgr->GetSearchResultCount($searchterm, $organizationid);
-				
-					$start = intval( (($page-1) * 10 ) + 1 );
+					$wordsmgr = new WordsManager();
 					
-					if( $start + 9 > $totalcount)
-						$end = $totalcount;
-					else
-						$end = $start + 9; // inclusive
+					$retwords = $wordsmgr->search($organizationid,$keyword,$page);
+					$totalcount = $wordsmgr->getcount($organizationid, $keyword);
 				
-					echo '<div class="righttext">';
-					
+					echo json_encode($retwords);
+				
+					/*
+				
+					echo '<div class="righttext">';	
 					
 					// deturmine plural
 					if( $totalcount == 1 )
@@ -104,6 +101,8 @@
 						echo '<div class="srsubheader"><a href="' . $doc->websiteurl . '">' . $doc->suborgname . '</a></div>';
 						echo '</div>';
 					}
+					
+					*/
 				}
 				else
 				{
