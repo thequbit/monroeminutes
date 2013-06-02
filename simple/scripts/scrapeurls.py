@@ -65,6 +65,17 @@ class scrapeurls:
             cur.execute("UPDATE scrapeurls SET url = %s,name = %s,organizationid = %s,enabled = %s WHERE scrapeurlid = %s",(url,name,organizationid,enabled,scrapeurlid))
             cur.close()
 
+##### Application Specific Functions #####
 
+    def geturls(self,organizationid):
+        with self.__con:
+            cur = self.__con.cursor()
+            cur.execute("SELECT scrapeurlid,url FROM scrapeurls WHERE organizationid = %s",(organizationid))
+            rows = cur.fetchall()
 
+        _scrapeurls = []
+        for row in rows:
+            _scrapeurls.append(row)
+
+        return _scrapeurls
 
