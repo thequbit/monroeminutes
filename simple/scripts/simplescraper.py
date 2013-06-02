@@ -1,5 +1,7 @@
+import os
 import sys
 import datetime
+import time
 import urllib
 import urllib2
 from random import randint
@@ -14,6 +16,7 @@ from ignoreurls import ignoreurls
 from suborganizations import suborganizations
 from documents import documents
 from documenttexts import documenttexts
+from words import words
 
 def report(type,text):
     if type == "info":
@@ -67,7 +70,7 @@ def decodelink(tag,siteurl,baseurl):
     #try:
         # make sure the URL is formatted correctly
         #print type(tag)
-        print "decoding: {0}".format(tag['href'])
+        #print "decoding: {0}".format(tag['href'])
         if len(tag['href']) >= 7 and tag['href'][0:7].lower() == "http://":
             linkurl = tag['href']
             #print "1: {0}".format(linkurl)
@@ -101,15 +104,16 @@ def addignore(link,scrapeurlid):
     iurls = ignoreurls()
     iurls.add(link,dt,scrapeurlid)
 
-def getsuborg(pdfheader):
+def getsuborg(pdfheader,orgid):
     sorgs = suborganizations()
     suborgs = sorgs.getall()
     success = False
     for suborg in suborgs:
         suborganizationid,organizationid,name,parsename,websiteurl,documentsurl,scriptname,dbpopulated = suborg
-        if parsename in pdfheader:
-            success = True
-            break
+        if orgid == organizationid:
+            if parsename in pdfheader:
+                success = True
+                break
     return success,suborganizationid
 
 def getdocdate(pdfheader):
@@ -120,12 +124,16 @@ def getdocname(pdfheader):
     # TODO: parse the header to get the name
     return "document"
 
-def savedoc(suborgid,orgid,sourceurl,documentdate,name,dochash,pdftext,tokens):
-    scrapedt = datetime.datetime.now().isoformat()
+def savedoc(suborgid,orgid,sourceurl,documentdate,name,dochash,pdftext,tokens,orphaned):
+    scrapedate = time.strftime('%Y-%m-%d')
     doc = documents()
-    docid = doc.add(suborgid,orgid,sourceurl,documentdate,scrapedt,name,dochash)
+    docid = doc.add(suborgid,orgid,sourceurl,documentdate,scrapedate,name,dochash,orphaned)
     doct = documenttexts()
     doct.add(docid,pdftext)
+    wrds = words()
+    for token,frequency in tokens.items():
+        if len(token) > 3:
+            wrds.add(docid,suborgid,orgid,token,frequency)
     return docid
 
 def main(argv):
@@ -163,19 +171,21 @@ def main(argv):
                 continue
             success,pdftext,texthash = decodepdf(filename)
             if success == True:
-                success,suborgid = getsuborg(pdftext[:HEADERLENGTH])
+                docdate = getdocdate(pdftext[:HEADERLENGTH])
+                docname = getdocname(pdftext[:HEADERLENGTH])
+                pdftextscrubbed = scrubtext(pdftext)
+                _tokens = nltk.word_tokenize(pdftextscrubbed)
+                tokens = nltk.FreqDist(word.lower() for word in _tokens)
+                success,suborgid = getsuborg(pdftext[:HEADERLENGTH],orgid)
                 if success == True:
-                    docdate = getdocdate(pdftext[:HEADERLENGTH])
-                    docname = getdocname(pdftext[:HEADERLENGTH])
-                    pdftextscrubbed = scrubtext(pdftext)
-                    _tokens = nltk.word_tokenize(pdftextscrubbed)
-                    tokens = nltk.FreqDist(word.lower() for word in _tokens)
-                    docid = savedoc(suborgid,orgid,link,docdate,docname,texthash,pdftext,tokens)
+                    report("info","Adding Doc and Word Histogram Data to Database.")
+                    docid = savedoc(suborgid,orgid,link,docdate,docname,texthash,pdftext,tokens,False)
                     report("info","Successfully Parsed And Added Document #{0}\n".format(docid))
                 else:
                     report("error","Unable to Decode Suborganization from PDF document.")
+                    report("info","Adding Doc and Word Histogram Data to Database as Orphan.")
+                    docid = savedoc(suborgid,orgid,link,docdate,docname,texthash,pdftext,tokens,True)
                     report("info","Adding `{0}` to orphan list.\n")
-                    # TODO: add to orphan list
             else:
                 report("warning","Unable to Parse PDF Into Text.")
                 report("info","Adding `{0}` to ignore list.\n".format(link))
