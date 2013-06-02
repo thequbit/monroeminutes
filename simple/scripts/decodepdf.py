@@ -35,7 +35,7 @@ def _pdf_to_text(path):
     return retVal
 
 def _scrub_text(text):
-    scrubbedString = text.replace(',','').replace('.','').replace('?','').replace('/',' ').replace(':','').replace(';','').replace('<','').replace('>','').replace('[','').replace(']','').replace('\\',' ').replace('"','').replace("'",'').replace('`','')
+    scrubstr = text.replace(',','').replace('.','').replace('?','').replace('/',' ').replace(':','').replace(';','').replace('<','').replace('>','').replace('[','').replace(']','').replace('\\',' ').replace('"','').replace("'",'').replace('`','')
 
     return scrubstr
 
