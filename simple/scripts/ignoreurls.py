@@ -27,8 +27,11 @@ class ignoreurls:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
-    def sanitize(self,valuein):
-        valueout = mysql.escape_string(valuein)
+    def __sanitize(self,valuein):
+        if type(valuein) == 'str':
+            valueout = mysql.escape_string(valuein)
+        else:
+            valueout = valuein
         return valuein
 
     def add(self,url,ignoredt,scrapeurlid):
@@ -73,10 +76,10 @@ class ignoreurls:
 
 ##### Application Specific Functions #####
 
-   def getallbyscrapeurlid(self,scraperurlid):
+    def getallbyscrapeurlid(self,scraperurlid):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("SELECT url FROM ignoreurls WHERE scrapeurlid = %s",(self.__santize(scraperurlid)))
+            cur.execute("SELECT url FROM ignoreurls WHERE scrapeurlid = %s",(scraperurlid))
             rows = cur.fetchall()
             cur.close()
         
@@ -84,4 +87,4 @@ class ignoreurls:
         for row in rows:
             _urls.append(row[0])
 
-        return _urls 
+        return _urls

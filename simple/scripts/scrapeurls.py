@@ -27,8 +27,11 @@ class scrapeurls:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
-    def sanitize(self,valuein):
-        valueout = mysql.escape_string(valuein)
+    def __sanitize(self,valuein):
+        if type(valuein) == 'str':
+            valueout = mysql.escape_string(valuein)
+        else:
+            valueout = valuein
         return valuein
 
     def add(self,url,name,organizationid,enabled):
@@ -76,7 +79,7 @@ class scrapeurls:
     def geturls(self,organizationid):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("SELECT scrapeurlid,url FROM scrapeurls WHERE organizationid = %s",(self.__sanitize(organizationid)))
+            cur.execute("SELECT scrapeurlid,url FROM scrapeurls WHERE organizationid = %s",(organizationid))
             rows = cur.fetchall()
 
         _scrapeurls = []
@@ -84,4 +87,3 @@ class scrapeurls:
             _scrapeurls.append(row)
 
         return _scrapeurls
-

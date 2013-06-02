@@ -27,8 +27,11 @@ class actions:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
-    def sanitize(self,valuein):
-        valueout = mysql.escape_string(valuein)
+    def __sanitize(self,valuein):
+        if type(valuein) == 'str':
+            valueout = mysql.escape_string(valuein)
+        else:
+            valueout = valuein
         return valuein
 
     def add(self,userid,actiontype,pagename,description):

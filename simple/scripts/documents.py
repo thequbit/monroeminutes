@@ -27,8 +27,11 @@ class documents:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
-    def sanitize(self,valuein):
-        valueout = mysql.escape_string(valuein)
+    def __sanitize(self,valuein):
+        if type(valuein) == 'str':
+            valueout = mysql.escape_string(valuein)
+        else:
+            valueout = valuein
         return valuein
 
     def add(self,suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash,orphaned):
@@ -72,11 +75,11 @@ class documents:
             cur.close()
 
 ##### Application Specific Functions #####
-    
+
     def urlexists(self,url):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("SELECT count(documentid) as count FROM documents WHERE sourceurl = %s",(self.__sanitize(url)))
+            cur.execute("SELECT count(documentid) as count FROM documents WHERE sourceurl = %s",(url))
             row = cur.fetchone()
             cur.close()
         
@@ -90,7 +93,7 @@ class documents:
     def hashexists(self,url):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("SELECT count(documentid) as count FROM documents WHERE dochash = %s",(self.__sanitize(url))
+            cur.execute("SELECT count(documentid) as count FROM documents WHERE dochash = %s",(url))
             row = cur.fetchone()
             cur.close()
 
@@ -99,4 +102,3 @@ class documents:
             _exists = True
 
         return _exists
-
