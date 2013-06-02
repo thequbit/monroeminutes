@@ -116,6 +116,65 @@
 				error_log( "Caught exception: " . $e->getMessage() );
 			}
 		}
+		
+		///// Application Specific Functions /////
+		
+		function getcount($orgid,$keyword,$page)
+		{
+			try
+			{
+				$db = new DatabaseTool(); 
+				$query = 'SELECT count(wordid) as count FROM words WHERE organizationid = ? and word = ?';
+				$mysqli = $db->Connect();
+				$stmt = $mysqli->prepare($query);
+				$stmt->bind_param("ss",$organizationid, $keyword);
+				$results = $db->Execute($stmt);
+			
+				$count = $row['count'];
+				
+				$db->Close($mysqli, $stmt);
+			}
+			catch (Exception $e)
+			{
+				error_log( "Caught exception: " . $e->getMessage() );
+			}
+		
+			return $count;
+		}
+		
+		function search($orgid,$keyword,$page)
+		{
+		    try
+			{
+				// decode offset based on page assuming 10 items / page
+				if( $page > 1 )
+					$limit = intval( ($page-1) * 10 );
+				else
+					$limit = 0;
+			
+				$db = new DatabaseTool(); 
+				$query = 'SELECT documentid,suborganizationid,frequency FROM words WHERE organizationid = ? and word = ? ORDER BY frequency LIMIT 10 OFFSET ?';
+				$mysqli = $db->Connect();
+				$stmt = $mysqli->prepare($query);
+				$stmt->bind_param("ss",$organizationid, $keyword, $limit);
+				$results = $db->Execute($stmt);
+			
+				$retArray = array();
+				foreach( $results as $row )
+				{
+					$object = (object) array('wordid' => $row['wordid'],'documentid' => $row['documentid'],'suborganizationid' => $row['suborganizationid'],'organizationid' => $row['organizationid'],'word' => $row['word'],'frequency' => $row['frequency']);
+					$retArray[] = $object;
+				}
+	
+				$db->Close($mysqli, $stmt);
+			}
+			catch (Exception $e)
+			{
+				error_log( "Caught exception: " . $e->getMessage() );
+			}
+		
+			return $retArray;
+		}
 	}
 
 ?>

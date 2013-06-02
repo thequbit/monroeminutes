@@ -116,6 +116,9 @@
 				error_log( "Caught exception: " . $e->getMessage() );
 			}
 		}
+		
+		///// Application Specific Functions
+		
 	}
 
 ?>
