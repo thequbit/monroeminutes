@@ -78,7 +78,8 @@ sourceurl text not null,
 documentdate date not null,
 scrapedate date not null,
 name text not null,
-dochash text not null
+dochash text not null,
+orphaned bool not null
 );
 
 create table documenttexts(
