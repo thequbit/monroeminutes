@@ -4,11 +4,13 @@ from pdfminer.layout import LAParams
 
 import hashlib
 
+from cStringIO import StringIO
+
 from suborganizations import suborganizations
 
 def _pdf_to_text(path):
 
-    try:
+    #try:
         rsrcmgr = PDFResourceManager()
         retstr = StringIO()
         codec = 'ascii'
@@ -27,14 +29,14 @@ def _pdf_to_text(path):
             retVal = (txt,True)
             retstr.close()
 
-    except:
+    #except:
         #print "\tERROR: PDF is not formatted correctly, aborting."
-        retVal = ("", False)
-        pass
+        #retVal = ("", False)
+        #pass
 
-    return retVal
+        return retVal
 
-def _scrub_text(text):
+def scrubtext(text):
     scrubstr = text.replace(',','').replace('.','').replace('?','').replace('/',' ').replace(':','').replace(';','').replace('<','').replace('>','').replace('[','').replace(']','').replace('\\',' ').replace('"','').replace("'",'').replace('`','')
 
     return scrubstr
@@ -42,7 +44,7 @@ def _scrub_text(text):
 def decodepdf(path):
 
     pdftext,success = _pdf_to_text(path)
-    pdftext = _scrub_text(pdftext)
+    #pdftext = _scrub_text(pdftext)
 
     texthash = ""
     if success == True:
