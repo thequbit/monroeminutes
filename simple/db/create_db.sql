@@ -77,7 +77,8 @@ foreign key (organizationid) references organizations(organizationid),
 sourceurl text not null,
 documentdate date not null,
 scrapedate date not null,
-name text not null
+name text not null,
+dochash text not null
 );
 
 create table documenttexts(
