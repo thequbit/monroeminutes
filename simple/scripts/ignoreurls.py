@@ -65,6 +65,19 @@ class ignoreurls:
             cur.execute("UPDATE ignoreurls SET url = %s,ignoredt = %s,scrapeurlid = %s WHERE ignoreurlid = %s",(url,ignoredt,scrapeurlid,ignoreurlid))
             cur.close()
 
+##### Application Specific Functions
 
+    def getallbyscrapeurlid(self,scraperurlid):
+        with self.__con:
+            cur = self.__con.cursor()
+            cur.execute("SELECT url FROM ignoreurls WHERE scrapeurlid = %s",(scraperurlid))
+            rows = cur.fetchall()
+            cur.close()
+        
+        _urls = []
+        for row in rows:
+            _urls.append(row[0])
+
+        return _urls
 
 
