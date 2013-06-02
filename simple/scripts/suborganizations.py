@@ -32,6 +32,8 @@ class suborganizations:
             cur = self.__con.cursor()
             cur.execute("INSERT INTO suborganizations(organizationid,name,parsename,websiteurl,documentsurl,scriptname,dbpopulated) VALUES(%s,%s,%s,%s,%s,%s,%s)",(organizationid,name,parsename,websiteurl,documentsurl,scriptname,dbpopulated))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,suborganizationid):
         with self.__con:
