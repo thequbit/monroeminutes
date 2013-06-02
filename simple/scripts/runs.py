@@ -27,11 +27,17 @@ class runs:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,rundt,scrapername,successful,organizationid,suborganizationid):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO runs(rundt,scrapername,successful,organizationid,suborganizationid) VALUES(%s,%s,%s,%s,%s)",(rundt,scrapername,successful,organizationid,suborganizationid))
+            cur.execute("INSERT INTO runs(rundt,scrapername,successful,organizationid,suborganizationid) VALUES(%s,%s,%s,%s,%s)",(self.__sanitize(rundt),self.__sanitize(scrapername),self.__sanitize(successful),self.__sanitize(organizationid),self.__sanitize(suborganizationid)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,runid):
         with self.__con:
@@ -62,9 +68,7 @@ class runs:
     def update(self,runid,rundt,scrapername,successful,organizationid,suborganizationid):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE runs SET rundt = %s,scrapername = %s,successful = %s,organizationid = %s,suborganizationid = %s WHERE runid = %s",(rundt,scrapername,successful,organizationid,suborganizationid,runid))
+            cur.execute("UPDATE runs SET rundt = %s,scrapername = %s,successful = %s,organizationid = %s,suborganizationid = %s WHERE runid = %s",(self.__sanitize(rundt),self.__sanitize(scrapername),self.__sanitize(successful),self.__sanitize(organizationid),self.__sanitize(suborganizationid),self.__sanitize(runid)))
             cur.close()
 
-
-
-
+##### Application Specific Functions #####

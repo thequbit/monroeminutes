@@ -27,11 +27,17 @@ class organizations:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,name,type,websiteurl):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO organizations(name,type,websiteurl) VALUES(%s,%s,%s)",(name,type,websiteurl))
+            cur.execute("INSERT INTO organizations(name,type,websiteurl) VALUES(%s,%s,%s)",(self.__sanitize(name),self.__sanitize(type),self.__sanitize(websiteurl)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,organizationid):
         with self.__con:
@@ -62,9 +68,7 @@ class organizations:
     def update(self,organizationid,name,type,websiteurl):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE organizations SET name = %s,type = %s,websiteurl = %s WHERE organizationid = %s",(name,type,websiteurl,organizationid))
+            cur.execute("UPDATE organizations SET name = %s,type = %s,websiteurl = %s WHERE organizationid = %s",(self.__sanitize(name),self.__sanitize(type),self.__sanitize(websiteurl),self.__sanitize(organizationid)))
             cur.close()
 
 ##### Application Specific Functions #####
-
-

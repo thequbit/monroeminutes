@@ -27,11 +27,17 @@ class documenttexts:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
-    def add(self,documentid,fulltext):
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
+    def add(self,documentid,documenttext):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO documenttexts(documentid,fulltext) VALUES(%s,%s)",(documentid,fulltext))
+            cur.execute("INSERT INTO documenttexts(documentid,documenttext) VALUES(%s,%s)",(self.__sanitize(documentid),self.__sanitize(documenttext)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,documenttextid):
         with self.__con:
@@ -59,12 +65,10 @@ class documenttexts:
             cur.execute("DELETE FROM documenttexts WHERE documenttextid = %s",(documenttextid))
             cur.close()
 
-    def update(self,documenttextid,documentid,fulltext):
+    def update(self,documenttextid,documentid,documenttext):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE documenttexts SET documentid = %s,fulltext = %s WHERE documenttextid = %s",(documentid,fulltext,documenttextid))
+            cur.execute("UPDATE documenttexts SET documentid = %s,documenttext = %s WHERE documenttextid = %s",(self.__sanitize(documentid),self.__sanitize(documenttext),self.__sanitize(documenttextid)))
             cur.close()
 
-
-
-
+##### Application Specific Functions #####

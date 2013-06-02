@@ -27,11 +27,17 @@ class words:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,documentid,suborganizationid,organizationid,word,frequency):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO words(documentid,suborganizationid,organizationid,word,frequency) VALUES(%s,%s,%s,%s,%s)",(documentid,suborganizationid,organizationid,word,frequency))
+            cur.execute("INSERT INTO words(documentid,suborganizationid,organizationid,word,frequency) VALUES(%s,%s,%s,%s,%s)",(self.__sanitize(documentid),self.__sanitize(suborganizationid),self.__sanitize(organizationid),self.__sanitize(word),self.__sanitize(frequency)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,wordid):
         with self.__con:
@@ -62,9 +68,7 @@ class words:
     def update(self,wordid,documentid,suborganizationid,organizationid,word,frequency):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE words SET documentid = %s,suborganizationid = %s,organizationid = %s,word = %s,frequency = %s WHERE wordid = %s",(documentid,suborganizationid,organizationid,word,frequency,wordid))
+            cur.execute("UPDATE words SET documentid = %s,suborganizationid = %s,organizationid = %s,word = %s,frequency = %s WHERE wordid = %s",(self.__sanitize(documentid),self.__sanitize(suborganizationid),self.__sanitize(organizationid),self.__sanitize(word),self.__sanitize(frequency),self.__sanitize(wordid)))
             cur.close()
 
-
-
-
+##### Application Specific Functions #####

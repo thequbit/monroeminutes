@@ -27,11 +27,17 @@ class searches:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,searchterm,searchdt,organizationid):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO searches(searchterm,searchdt,organizationid) VALUES(%s,%s,%s)",(searchterm,searchdt,organizationid))
+            cur.execute("INSERT INTO searches(searchterm,searchdt,organizationid) VALUES(%s,%s,%s)",(self.__sanitize(searchterm),self.__sanitize(searchdt),self.__sanitize(organizationid)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,searchid):
         with self.__con:
@@ -62,9 +68,7 @@ class searches:
     def update(self,searchid,searchterm,searchdt,organizationid):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE searches SET searchterm = %s,searchdt = %s,organizationid = %s WHERE searchid = %s",(searchterm,searchdt,organizationid,searchid))
+            cur.execute("UPDATE searches SET searchterm = %s,searchdt = %s,organizationid = %s WHERE searchid = %s",(self.__sanitize(searchterm),self.__sanitize(searchdt),self.__sanitize(organizationid),self.__sanitize(searchid)))
             cur.close()
 
-
-
-
+##### Application Specific Functions #####

@@ -27,11 +27,17 @@ class actions:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,userid,actiontype,pagename,description):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO actions(userid,actiontype,pagename,description) VALUES(%s,%s,%s,%s)",(userid,actiontype,pagename,description))
+            cur.execute("INSERT INTO actions(userid,actiontype,pagename,description) VALUES(%s,%s,%s,%s)",(self.__sanitize(userid),self.__sanitize(actiontype),self.__sanitize(pagename),self.__sanitize(description)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,actionid):
         with self.__con:
@@ -62,9 +68,7 @@ class actions:
     def update(self,actionid,userid,actiontype,pagename,description):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE actions SET userid = %s,actiontype = %s,pagename = %s,description = %s WHERE actionid = %s",(userid,actiontype,pagename,description,actionid))
+            cur.execute("UPDATE actions SET userid = %s,actiontype = %s,pagename = %s,description = %s WHERE actionid = %s",(self.__sanitize(userid),self.__sanitize(actiontype),self.__sanitize(pagename),self.__sanitize(description),self.__sanitize(actionid)))
             cur.close()
 
-
-
-
+##### Application Specific Functions #####

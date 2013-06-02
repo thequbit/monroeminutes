@@ -27,11 +27,17 @@ class users:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,username,passwordhash,displyname,emailaddress,verificationcode,verified):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO users(username,passwordhash,displyname,emailaddress,verificationcode,verified) VALUES(%s,%s,%s,%s,%s,%s)",(username,passwordhash,displyname,emailaddress,verificationcode,verified))
+            cur.execute("INSERT INTO users(username,passwordhash,displyname,emailaddress,verificationcode,verified) VALUES(%s,%s,%s,%s,%s,%s)",(self.__sanitize(username),self.__sanitize(passwordhash),self.__sanitize(displyname),self.__sanitize(emailaddress),self.__sanitize(verificationcode),self.__sanitize(verified)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,userid):
         with self.__con:
@@ -62,9 +68,7 @@ class users:
     def update(self,userid,username,passwordhash,displyname,emailaddress,verificationcode,verified):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE users SET username = %s,passwordhash = %s,displyname = %s,emailaddress = %s,verificationcode = %s,verified = %s WHERE userid = %s",(username,passwordhash,displyname,emailaddress,verificationcode,verified,userid))
+            cur.execute("UPDATE users SET username = %s,passwordhash = %s,displyname = %s,emailaddress = %s,verificationcode = %s,verified = %s WHERE userid = %s",(self.__sanitize(username),self.__sanitize(passwordhash),self.__sanitize(displyname),self.__sanitize(emailaddress),self.__sanitize(verificationcode),self.__sanitize(verified),self.__sanitize(userid)))
             cur.close()
 
-
-
-
+##### Application Specific Functions #####

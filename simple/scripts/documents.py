@@ -27,11 +27,17 @@ class documents:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
-    def add(self,suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash):
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
+    def add(self,suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash,orphaned):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO documents(suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash) VALUES(%s,%s,%s,%s,%s,%s,%s)",(suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash))
+            cur.execute("INSERT INTO documents(suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash,orphaned) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(self.__sanitize(suborganizationid),self.__sanitize(organizationid),self.__sanitize(sourceurl),self.__sanitize(documentdate),self.__sanitize(scrapedate),self.__sanitize(name),self.__sanitize(dochash),self.__sanitize(orphaned)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,documentid):
         with self.__con:
@@ -59,18 +65,18 @@ class documents:
             cur.execute("DELETE FROM documents WHERE documentid = %s",(documentid))
             cur.close()
 
-    def update(self,documentid,suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash):
+    def update(self,documentid,suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash,orphaned):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE documents SET suborganizationid = %s,organizationid = %s,sourceurl = %s,documentdate = %s,scrapedate = %s,name = %s,dochash = %s WHERE documentid = %s",(suborganizationid,organizationid,sourceurl,documentdate,scrapedate,name,dochash,documentid))
+            cur.execute("UPDATE documents SET suborganizationid = %s,organizationid = %s,sourceurl = %s,documentdate = %s,scrapedate = %s,name = %s,dochash = %s,orphaned = %s WHERE documentid = %s",(self.__sanitize(suborganizationid),self.__sanitize(organizationid),self.__sanitize(sourceurl),self.__sanitize(documentdate),self.__sanitize(scrapedate),self.__sanitize(name),self.__sanitize(dochash),self.__sanitize(orphaned),self.__sanitize(documentid)))
             cur.close()
 
-##### applilication functions #####
-
+##### Application Specific Functions #####
+    
     def urlexists(self,url):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("SELECT count(documentid) as count FROM documents WHERE sourceurl = %s",(url))
+            cur.execute("SELECT count(documentid) as count FROM documents WHERE sourceurl = %s",(self.__sanitize(url)))
             row = cur.fetchone()
             cur.close()
         
@@ -84,7 +90,7 @@ class documents:
     def hashexists(self,url):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("SELECT count(documentid) as count FROM documents WHERE dochash = %s",(url))
+            cur.execute("SELECT count(documentid) as count FROM documents WHERE dochash = %s",(self.__sanitize(url))
             row = cur.fetchone()
             cur.close()
 

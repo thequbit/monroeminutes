@@ -27,11 +27,17 @@ class permissions:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,isadmin,canlogin):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO permissions(isadmin,canlogin) VALUES(%s,%s)",(isadmin,canlogin))
+            cur.execute("INSERT INTO permissions(isadmin,canlogin) VALUES(%s,%s)",(self.__sanitize(isadmin),self.__sanitize(canlogin)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,permissionid):
         with self.__con:
@@ -62,9 +68,7 @@ class permissions:
     def update(self,permissionid,isadmin,canlogin):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE permissions SET isadmin = %s,canlogin = %s WHERE permissionid = %s",(isadmin,canlogin,permissionid))
+            cur.execute("UPDATE permissions SET isadmin = %s,canlogin = %s WHERE permissionid = %s",(self.__sanitize(isadmin),self.__sanitize(canlogin),self.__sanitize(permissionid)))
             cur.close()
 
-
-
-
+##### Application Specific Functions #####

@@ -27,11 +27,17 @@ class scrapeurls:
         # create connection
         self.__con = mdb.connect(host=self.__settings['host'], user=self.__settings['username'], passwd=self.__settings['password'], db=self.__settings['database'])
 
+    def sanitize(self,valuein):
+        valueout = mysql.escape_string(valuein)
+        return valuein
+
     def add(self,url,name,organizationid,enabled):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("INSERT INTO scrapeurls(url,name,organizationid,enabled) VALUES(%s,%s,%s,%s)",(url,name,organizationid,enabled))
+            cur.execute("INSERT INTO scrapeurls(url,name,organizationid,enabled) VALUES(%s,%s,%s,%s)",(self.__sanitize(url),self.__sanitize(name),self.__sanitize(organizationid),self.__sanitize(enabled)))
             cur.close()
+            newid = cur.lastrowid
+        return newid
 
     def get(self,scrapeurlid):
         with self.__con:
@@ -62,7 +68,7 @@ class scrapeurls:
     def update(self,scrapeurlid,url,name,organizationid,enabled):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("UPDATE scrapeurls SET url = %s,name = %s,organizationid = %s,enabled = %s WHERE scrapeurlid = %s",(url,name,organizationid,enabled,scrapeurlid))
+            cur.execute("UPDATE scrapeurls SET url = %s,name = %s,organizationid = %s,enabled = %s WHERE scrapeurlid = %s",(self.__sanitize(url),self.__sanitize(name),self.__sanitize(organizationid),self.__sanitize(enabled),self.__sanitize(scrapeurlid)))
             cur.close()
 
 ##### Application Specific Functions #####
@@ -70,7 +76,7 @@ class scrapeurls:
     def geturls(self,organizationid):
         with self.__con:
             cur = self.__con.cursor()
-            cur.execute("SELECT scrapeurlid,url FROM scrapeurls WHERE organizationid = %s",(organizationid))
+            cur.execute("SELECT scrapeurlid,url FROM scrapeurls WHERE organizationid = %s",(self.__sanitize(organizationid)))
             rows = cur.fetchall()
 
         _scrapeurls = []
