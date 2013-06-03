@@ -31,7 +31,7 @@ def _pdf_to_text(path):
 
     except Exception,e:
         #print str(e)
-        print "\tERROR: PDF is not formatted correctly, aborting."
+        #print "\tERROR: PDF is not formatted correctly, aborting."
         retVal = ("", False)
         pass
 
