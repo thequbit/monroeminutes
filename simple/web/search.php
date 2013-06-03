@@ -5,9 +5,6 @@
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	
 	<script type="text/javascript">
-	
-		
-	
 	</script>
 
 	<div>
@@ -27,7 +24,7 @@
 					$orgs = $orgmgr->getall();
 					foreach($orgs as $org)
 					{
-						echo '<option value="' . $org->id . '">' . $org->name . '</option>\n';
+						echo '<option value="' . $org->organizationid . '">' . $org->name . '</option>\n';
 					}
 					
 				?>
@@ -72,37 +69,65 @@
 					//echo "Searching for '" . $keyword . "' within org #" . $organizationid . ", returning page #" . $page . " ...</br>";
 			
 					require_once("./tools/WordsManager.class.php");
+					require_once("./tools/DocumentsManager.class.php");
+					require_once("./tools/SuborganizationsManager.class.php");
 					
-					// perform the search
+					$docmgr = new DocumentsManager();
 					$wordsmgr = new WordsManager();
+					$sorgmgr = new SuborganizationsManager();
+					
+					//echo "Organization ID = " . $organizationid . "<br>";
+					//echo "Keyword = " . $keyword . "<br>";
 					
 					$retwords = $wordsmgr->search($organizationid,$keyword,$page);
-					$totalcount = $wordsmgr->getcount($organizationid, $keyword);
+					$wordcount = $wordsmgr->getcount($organizationid, $keyword);
 				
-					echo json_encode($retwords);
+					// get the docs
+					$docs = array();
+					foreach($retwords as $retword)
+					{
+						$doc = $docmgr->getbyorg($retword->documentid);
+						$docs[] = $doc;
+					}
 				
-					/*
+					// create suborg dictionary
+					$suborgs = $sorgmgr->getall();
+					$suborgdict = array();
+					foreach($suborgs as $suborg)
+					{
+						$suborgdict[$suborg->suborganizationid] = (object) array( 'name' => $suborg->name, 'websiteurl' => $suborg->websiteurl );
+					}
+				
+					//echo "Count = " . $wordcount . "<br>";
+				
+					//echo json_encode($retwords);
 				
 					echo '<div class="righttext">';	
 					
+					$start = (($page - 1) * 10)+1;
+					if( $start + 9 > $wordcount )
+						$end = $wordcount;
+					else
+						$end = $start + 9;
+					
 					// deturmine plural
-					if( $totalcount == 1 )
+					if( $wordcount == 1 )
 						echo "Displaying 1 total result.";
 					else
-						echo "Displaying " . $start . " to " . $end . ", of " . $totalcount . " total results.";
+						echo "Displaying " . $start . " to " . $end . ", of " . $wordcount . " total results.";
 					
 					echo '</div>';
 				
 					// print all of the results to the page
-					foreach($documents as $doc)
+					foreach($docs as $doc)
 					{
 						echo '<div class="searchresult">';
-						echo '<div class="srheader"><a href="' . $doc->sourceurl . '">' . $doc->docname . '</a></div>';
-						echo '<div class="srsubheader"><a href="' . $doc->websiteurl . '">' . $doc->suborgname . '</a></div>';
+						echo '<div class="srheader"><a href="' . $doc->sourceurl . '">' . $doc->name . '</a></div>';
+						echo '<div class="srsubheader"><a href="' . $suborgdict[$doc->suborganizationid]->websiteurl . '">' . $suborgdict[$doc->suborganizationid]->name . '</a></div>';
 						echo '</div>';
 					}
 					
-					*/
+					
 				}
 				else
 				{
