@@ -98,7 +98,7 @@
 			}
 		}
 
-		function update(<!csv_key_column_names!>)
+		function update($name,$type,$websiteurl)
 		{
 			try
 			{
@@ -116,8 +116,9 @@
 				error_log( "Caught exception: " . $e->getMessage() );
 			}
 		}
-		
-		///// Application Specific Functions //////
+
+		///// Application Specific Functions
+
 	}
 
 ?>

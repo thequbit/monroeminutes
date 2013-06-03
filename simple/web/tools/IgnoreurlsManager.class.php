@@ -98,7 +98,7 @@
 			}
 		}
 
-		function update(<!csv_key_column_names!>)
+		function update($url,$ignoredt,$scrapeurlid)
 		{
 			try
 			{
@@ -116,6 +116,9 @@
 				error_log( "Caught exception: " . $e->getMessage() );
 			}
 		}
+
+		///// Application Specific Functions
+
 	}
 
 ?>
