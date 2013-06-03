@@ -119,7 +119,7 @@
 
 		///// Application Specific Functions
 
-		function search($orgid,$keyword,$page)
+		function search($organizationid,$keyword,$page)
 		{
 		    try
 			{
@@ -130,16 +130,16 @@
 					$limit = 0;
 			
 				$db = new DatabaseTool(); 
-				$query = 'SELECT documentid,suborganizationid,frequency FROM words WHERE organizationid = ? and word = ? ORDER BY frequency LIMIT 10 OFFSET ?';
+				$query = 'SELECT documentid,suborganizationid,frequency FROM words WHERE organizationid = ? AND word = ? ORDER BY frequency DESC LIMIT 10 OFFSET ?';
 				$mysqli = $db->Connect();
 				$stmt = $mysqli->prepare($query);
-				$stmt->bind_param("ss",$organizationid, $keyword, $limit);
+				$stmt->bind_param("sss",$organizationid, $keyword, $limit);
 				$results = $db->Execute($stmt);
 			
 				$retArray = array();
 				foreach( $results as $row )
 				{
-					$object = (object) array('wordid' => $row['wordid'],'documentid' => $row['documentid'],'suborganizationid' => $row['suborganizationid'],'organizationid' => $row['organizationid'],'word' => $row['word'],'frequency' => $row['frequency']);
+					$object = (object) array('documentid' => $row['documentid'],'suborganizationid' => $row['suborganizationid'],'frequency' => $row['frequency']);
 					$retArray[] = $object;
 				}
 	
@@ -151,6 +151,29 @@
 			}
 		
 			return $retArray;
+		}
+		
+		function getcount($organizationid,$keyword)
+		{
+			try
+			{
+				$db = new DatabaseTool(); 
+				$query = 'SELECT count(wordid) as count FROM words WHERE organizationid = ? and word = ?';
+				$mysqli = $db->Connect();
+				$stmt = $mysqli->prepare($query);
+				$stmt->bind_param("ss",$organizationid, $keyword);
+				$results = $db->Execute($stmt);
+
+				$count = $results[0]['count'];
+
+				$db->Close($mysqli, $stmt);
+			}
+			catch (Exception $e)
+			{
+				error_log( "Caught exception: " . $e->getMessage() );
+			}
+
+			return $count;
 		}
 
 	}
