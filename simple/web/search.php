@@ -86,10 +86,19 @@
 					$docs = array();
 					foreach($retwords as $retword)
 					{
-						$doc = $docmgr->getbyorg($retword->documentid);
+						$doc = $docmgr->get($retword->documentid);
 						$docs[] = $doc;
 					}
 				
+					/*
+					// create words array
+					$words = array();
+					foreach($retword as $word)
+					{
+						$words[$word->word] = (object) array('documentid' => $word->documentid, 'frequency' => $word->frequency);
+					}
+					*/
+					
 					// create suborg dictionary
 					$suborgs = $sorgmgr->getall();
 					$suborgdict = array();
@@ -122,7 +131,7 @@
 					foreach($docs as $doc)
 					{
 						echo '<div class="searchresult">';
-						echo '<div class="srheader"><a href="' . $doc->sourceurl . '">' . $doc->name . '</a></div>';
+						echo '<div class="srheader">[' . $doc->documentdate . '] - <a href="' . $doc->sourceurl . '">' . $doc->name . '</a></div>';
 						echo '<div class="srsubheader"><a href="' . $suborgdict[$doc->suborganizationid]->websiteurl . '">' . $suborgdict[$doc->suborganizationid]->name . '</a></div>';
 						echo '</div>';
 					}

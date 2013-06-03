@@ -130,7 +130,7 @@
 					$limit = 0;
 			
 				$db = new DatabaseTool(); 
-				$query = 'SELECT documentid,suborganizationid,frequency FROM words WHERE organizationid = ? AND word = ? ORDER BY frequency DESC LIMIT 10 OFFSET ?';
+				$query = 'SELECT word,documentid,suborganizationid,frequency FROM words WHERE organizationid = ? AND word = ? ORDER BY frequency DESC LIMIT 10 OFFSET ?';
 				$mysqli = $db->Connect();
 				$stmt = $mysqli->prepare($query);
 				$stmt->bind_param("sss",$organizationid, $keyword, $limit);
@@ -139,7 +139,7 @@
 				$retArray = array();
 				foreach( $results as $row )
 				{
-					$object = (object) array('documentid' => $row['documentid'],'suborganizationid' => $row['suborganizationid'],'frequency' => $row['frequency']);
+					$object = (object) array('word' => $row['word'], 'documentid' => $row['documentid'],'suborganizationid' => $row['suborganizationid'],'frequency' => $row['frequency']);
 					$retArray[] = $object;
 				}
 	
