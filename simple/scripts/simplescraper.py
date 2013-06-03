@@ -43,7 +43,7 @@ def getlinks(urlid,url,siteurl,baseurl):
     pagelinks = []
     for pagelink in _pagelinks:
         link = decodelink(pagelink,siteurl,baseurl)
-        pagelinks.append(link.lower())
+        pagelinks.append((link.lower(),pagelink.get_text().strip()))
 
     # diff the lists, dropping links from the ignore list
     links = [x for x in pagelinks if x not in ignorelinks]
@@ -167,7 +167,7 @@ def main(argv):
 
         report("info","Working on {0} Links from `{1}`".format(len(links),url))
 
-        for link in links:
+        for link,linkname in links:
             report("info","Working on URL `{0}`".format(link))
             success,filename = downloadlink(link)
             if success == False:
@@ -176,7 +176,8 @@ def main(argv):
             success,pdftext,texthash = decodepdf(filename)
             if success == True:
                 docdate = getdocdate(pdftext[:HEADERLENGTH])
-                docname = getdocname(pdftext[:HEADERLENGTH])
+                #docname = getdocname(pdftext[:HEADERLENGTH])
+                docname = linkname
                 pdftextscrubbed = scrubtext(pdftext)
                 _tokens = nltk.word_tokenize(pdftextscrubbed)
                 tokens = nltk.FreqDist(word.lower() for word in _tokens)
