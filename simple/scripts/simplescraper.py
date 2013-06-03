@@ -107,11 +107,15 @@ def addignore(link,scrapeurlid):
 def getsuborg(pdfheader,orgid):
     sorgs = suborganizations()
     suborgs = sorgs.getall()
+    #print "orgid = {0}".format(orgid)
     success = False
     for suborg in suborgs:
         suborganizationid,organizationid,name,parsename,websiteurl,documentsurl,scriptname,dbpopulated = suborg
-        if orgid == organizationid:
-            if parsename in pdfheader:
+        #pprint(suborg)
+        if int(orgid) == int(organizationid):
+            #print "parsename = {0}\n".format(parsename.lower())
+            #print "header = {0}\n\n\n".format(pdfheader.lower())
+            if parsename.lower() in pdfheader.lower():
                 success = True
                 break
     return success,suborganizationid
