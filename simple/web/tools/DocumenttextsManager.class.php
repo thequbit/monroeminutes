@@ -119,6 +119,30 @@
 
 		///// Application Specific Functions
 
+		function getbydocid($docid)
+		{
+			try
+			{
+				$db = new DatabaseTool(); 
+				$query = 'SELECT * FROM documenttexts WHERE documentid = ?';
+				$mysqli = $db->Connect();
+				$stmt = $mysqli->prepare($query);
+				$stmt->bind_param("s", $documenttextid);
+				$results = $db->Execute($stmt);
+			
+				$row = $results[0];
+				$retVal = (object) array('documenttextid' => $row['documenttextid'],'documentid' => $row['documentid'],'documenttext' => $row['documenttext']);
+	
+				$db->Close($mysqli, $stmt);
+			}
+			catch (Exception $e)
+			{
+				error_log( "Caught exception: " . $e->getMessage() );
+			}
+		
+			return $retVal;
+		}
+
 	}
 
 ?>
