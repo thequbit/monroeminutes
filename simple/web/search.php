@@ -7,32 +7,36 @@
 	<script type="text/javascript">
 	</script>
 
-	<div>
+	<div class="searchwrapper">
 		<form name="input" action="search.php" method="get">
-		
-			Enter a Search Term</br>
-			<input type="text" id="keyword" name="keyword" size="80" value=""></br>
+
+			<div class="searchbox">
+				Enter a Search Term</br>
+				<input type="text" id="keyword" name="keyword" size="80" value=""></br>
+			</div>
 			
-			Select a Specific Organization</br>
-			<select id="organization" name="organization">
-			
-				<?php
+			<div class="orgselectbox">
+				Select a Specific Organization</br>
+				<select id="organization" name="organization">
 				
-					require_once("./tools/OrganizationsManager.class.php");
+					<?php
 					
-					$orgmgr = new OrganizationsManager();
-					$orgs = $orgmgr->getall();
-					foreach($orgs as $org)
-					{
-						echo '<option value="' . $org->organizationid . '">' . $org->name . '</option>\n';
-					}
-					
-				?>
-			
-			</select>
+						require_once("./tools/OrganizationsManager.class.php");
+						
+						$orgmgr = new OrganizationsManager();
+						$orgs = $orgmgr->getall();
+						foreach($orgs as $org)
+						{
+							echo '<option value="' . $org->organizationid . '">' . $org->name . '</option>\n';
+						}
+						
+					?>
+				
+				</select>
+			</div>
 			
 			<div class="smallpadding">
-			<input type="submit" id="search" value="Search"></br>
+				<input type="submit" id="search" value="Search"></br>
 			</div>
 			
 		</form>
@@ -111,7 +115,7 @@
 				
 					//echo json_encode($retwords);
 				
-					echo '<div class="righttext">';	
+					
 					
 					$start = (($page - 1) * 10)+1;
 					if( $start + 9 > $wordcount )
@@ -119,21 +123,26 @@
 					else
 						$end = $start + 9;
 					
-					// deturmine plural
-					if( $wordcount == 1 )
-						echo "Displaying 1 total result.";
-					else
-						echo "Displaying " . $start . " to " . $end . ", of " . $wordcount . " total results.";
+					echo '<div class="srtop">';
 					
-					echo '</div>';
+					echo '<a href="' . $suborgdict[$doc->suborganizationid]->websiteurl . '">' . $suborgdict[$doc->suborganizationid]->name . '</a>';
+					
+					if( $wordcount == 1 )
+						echo '<div class="srcounts"><div class="righttext">Displaying 1 total result.</div></div>';
+					else
+						echo '<div class="srcounts"><div class="righttext">Displaying ' . $start . ' to ' . $end . ' of ' . $wordcount . ' total results.</div></div>';
+
+					echo "</div>\n";
 				
 					// print all of the results to the page
 					foreach($docs as $doc)
 					{
 						echo '<div class="searchresult">';
-						echo '<div class="srheader">[' . $doc->documentdate . '] - <a href="' . $doc->sourceurl . '">' . $doc->name . '</a></div>';
-						echo '<div class="srsubheader"><a href="' . $suborgdict[$doc->suborganizationid]->websiteurl . '">' . $suborgdict[$doc->suborganizationid]->name . '</a></div>';
-						echo '</div>';
+						echo '<div class="srheader"><a href="' . $doc->sourceurl . '">' . $doc->name . '</a> - ' . $doc->documentdate . '</div>';
+						echo '<div class="srurlheader">' . $doc->sourceurl . '</div></br>';
+						echo '<div class="srpreviewtext">"... that the floor plan for this house is identical to the last one the Planning Board approved. He passed around a sample of the exterior color, which members agreed was aesthetically ..."</div>';
+						//echo '<div class="srsubheader"><a href="' . $suborgdict[$doc->suborganizationid]->websiteurl . '">' . $suborgdict[$doc->suborganizationid]->name . '</a></div>';
+						echo "</div>\n\n";
 					}
 					
 					
