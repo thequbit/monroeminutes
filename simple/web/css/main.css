@@ -137,6 +137,29 @@ div.footer
 /***                                        ***/
 /**********************************************/
 
+div.searchwrapper
+{
+	
+}
+
+div.searchbox
+{
+	float: left;
+	text-align: left;
+	padding-right: 10px;
+	
+}
+
+div.orgselectbox
+{
+	display: inline;
+	text-align: left;
+}
+
+select#organization
+{
+	width: 200px;
+}
 
 div.searchwrapper
 {
@@ -146,14 +169,24 @@ div.searchwrapper
 
 div.searchresults
 {
-	padding: 10px 10px 10px 10px;
-	margin: auto;
-	background-color: #f6f6f6;
+
+}
+
+div.srtop
+{
+	padding-bottom: 5px;
+}
+
+div.srcounts
+{
+	float: right;
 }
 
 div.searchresult
 {
-	padding: 10px 10px 10px 10px;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	text-align: left;
 	margin-bottom: 5px;
 	background-color: #f0f0f0;
@@ -162,14 +195,32 @@ div.searchresult
 div.srheader
 {
 	font-size: 16px;
-	
+	padding-left: 2px;
+}
+
+div.srurlheader
+{
+	float: left;
+	font-size: 12px;
+	padding-left: 2px;
+	color: #209020;
 }
 
 div.srsubheader
 {
+
 	font-size: 12px;
 	padding-left: 2px;
-	color: #2020202
+	color: #2020202;
+}
+
+div.srpreviewtext
+{
+	font-size: 12px;
+	padding-left: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	color: #202020;
 }
 
 div.smallpadding
