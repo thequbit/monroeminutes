@@ -44,9 +44,7 @@ CREATE TABLE IF NOT EXISTS docs(
     urlid INT NOT NULL,
     FOREIGN KEY (urlid) REFERENCES docs(docid),
     creationdatetime DATETIME NOT NULL,
-    pdfhash CHAR(255) NOT NULL,
-    runid INT NOT NULL,
-    FOREIGN KEY (runid) REFERENCES runs(runid)
+    pdfhash CHAR(255) NOT NULL
 );
 CREATE INDEX docs_docid ON docs(docid);
 
