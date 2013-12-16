@@ -27,12 +27,14 @@ class Archiver():
     #
     ####
 
-     def geturlslist(self):
-        urls = []
-
-        # TODO: pull list of URLs from the database
-
-        return urls
+    def geturlslist(self):
+        urls = Urls()
+        _urls = urls.getall()
+        urllist = []
+        for url in _urls:
+            urllist.append(url[1])
+        print "URL List: {0}".format(urllist)
+        return urllist
 
     ####
     #
@@ -67,6 +69,8 @@ class Archiver():
             # make sure that the url is within the url list that is in the database
             if urldata['targeturl'] in self.geturllist():
                 
+                print "Processing new document ..."
+
                 #
                 # The flow of things:
                 #
@@ -120,9 +124,9 @@ class Archiver():
     def sendtoelasticsearch(self,targeturl,docurl,pdftext,pdfhash,scrapedatetime):
         es = elasticsearch.Elasticsearch() # TODO: implement server definition rather than just localhost
 
-        es.index(
-            index="monroeminutes",
-            doc_type="pdf",
+        #es.index(
+        #    index="monroeminutes",
+        #    doc_type="pdf",
             
 
 if __name__ == '__main__':
