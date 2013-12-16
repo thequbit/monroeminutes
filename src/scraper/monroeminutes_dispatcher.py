@@ -5,6 +5,7 @@ if __name__ == '__main__':
     print "Starting Monroe Minutes Scraper ..."
 
     url = {'targeturl': "http://timduffy.me/",
+           'urlid': 1, # meta data not used by barkingowl
            'title': "TimDuffy.Me",
            'description': "Tim Duffy's Personal Website",
            'maxlinklevel': 3,
