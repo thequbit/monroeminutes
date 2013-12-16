@@ -28,15 +28,6 @@ CREATE TABLE IF NOT EXISTS urls(
 );
 CREATE INDEX urls_urlid ON urls(urlid);
 
-CREATE TABLE IF NOT EXISTS runs(
-    runid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    startdatetime DATETIME NOT NULL,
-    enddatetime DATETIME NOT NULL,
-    linkcount INT NOT NULL,
-    scraperid CHAR(255) NOT NULL
-);
-CREATE INDEX runs_runid ON runs(runid);
-
 CREATE TABLE IF NOT EXISTS docs(
     docid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     docurl TEXT NOT NULL,
