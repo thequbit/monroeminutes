@@ -117,23 +117,30 @@ class DocProcessor(threading.Thread):
                 #
 
                 # 1. Download and save pdf
-                pdffilename = self.downloadpdf(docurl)
+                pdffilename,success = self.downloadpdf(docurl)
                
                 # 2. Convert PDF to Text
-                created,pdftext,pdfhash = self.getpdftext(pdffilename)
+                created,pdftext,pdfhash,success = self.getpdftext(pdffilename)
 
-                # 3. Save text doc to file store
-                textfilename = "%s.txt" % pdffilename
-                self.savetext(textfilename,pdftext)
+                if success == False:
 
-                # 3. Save doc to DB
-                docid = self.savedoctodb(docurl,linktext,urldata['urlid'],scrapedatetime,pdfhash,textfilename,pdffilename)
+                    if self.DEBUG:
+                        print "Document NOT processed successfully."
 
-                # 4. Push text to elastic search
-                self.sendtoelasticsearch(urldata['targeturl'],docurl,linktext,docid,pdftext,pdfhash,scrapedatetime)
+                else:
 
-                if self.DEBUG:
-                    print "New document processed successfully."
+                    # 3. Save text doc to file store
+                    textfilename = "%s.txt" % pdffilename
+                    self.savetext(textfilename,pdftext)
+
+                    # 3. Save doc to DB
+                    docid = self.savedoctodb(docurl,linktext,urldata['urlid'],scrapedatetime,pdfhash,textfilename,pdffilename)
+
+                    # 4. Push text to elastic search
+                    self.sendtoelasticsearch(urldata['targeturl'],docurl,linktext,docid,pdftext,pdfhash,scrapedatetime,textfilename,pdffilename)
+
+                    if self.DEBUG:
+                        print "New document processed successfully."
             else:
                 print "Target URL not within the database, skipping."
 
@@ -155,6 +162,8 @@ class DocProcessor(threading.Thread):
 
     def downloadpdf(self,url):
 
+        success = True
+
         if self.DEBUG:
             print "Downloading document '{0}' to '{1}'".format(url,self.downloaddir)
 
@@ -168,12 +177,14 @@ class DocProcessor(threading.Thread):
         if success:
             filename,dldatetime = files[0]
         else:
-            raise Exception("File Download Error.")
+            #raise Exception("File Download Error.")
+            print "Error downloading document."
+            success = False
     
         if self.DEBUG:
             print "PDF document successfully downloaded to filestore."
 
-        return filename
+        return filename,success
 
     def savetext(self,filename,text):
 
@@ -213,9 +224,12 @@ class DocProcessor(threading.Thread):
         unpdfer = UnPDFer(filename)
         created,pdftext,pdfhash,success = unpdfer.unpdf(filename,SCRUB=SCRUB)
         if success:
-            retval = (created,pdftext,pdfhash)
+            retval = (created,pdftext,pdfhash,True)
         else:
-            raise Exception("Error in PDF->Text conversion")
+            #raise Exception("Error in PDF->Text conversion")
+            if self.DEBUG:
+                print "Error in PDF->Text conversion"
+            retval = (None,None,None,False)
 
         if self.DEBUG:
             print "Document successfully converted from PDF to Text."
@@ -228,7 +242,7 @@ class DocProcessor(threading.Thread):
     #
     ####
 
-    def sendtoelasticsearch(self,targeturl,docurl,linktext,docid,pdftext,pdfhash,scrapedatetime):
+    def sendtoelasticsearch(self,targeturl,docurl,linktext,docid,pdftext,pdfhash,scrapedatetime,textfilename,pdffilename):
 
         print "Attempting to push document to ElasticSearch ..."
 
@@ -245,7 +259,9 @@ class DocProcessor(threading.Thread):
                 'docid': docid,
                 'pdftext': pdftext,
                 'pdfhash': pdfhash,
-                'scrapedatetime': scrapedatetime
+                'scrapedatetime': scrapedatetime,
+                'textfilename': textfilename,
+                'pdffilename': pdffilename
             }
         )
 
