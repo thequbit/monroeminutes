@@ -46,13 +46,12 @@ class DLer:
     def dl(self,links,destdir):
         retsuccess = True
         files = []
-        for _link in links:
-            link,text = _link
+        for link in links:
             filename,datetime,success = self._download(link,destdir)
             if not success:
                 retsuccess = False
                 break
             else:
-                files.append((filename,text,datetime))
+                files.append((filename,datetime))
         return (files,retsuccess)
 

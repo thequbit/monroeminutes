@@ -24,7 +24,7 @@ class UnPDFer:
             print "[unPDFer ] {0}".format(text)
 
     def _pdf2text(self,fp):
-        #try:
+        try:
             rsrcmgr = PDFResourceManager()
             retstr = StringIO()
             codec = 'ascii'
@@ -63,10 +63,10 @@ class UnPDFer:
 
             retVal = (created,txt,True)
             retstr.close()
-        #except:
-        #    retVal = (None,"",False)
-        #    pass
-            return retVal
+        except:
+            retVal = (None,"",False)
+            pass
+        return retVal
 
     def _scrubtext(self,text):
         text = text.replace(',','').replace('.','').replace('?','')
