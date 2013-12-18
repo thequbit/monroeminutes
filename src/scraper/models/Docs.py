@@ -23,13 +23,13 @@ class Docs:
             valueout = valuein
         return valuein
 
-    def add(self,docurl,linktext,urlid,creationdatetime,pdfhash):
+    def add(self,docurl,linktext,urlid,creationdatetime,pdfhash,textfilename,pdffilename):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO docs(docurl,linktext,urlid,creationdatetime,pdfhash) VALUES(%s,%s,%s,%s,%s)",
-                            (self.__sanitize(docurl),self.__sanitize(linktext),self.__sanitize(urlid),self.__sanitize(creationdatetime),self.__sanitize(pdfhash))
+                cur.execute("INSERT INTO docs(docurl,linktext,urlid,creationdatetime,pdfhash,textfilename,pdffilename) VALUES(%s,%s,%s,%s,%s,%s,%s)",
+                            (self.__sanitize(docurl),self.__sanitize(linktext),self.__sanitize(urlid),self.__sanitize(creationdatetime),self.__sanitize(pdfhash),self.__sanitize(textfilename),self.__sanitize(pdffilename))
                            )
                 cur.close()
                 newid = cur.lastrowid
@@ -82,13 +82,13 @@ class Docs:
         except Exception, e:
             raise Exception("sql2api error - delete() failed with error:\n\n\t{0}".format(e))
 
-    def update(self,docid,docurl,linktext,urlid,creationdatetime,pdfhash):
+    def update(self,docid,docurl,linktext,urlid,creationdatetime,pdfhash,textfilename,pdffilename):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("UPDATE docs SET docurl = %s,linktext = %s,urlid = %s,creationdatetime = %s,pdfhash = %s WHERE docid = %s",
-                            (self.__sanitize(docurl),self.__sanitize(linktext),self.__sanitize(urlid),self.__sanitize(creationdatetime),self.__sanitize(pdfhash),self.__sanitize(docid))
+                cur.execute("UPDATE docs SET docurl = %s,linktext = %s,urlid = %s,creationdatetime = %s,pdfhash = %s,textfilename = %s,pdffilename = %s WHERE docid = %s",
+                            (self.__sanitize(docurl),self.__sanitize(linktext),self.__sanitize(urlid),self.__sanitize(creationdatetime),self.__sanitize(pdfhash),self.__sanitize(textfilename),self.__sanitize(pdffilename),self.__sanitize(docid))
                            )
                 cur.close()
             con.close()
