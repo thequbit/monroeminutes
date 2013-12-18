@@ -10,13 +10,14 @@ def geturls():
 
 def packageurl(url):
     urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,organizationid = url   
+    
     pkg = {
         'urlid': urlid,                       # meta
         'targeturl': targeturl,               # required
         'title': title,                       # required
         'description': description,           # required
         'maxlinklevel': maxlinklevel,         # required
-        'creationdatetime': creationdatetime, # required
+        'creationdatetime': str(creationdatetime), # required
         'doctype': doctype,                   # required
         'frequency': frequency,               # required
         'organizationid': organizationid      # meta
