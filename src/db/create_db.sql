@@ -33,9 +33,11 @@ CREATE TABLE IF NOT EXISTS docs(
     docurl TEXT NOT NULL,
     linktext CHAR(255) NOT NULL,
     urlid INT NOT NULL,
-    FOREIGN KEY (urlid) REFERENCES docs(docid),
+    FOREIGN KEY (urlid) REFERENCES urls(urlid),
     creationdatetime DATETIME NOT NULL,
-    pdfhash CHAR(255) NOT NULL
+    pdfhash CHAR(255) NOT NULL,
+    textfilename TEXT NOT NULL,
+    pdffilename TEXT NOT NULL
 );
 CREATE INDEX docs_docid ON docs(docid);
 
