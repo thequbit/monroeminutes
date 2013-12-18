@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     exchange = "monroeminutes"
     try:
-        sw = ScraperWrapper(exchange=exchange)
+        sw = ScraperWrapper(exchange=exchange,DEBUG=True)
         sw.start()
     except:
         print "Monroe Minutes Scraper Exiting ..."
