@@ -15,13 +15,32 @@ app.debug = True
 
 es = elasticsearch.Elasticsearch()
 
+#
+# TODO: make this pull from a static location
+#
 @app.route('/main.css')
 def jquery():
     return render_template('main.css')
 
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/organizations')
+def index():
+    return render_template('organizations.html')
+
+@app.route('/developers')
+def index():
+    return render_template('developers.html')
+
+@app.route('/about')
+def index():
+    return render_template('about.html')
+
+
 
 @app.route('/search.json', methods=['GET'])
 def search():
