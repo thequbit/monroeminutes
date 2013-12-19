@@ -1,7 +1,7 @@
 from time import strftime
 from BarkingOwl.dispatcher.barkingowl_dispatcher import Dispatcher
 
-from models import Urls
+from db.models import Urls
 
 def geturls():
     urls = Urls()
