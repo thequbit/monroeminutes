@@ -29,15 +29,15 @@ def index():
     return render_template('index.html')
 
 @app.route('/organizations')
-def index():
+def organizations():
     return render_template('organizations.html')
 
 @app.route('/developers')
-def index():
+def developers():
     return render_template('developers.html')
 
 @app.route('/about')
-def index():
+def about():
     return render_template('about.html')
 
 
