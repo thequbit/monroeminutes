@@ -16,9 +16,10 @@ def main(argv):
 
     print "{0} Results Found.".format(len(results['hits']['hits']))
     for hit in results['hits']['hits']:
-        #print hit
-        url = hit['_source']['docurl']
-        print "URL: {0}".format(url)
+        print hit
+        #url = hit['_source']['docurl']
+        #print "URL: {0}".format(url)
+        return
 
     #f = open("output.json","w")
     #f.write(json.dumps(results))
