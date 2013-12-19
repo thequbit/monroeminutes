@@ -9,11 +9,15 @@ import json
 from db.models import *
 
 app = Flask(__name__)
-app.template_folder = "web/templates"
-app.static_folder = "web/static"
+app.template_folder = "web"
+#app.static_folder = "web/static"
 app.debug = True
 
 es = elasticsearch.Elasticsearch()
+
+@app.route('/main.css')
+def jquery():
+    return render_template('main.css')
 
 @app.route('/')
 def index():
