@@ -64,9 +64,9 @@
 				</br>
 				<!-- <hr> -->
 				
-				<div class="searchresults">
+				<div class="searchresults" id="searchresults">
 				
-					hi.
+					<!-- results go here -->	
 				
 				</div>
 				
@@ -99,9 +99,20 @@
 
 					$.getJSON(url, function (data) {
 						
-						alert(data);
+						var html = "";
+
+						html += "Results: " + data.count;
+
+						for(var i=0; i<data.results.length; i++) {
+							console.log(data.results[i]);
+							html += "<div class=\"searchresult\">";
+							html += "<a href=\"" + data.results[i].docurl + "\">" + data.results[i].linktext + "</a>";
+							html += "</div>";
+						}
+
+						$("#searchresults").html(html)
 						
-					})
+					});
 
 				}
 			};
