@@ -14,7 +14,8 @@ except Exception,e:
     raise Exception("sql2api error - could not connect to the database:\n\n\t{0}".format(e))
 
 
-from Organizations import Organizations
 from Urls import Urls
+from Orgs import Orgs
+from Bodies import Bodies
 from Docs import Docs
 

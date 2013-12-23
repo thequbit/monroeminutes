@@ -4,7 +4,7 @@ import re
 
 import __dbcreds__
 
-class Organizations:
+class Orgs:
 
     __con = False
 
@@ -23,13 +23,13 @@ class Organizations:
             valueout = valuein
         return valuein
 
-    def add(self,name,description,creationdatetime):
+    def add(self,name,description,creationdatetime,matchtext,urlid,bodyid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO organizations(name,description,creationdatetime) VALUES(%s,%s,%s)",
-                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatetime))
+                cur.execute("INSERT INTO orgs(name,description,creationdatetime,matchtext,urlid,bodyid) VALUES(%s,%s,%s,%s,%s,%s)",
+                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatetime),self.__sanitize(matchtext),self.__sanitize(urlid),self.__sanitize(bodyid))
                            )
                 cur.close()
                 newid = cur.lastrowid
@@ -38,13 +38,13 @@ class Organizations:
             raise Exception("sql2api error - add() failed with error:\n\n\t{0}".format(e))
         return newid
 
-    def get(self,organizationid):
+    def get(self,orgid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("SELECT * FROM organizations WHERE organizationid = %s",
-                            (organizationid)
+                cur.execute("SELECT * FROM orgs WHERE orgid = %s",
+                            (orgid)
                            )
                 row = cur.fetchone()
                 cur.close()
@@ -58,37 +58,37 @@ class Organizations:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("SELECT * FROM organizations")
+                cur.execute("SELECT * FROM orgs")
                 rows = cur.fetchall()
                 cur.close()
-            _organizations = []
+            _orgs = []
             for row in rows:
-                _organizations.append(row)
+                _orgs.append(row)
             con.close()
         except Exception, e:
             raise Exception("sql2api error - getall() failed with error:\n\n\t{0}".format(e))
-        return _organizations
+        return _orgs
 
-    def delete(self,organizationid):
+    def delete(self,orgid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("DELETE FROM organizations WHERE organizationid = %s",
-                            (self.__sanitize(organizationid))
+                cur.execute("DELETE FROM orgs WHERE orgid = %s",
+                            (self.__sanitize(orgid))
                            )
                 cur.close()
             con.close()
         except Exception, e:
             raise Exception("sql2api error - delete() failed with error:\n\n\t{0}".format(e))
 
-    def update(self,organizationid,name,description,creationdatetime):
+    def update(self,orgid,name,description,creationdatetime,matchtext,urlid,bodyid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("UPDATE organizations SET name = %s,description = %s,creationdatetime = %s WHERE organizationid = %s",
-                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatetime),self.__sanitize(organizationid))
+                cur.execute("UPDATE orgs SET name = %s,description = %s,creationdatetime = %s,matchtext = %s,urlid = %s,bodyid = %s WHERE orgid = %s",
+                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatetime),self.__sanitize(matchtext),self.__sanitize(urlid),self.__sanitize(bodyid),self.__sanitize(orgid))
                            )
                 cur.close()
             con.close()

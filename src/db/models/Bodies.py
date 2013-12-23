@@ -4,7 +4,7 @@ import re
 
 import __dbcreds__
 
-class Urls:
+class Bodies:
 
     __con = False
 
@@ -23,13 +23,13 @@ class Urls:
             valueout = valuein
         return valuein
 
-    def add(self,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency):
+    def add(self,name,description,creationdatatime):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO urls(targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency) VALUES(%s,%s,%s,%s,%s,%s,%s)",
-                            (self.__sanitize(targeturl),self.__sanitize(title),self.__sanitize(description),self.__sanitize(maxlinklevel),self.__sanitize(creationdatetime),self.__sanitize(doctype),self.__sanitize(frequency))
+                cur.execute("INSERT INTO bodies(name,description,creationdatatime) VALUES(%s,%s,%s)",
+                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatatime))
                            )
                 cur.close()
                 newid = cur.lastrowid
@@ -38,13 +38,13 @@ class Urls:
             raise Exception("sql2api error - add() failed with error:\n\n\t{0}".format(e))
         return newid
 
-    def get(self,urlid):
+    def get(self,bodyid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("SELECT * FROM urls WHERE urlid = %s",
-                            (urlid)
+                cur.execute("SELECT * FROM bodies WHERE bodyid = %s",
+                            (bodyid)
                            )
                 row = cur.fetchone()
                 cur.close()
@@ -58,37 +58,37 @@ class Urls:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("SELECT * FROM urls")
+                cur.execute("SELECT * FROM bodies")
                 rows = cur.fetchall()
                 cur.close()
-            _urls = []
+            _bodies = []
             for row in rows:
-                _urls.append(row)
+                _bodies.append(row)
             con.close()
         except Exception, e:
             raise Exception("sql2api error - getall() failed with error:\n\n\t{0}".format(e))
-        return _urls
+        return _bodies
 
-    def delete(self,urlid):
+    def delete(self,bodyid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("DELETE FROM urls WHERE urlid = %s",
-                            (self.__sanitize(urlid))
+                cur.execute("DELETE FROM bodies WHERE bodyid = %s",
+                            (self.__sanitize(bodyid))
                            )
                 cur.close()
             con.close()
         except Exception, e:
             raise Exception("sql2api error - delete() failed with error:\n\n\t{0}".format(e))
 
-    def update(self,urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency):
+    def update(self,bodyid,name,description,creationdatatime):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("UPDATE urls SET targeturl = %s,title = %s,description = %s,maxlinklevel = %s,creationdatetime = %s,doctype = %s,frequency = %s WHERE urlid = %s",
-                            (self.__sanitize(targeturl),self.__sanitize(title),self.__sanitize(description),self.__sanitize(maxlinklevel),self.__sanitize(creationdatetime),self.__sanitize(doctype),self.__sanitize(frequency),self.__sanitize(urlid))
+                cur.execute("UPDATE bodies SET name = %s,description = %s,creationdatatime = %s WHERE bodyid = %s",
+                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatatime),self.__sanitize(bodyid))
                            )
                 cur.close()
             con.close()
