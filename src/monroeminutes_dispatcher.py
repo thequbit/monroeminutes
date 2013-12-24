@@ -2,6 +2,7 @@ from time import strftime
 from BarkingOwl.dispatcher.barkingowl_dispatcher import Dispatcher
 
 from db.models import Urls
+from db.models import Orgs
 
 def geturls():
     urls = Urls()
@@ -9,33 +10,44 @@ def geturls():
     return urllist
 
 def packageurl(url):
-    urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,organizationid = url   
-    
+    urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency = url  
+ 
+    # we need to package all of the organizations that associated with the URL
+    # into the payload so the archiver has enough information to classify the 
+    # documents after converting them.
+    orgs = Orgs()
+    orglist = orgs.getall()
+    urlorgs = []
+    for org in orglist:
+        org_orgid,org_name,org_description,org_creationdatetime,org_matchtext,org_urlid,org_bodyid = org
+        if org_urlid == urlid:
+            urlorgs.append({'id': org_orgid,
+                            'name': org_name,
+                            'description': org_description,
+                            'creationdatetime': str(org_creationdatetime),
+                            'matchtext': org_matchtext,
+                            'urlid': org_urlid,
+                            'bodyid': org_bodyid,
+                           })
+
+    # create the URL payload
     pkg = {
-        'urlid': urlid,                       # meta
-        'targeturl': targeturl,               # required
-        'title': title,                       # required
-        'description': description,           # required
-        'maxlinklevel': maxlinklevel,         # required
-        'creationdatetime': str(creationdatetime), # required
-        'doctype': doctype,                   # required
-        'frequency': frequency,               # required
-        'organizationid': organizationid      # meta
+        'targeturl': targeturl,                    # required
+        'title': title,                            # meta
+        'description': description,                # meta
+        'maxlinklevel': maxlinklevel,              # required
+        'creationdatetime': str(creationdatetime), # meta
+        'doctype': doctype,                        # required
+        'frequency': frequency,                    # required
+        'urlid': urlid,                            # meta
+        'orgs': urlorgs,                           # meta
     }
+
     return pkg
 
 if __name__ == '__main__':
+    
     print "Monroe Minutes Dispatcher Starting ..."
-
-    #url = {'targeturl': "http://timduffy.me/",
-    #       'urlid': 1, # meta data not used by barkingowl
-    #       'title': "TimDuffy.Me",
-    #       'description': "Tim Duffy's Personal Website",
-    #       'maxlinklevel': 3,
-    #       'creationdatetime': str(strftime("%Y-%m-%d %H:%M:%S")),
-    #       'doctype': 'application/pdf',
-    #       'frequency': 2,
-    #      }
 
     # create our BarkingOwl dispatcher
     dispatcher = Dispatcher(address='localhost',exchange='monroeminutes')
