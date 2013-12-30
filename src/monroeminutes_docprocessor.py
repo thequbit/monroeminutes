@@ -74,7 +74,9 @@ class DocProcessor(threading.Thread):
                             'textfilename': textfilename,
                             'pdffilename': pdffilename,
                             'misfit': misfit,
-                            'org': org
+                            'orgname': org['name'],
+                            'orgid': org['orgid'],
+                            'bodyid': org['bodyid']
                            }
 
                     self.sendtoelasticsearch(body)
@@ -86,7 +88,10 @@ class DocProcessor(threading.Thread):
 
     def orgmatch(self,orgs,pdftext):
         misfit = True
-        org = None
+        org = {}
+        org['name'] = ""
+        org['orgid'] = 0
+        org['bodyid'] = 0
         for o in orgs:
             if self.DEBUG:
                 print "matchtext: %s" % o['matchtext']

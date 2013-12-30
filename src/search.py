@@ -35,7 +35,7 @@ class Search():
                     "query": {
                         "match": {
                             "pdftext": phrase,
-                            "orgid": orgid
+                            "orgid": orgid,
                    }}}
 
         #try:
