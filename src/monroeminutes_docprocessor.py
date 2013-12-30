@@ -2,6 +2,7 @@ import re
 import uuid
 import simplejson
 import threading
+import urllib2
 
 import elasticsearch
 
@@ -62,7 +63,7 @@ class DocProcessor(threading.Thread):
                     org,misfit = self.orgmatch(orgs,pdftext[:8192]) # pass in the first 8K of text
 
                     # build elastic search entry
-                    docname = docurl.split('/')[-1]
+                    docname = urllib2.unquote(docurl.split('/')[-1])
                     body = {'targeturl': urldata['targeturl'],
                             'docurl': docurl,
                             'docname': docname,
