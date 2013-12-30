@@ -30,13 +30,44 @@ class Search():
             #
 
             # create the search query that is orgid specifc
-            body = {"size": 10,
-                    "from": page*10,
-                    "query": {
-                        "match": {
-                            "pdftext": phrase,
-                            "orgid": orgid,
-                   }}}
+            #body = {
+            #    "size": 10,
+            #    "from": page*10,
+            #    "query": {
+            #        "match": {
+            #            "pdftext": phrase,
+            #        },    
+            #        "field": {
+            #            "orgid": orgid,
+            #        }
+            #    }
+            #}
+
+            body = {
+                'size': 10,
+                'from': page*10,
+                'query': {
+                    'filtered': {
+                        'query': {
+                            'query_string': {
+                                'query': phrase,
+                                'use_dis_max': True,
+                                'default_operator':'AND',
+                                'fields': [
+                                    'pdftext',
+                                ]
+                            }
+                        },
+                        'filter': {
+                            'query': {
+                                'field': {
+                                    'orgid': orgid,
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
         #try:
         if True:

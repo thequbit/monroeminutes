@@ -21,7 +21,7 @@ def packageurl(url):
     for org in orglist:
         org_orgid,org_name,org_description,org_creationdatetime,org_matchtext,org_urlid,org_bodyid = org
         if org_urlid == urlid:
-            urlorgs.append({'id': org_orgid,
+            urlorgs.append({'orgid': org_orgid,
                             'name': org_name,
                             'description': org_description,
                             'creationdatetime': str(org_creationdatetime),

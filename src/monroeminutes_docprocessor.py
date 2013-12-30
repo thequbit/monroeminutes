@@ -104,6 +104,7 @@ class DocProcessor(threading.Thread):
             if re.search(regexstr.lower(),pdftext.lower()):
                 if self.DEBUG:
                     print "Match found for '%s'" % o['name']
+                    print "ORG: {0}".format(o)
                 org = o
                 misfit = False
                 break
