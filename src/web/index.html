@@ -83,9 +83,15 @@
 
             html += "Result Count: " + data.count;
             for(var i=0; i<data.results.length; i++) {
-              console.log(data.results[i]);
+              console.log("linktext: " + data.results[i].linktext + ", docname: " + data.results[i].linktext);
               html += "<div class=\"searchresult\">";
-              html += "<a href=\"" + data.results[i].docurl + "\">" + data.results[i].linktext + "</a>";
+              html += "<a href=\"" + data.results[i].docurl + "\">"
+              if(data.results[i].linktext == "None") {
+                html += data.results[i].docname + "</a>";
+              }
+              else {
+                html += data.results[i].linktext + "</a>";
+              }
               html += "</div>";
             }
 

@@ -7,15 +7,20 @@ class Search():
 
         self.es = elasticsearch.Elasticsearch()
 
-    def search(self,phrase,orgid=0,page=0):
+    def search(self,phrase,orgid=0,bodyid=0,page=0):
 
         # create our response
         response = {}
         response['success'] = False
+        response['error'] = ""
         response['count'] = 0
         response['results'] = []
 
-        if orgid == 0:
+        if orgid !=0 and bodyid != 0:
+            response['error'] = "orgid and bodyid both specified, only one can be used at a time."
+            return response
+
+        if orgid == 0 and bodyid == 0:
             #create the search query
             body = {"size": 10,
                     "from": page*10,
@@ -24,25 +29,7 @@ class Search():
                             "pdftext": phrase
                    }}}
         else:
-
-            #
-            # TODO: figure out how to only return items with matching orgid 
-            #
-
-            # create the search query that is orgid specifc
-            #body = {
-            #    "size": 10,
-            #    "from": page*10,
-            #    "query": {
-            #        "match": {
-            #            "pdftext": phrase,
-            #        },    
-            #        "field": {
-            #            "orgid": orgid,
-            #        }
-            #    }
-            #}
-
+            # create the query
             body = {
                 'size': 10,
                 'from': page*10,
@@ -61,13 +48,19 @@ class Search():
                         'filter': {
                             'query': {
                                 'field': {
-                                    'orgid': orgid,
+                                    #'orgid': orgid,
                                 }
                             }
                         }
                     }
                 }
             }
+
+            # add the 'where clauses'
+            if orgid != 0:
+                body['query']['filtered']['filter']['query']['field']['orgid'] = orgid
+            if bodyid != 0:
+                body['query']['filtered']['filter']['query']['field']['bodyid'] = bodyid
 
         #try:
         if True:
@@ -85,6 +78,7 @@ class Search():
                     'score': hit['_score'],
                     'docid': hit['_id'],
                     'docurl': hit['_source']['docurl'],
+                    'docname': hit['_source']['docname'],
                     'scrapedatetime': hit['_source']['scrapedatetime'],
                     'linktext': hit['_source']['linktext'],
                     'targeturl': hit['_source']['targeturl']
@@ -100,6 +94,6 @@ if __name__ == '__main__':
 
     search = Search()
 
-    response = search.search('scottsville',orgid=1)
+    response = search.search('scottsville',orgid=0,bodyid=1)
 
     print response

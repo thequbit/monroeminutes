@@ -8,12 +8,16 @@ import json
 
 from db.models import *
 
+from searchapi import Search
+
 app = Flask(__name__)
 app.template_folder = "web"
 #app.static_folder = "web/static"
 app.debug = True
 
-es = elasticsearch.Elasticsearch()
+searchapi = Search()
+
+#es = elasticsearch.Elasticsearch()
 
 #
 # TODO: make this pull from a static location
@@ -47,6 +51,18 @@ def search():
     except:
         phrase = ""
 
+    # which organization are we searching within
+    try:
+        orgid = request.args['orgid']
+    except:
+        orgid = 0
+
+    # which body are we searching within
+    try:
+        bodyid = request.args['bodyid']
+    except:
+        bodyid = 0
+
     # which page of the search results to display
     try:
         page = int(request.args['page'])
@@ -62,35 +78,10 @@ def search():
     # Make sure we are actually searching for something, and if so then
     # perform the search
     if not phrase == "":
-
-        try:
-            # perform the search
-            results = es.search(index="monroeminutes",
-                                body={
-                                    "size": 10,
-                                    "from": page*10,
-                                    "query": {
-                                        "match": {
-                                            "pdftext": phrase
-                               }}})
-        
-            # create our return object to send back
-            response['success'] = True
-            response['count'] = len(results['hits']['hits'])
-            response['results'] = []
-            for hit in results['hits']['hits']:
-                response['results'].append({
-                    'score': hit['_score'],
-                    'docid': hit['_id'],
-                    'docurl': hit['_source']['docurl'],
-                    'scrapedatetime': hit['_source']['scrapedatetime'],
-                    'linktext': hit['_source']['linktext'],
-                    'targeturl': hit['_source']['targeturl']
-                })
-        
-        except:
-            # if unsuccessfull, then we will return success = False
-            pass
+        response = searchapi.search(phrase=phrase,
+                                    orgid=orgid,
+                                    bodyid=bodyid,
+                                    page=page)
 
     # respond with the response serilized object
     return json.dumps(response)
