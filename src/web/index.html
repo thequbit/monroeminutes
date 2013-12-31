@@ -68,7 +68,17 @@
     
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script>
-    
+   
+      /*
+       * This taken from here: http://dumpsite.com/forum/index.php?topic=4.msg8#msg8
+       * from user: qwerty
+       *
+       */
+      String.prototype.replaceAll = function(str1, str2, ignore) 
+      {
+	return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
+      }
+ 
       $("#phrase").bind("keypress", {}, keypressInBox);
       
       function keypressInBox(e) {
@@ -85,13 +95,20 @@
             for(var i=0; i<data.results.length; i++) {
               console.log("linktext: " + data.results[i].linktext + ", docname: " + data.results[i].linktext);
               html += "<div class=\"searchresult\">";
-              html += "<a href=\"" + data.results[i].docurl + "\">"
-              if(data.results[i].linktext == "None") {
+              //html += "[" + data.results[i].scrapedatetime + "]";
+              html += "<div class=\"resultheader\"><a href=\"" + data.results[i].docurl + "\">";
+              //if(data.results[i].linktext == "None") {
                 html += data.results[i].docname + "</a>";
-              }
-              else {
-                html += data.results[i].linktext + "</a>";
-              }
+              //}
+              //else {
+              //  html += data.results[i].linktext + "</a></br>";
+              //}
+              //html += "<b>" + data.results[i].docname + "</b></br>";
+              html += " - " + data.results[i].scrapedatetime.split(' ')[0] + "</br></div>";
+              var phrase = data.phrase.toLowerCase();
+              var previewtext = data.results[i].previewtext.toLowerCase();
+              previewtext = previewtext.replaceAll(phrase,"<b>" + phrase + "</b>");
+              html += previewtext + "</br>";
               html += "</div>";
             }
 

@@ -184,6 +184,11 @@ div.searchresult
 	background-color: #f0f0f0;
 }
 
+div.resultheader
+{
+	padding-bottom: 3px;
+}
+
 div.srheader
 {
 	font-size: 16px;
