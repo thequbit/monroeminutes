@@ -42,6 +42,59 @@ def developers():
 def about():
     return render_template('about.html')
 
+@app.route('/getorgs')
+def getorgs():
+    bodies = Bodies()
+    orgs = Orgs()
+
+    allorgs = orgs.getall()
+    allbodies = bodies.getall()
+
+    retval = {}
+    retval['bodies'] = []
+    for body in allbodies:
+        bodyid,bodyname,bodydescription,bodycreationdatetime = body
+        b = {}
+        b['bodyid'] = bodyid
+        b['name'] = bodyname
+        b['description'] = bodydescription
+        b['creationdatetime'] = str(bodycreationdatetime)
+        b['orgs'] = []
+        for org in allorgs:
+            orgid,orgname,orgdescription,orgcreationdatetime,orgmatchtext,orgurlid,orgbodyid = org
+            if orgbodyid == bodyid:
+                b['orgs'].append({'orgid': orgid,
+                                  'name': orgname,
+                                  'description': orgdescription,
+                                  'creationdatetime': str(orgcreationdatetime),
+                                  'matchtext': orgmatchtext,
+                                  'urlid': orgurlid,
+                                  'bodyid': orgbodyid})
+        retval['bodies'].append(b)
+    return json.dumps(retval)
+
+@app.route('addorg')
+def addorg():
+    success = True
+    error = ""
+    try:
+        name = request.args['name']
+        bodyid = request.args['bodyid']
+        matchtext = request.args['matchtext']
+        orgid = request.args['orgid']
+        urlid = request.args['urlid']
+        #creationdatetime = str(datetime.datetime.now())
+        descriptoin = request.args['description']
+    except:
+        success = False
+        error = "An error occurred while parsing arguments.  Did you include name, bodyid, matchtext, orgi, urlid, and description in the url?"
+
+    retval = {}
+    retval['success'] = success
+    retval['error'] = error
+
+    return json.dumps(retval)
+
 @app.route('/search.json', methods=['GET'])
 def search():
     
