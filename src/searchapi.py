@@ -1,6 +1,7 @@
 import elasticsearch
 import json
 import re
+import uuid
 
 class Search():
 
@@ -139,6 +140,43 @@ class Search():
                 body['query']['filtered']['filter']['query']['field']['bodyid'] = bodyid
 
         return body 
+
+    def checkexists(self,pdfhash):
+        body = {
+            "query": {
+                "match": {
+                    "pdfhash": pdfhash
+                }
+            }
+        }
+        try:
+            results = self.es.search(index="monroeminutes",
+                                     body=body
+            )
+        except:
+            # if we get here, the index is probably empty
+            return False
+        exists = False
+        if len(results['hits']['hits']) > 0:
+            exists = True
+
+        return exists
+
+    def sendtoindex(self,body):
+        es = elasticsearch.Elasticsearch() # TODO: implement server definition rather than just localhost
+
+        if not self.checkexists(body['pdfhash']):
+            retval = True
+            es.index(
+                index="monroeminutes",
+                doc_type="pdfdoc",
+                id=uuid.uuid4(),
+                body=body,
+            )
+        else:
+            retval = False
+
+        return retval
 
 if __name__ == '__main__':
 

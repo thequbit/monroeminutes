@@ -9,6 +9,8 @@ import elasticsearch
 from dler.dler import DLer
 from unpdfer.unpdfer import UnPDFer
 
+from searchapi import Search
+
 class DocProcessor(threading.Thread):
 
     def __init__(self,downloaddir='./downloads',DEBUG=False):
@@ -16,6 +18,8 @@ class DocProcessor(threading.Thread):
 
         self.downloaddir = downloaddir
         self.DEBUG = DEBUG
+
+        self.searchapi = Search()
 
     def run(self):
         if self.DEBUG:
@@ -210,21 +214,17 @@ class DocProcessor(threading.Thread):
     #
     ####
 
-    def sendtoelasticsearch(self,body): #targeturl,docurl,docname,linktext,docid,pdftext,pdfhash,scrapedatetime,textfilename,pdffilename):
+    def sendtoelasticsearch(self,body):
 
-        print "Attempting to push document to ElasticSearch ..."
+        # push to es index
+        success = self.searchapi.sendtoindex(body)
 
-        es = elasticsearch.Elasticsearch() # TODO: implement server definition rather than just localhost
-
-        es.index(
-            index="monroeminutes",
-            doc_type="pdfdoc",
-            id=uuid.uuid4(),
-            body=body,
-        )
-
-        print "Document successfully loaded into Elastic Search Indexer."
-
+        if success:
+           if self.DEBUG:
+               print "Document added to the index successfully."
+        else:
+            if self.DEBUG:
+               print "Document NOT added since it already exists."
 
 if __name__ == '__main__':
 
