@@ -6,11 +6,22 @@ import elasticsearch
 
 import json
 
+import datetime
+
 from db.models import *
 
 from searchapi import Search
 
-app = Flask(__name__)
+##
+##
+
+ADMIN = True
+
+##
+##
+
+#app = Flask(__name__)
+app = Flask(__name__, static_folder='web/static', static_url_path='')
 app.template_folder = "web"
 #app.static_folder = "web/static"
 app.debug = True
@@ -22,9 +33,21 @@ searchapi = Search()
 #
 # TODO: make this pull from a static location
 #
-@app.route('/main.css')
-def jquery():
-    return render_template('main.css')
+#@app.route('/main.css')
+#def jquery():
+#    return render_template('main.css')
+#
+#@app.route('/white_wall.png')
+#def background():
+#    return render_template('white_wall.png')
+#
+
+@app.route('/admin')
+def admin():
+    if ADMIN:
+        return render_template('admin.html')
+    else:
+        return 'Admin access currently disabled.'
 
 @app.route('/')
 def index():
@@ -73,25 +96,54 @@ def getorgs():
         retval['bodies'].append(b)
     return json.dumps(retval)
 
-@app.route('addorg')
+@app.route('/addorg')
 def addorg():
     success = True
     error = ""
-    try:
+    #try:
+    if True:
         name = request.args['name']
-        bodyid = request.args['bodyid']
+        description = request.args['description']
+        creationdatetime = str(datetime.datetime.now())
         matchtext = request.args['matchtext']
-        orgid = request.args['orgid']
         urlid = request.args['urlid']
-        #creationdatetime = str(datetime.datetime.now())
-        descriptoin = request.args['description']
-    except:
-        success = False
-        error = "An error occurred while parsing arguments.  Did you include name, bodyid, matchtext, orgi, urlid, and description in the url?"
+        bodyid = request.args['bodyid']
+
+        orgs = Orgs()
+        orgid = orgs.add(name,description,creationdatetime,matchtext,urlid,bodyid)
+
+    #except:
+    #    success = False
+    #    error = "An error occurred while parsing arguments.  Did you include name, bodyid, matchtext, orgi, urlid, and description in the url?"
+    #    orgid = -1
 
     retval = {}
     retval['success'] = success
     retval['error'] = error
+    retval['orgid'] = orgid
+
+    return json.dumps(retval)
+
+@app.route('/addbody')
+def addbody():
+    success = True
+    error = ""
+    try:
+        name = request.args['name']
+        description = request.args['description']
+        creationdatetime = str(datetime.datetime.now())
+
+        bodies = Bodies()
+        bodyid = bodies.add(name,description,creationdatetime)
+    except:
+        success = False
+        error = "An error occurred while parsing arguments.  Did you include name and description in the url?"
+        bodyid = -1
+
+    retval = {}
+    retval['success'] = success
+    retval['error'] = error
+    retval['bodyid'] = bodyid
 
     return json.dumps(retval)
 
