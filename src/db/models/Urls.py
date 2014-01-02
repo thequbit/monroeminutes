@@ -23,13 +23,13 @@ class Urls:
             valueout = valuein
         return valuein
 
-    def add(self,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency):
+    def add(self,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO urls(targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency) VALUES(%s,%s,%s,%s,%s,%s,%s)",
-                            (self.__sanitize(targeturl),self.__sanitize(title),self.__sanitize(description),self.__sanitize(maxlinklevel),self.__sanitize(creationdatetime),self.__sanitize(doctype),self.__sanitize(frequency))
+                cur.execute("INSERT INTO urls(targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",
+                            (self.__sanitize(targeturl),self.__sanitize(title),self.__sanitize(description),self.__sanitize(maxlinklevel),self.__sanitize(creationdatetime),self.__sanitize(doctype),self.__sanitize(frequency),self.__sanitize(bodyid))
                            )
                 cur.close()
                 newid = cur.lastrowid
@@ -82,13 +82,13 @@ class Urls:
         except Exception, e:
             raise Exception("sql2api error - delete() failed with error:\n\n\t{0}".format(e))
 
-    def update(self,urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency):
+    def update(self,urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("UPDATE urls SET targeturl = %s,title = %s,description = %s,maxlinklevel = %s,creationdatetime = %s,doctype = %s,frequency = %s WHERE urlid = %s",
-                            (self.__sanitize(targeturl),self.__sanitize(title),self.__sanitize(description),self.__sanitize(maxlinklevel),self.__sanitize(creationdatetime),self.__sanitize(doctype),self.__sanitize(frequency),self.__sanitize(urlid))
+                cur.execute("UPDATE urls SET targeturl = %s,title = %s,description = %s,maxlinklevel = %s,creationdatetime = %s,doctype = %s,frequency = %s,bodyid = %s WHERE urlid = %s",
+                            (self.__sanitize(targeturl),self.__sanitize(title),self.__sanitize(description),self.__sanitize(maxlinklevel),self.__sanitize(creationdatetime),self.__sanitize(doctype),self.__sanitize(frequency),self.__sanitize(bodyid),self.__sanitize(urlid))
                            )
                 cur.close()
             con.close()

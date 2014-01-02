@@ -23,13 +23,13 @@ class Bodies:
             valueout = valuein
         return valuein
 
-    def add(self,name,description,creationdatatime):
+    def add(self,name,description,creationdatetime):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO bodies(name,description,creationdatatime) VALUES(%s,%s,%s)",
-                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatatime))
+                cur.execute("INSERT INTO bodies(name,description,creationdatetime) VALUES(%s,%s,%s)",
+                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatetime))
                            )
                 cur.close()
                 newid = cur.lastrowid
@@ -82,13 +82,13 @@ class Bodies:
         except Exception, e:
             raise Exception("sql2api error - delete() failed with error:\n\n\t{0}".format(e))
 
-    def update(self,bodyid,name,description,creationdatatime):
+    def update(self,bodyid,name,description,creationdatetime):
         try:
             con = self.__connect()
             with con:
                 cur = con.cursor()
-                cur.execute("UPDATE bodies SET name = %s,description = %s,creationdatatime = %s WHERE bodyid = %s",
-                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatatime),self.__sanitize(bodyid))
+                cur.execute("UPDATE bodies SET name = %s,description = %s,creationdatetime = %s WHERE bodyid = %s",
+                            (self.__sanitize(name),self.__sanitize(description),self.__sanitize(creationdatetime),self.__sanitize(bodyid))
                            )
                 cur.close()
             con.close()
