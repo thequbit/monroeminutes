@@ -10,7 +10,7 @@ def geturls():
     return urllist
 
 def packageurl(url):
-    urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency = url  
+    urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid = url  
  
     # we need to package all of the organizations that associated with the URL
     # into the payload so the archiver has enough information to classify the 
@@ -40,6 +40,7 @@ def packageurl(url):
         'doctype': doctype,                        # required
         'frequency': frequency,                    # required
         'urlid': urlid,                            # meta
+        'bodyid': bodyid,
         'orgs': urlorgs,                           # meta
     }
 
