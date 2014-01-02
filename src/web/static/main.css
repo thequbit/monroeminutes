@@ -248,3 +248,15 @@ div.org
   font-size: 10px;
   padding-left: 5px;
 }
+
+div.urltitle
+{
+  padding-top: 5px;
+  font-size: 12px;
+}
+
+div.urlproperty
+{
+  padding-left: 5px;
+  font-size: 10px;
+}

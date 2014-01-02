@@ -65,6 +65,31 @@ def developers():
 def about():
     return render_template('about.html')
 
+@app.route('/geturls')
+def geturls():
+    urls = Urls()
+
+    allurls = urls.getall()
+
+    retval = {}
+    retval['urls'] = []
+    for url in allurls:
+        urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid = url
+        
+        u = {}
+        u['urlid'] = urlid
+        u['targeturl'] = targeturl
+        u['title'] = title
+        u['description'] = description
+        u['maxlinklevel'] = maxlinklevel
+        u['creationdatetime'] = str(creationdatetime)
+        u['doctype'] = doctype
+        u['frequency'] = frequency
+        u['bodyid'] = bodyid
+        retval['urls'].append(u)
+
+    return json.dumps(retval)
+
 @app.route('/getorgs')
 def getorgs():
     bodies = Bodies()
@@ -98,6 +123,9 @@ def getorgs():
 
 @app.route('/addorg')
 def addorg():
+    if not ADMIN:
+        return 'Admin access currently disabled.'
+
     success = True
     error = ""
     #try:
@@ -124,8 +152,66 @@ def addorg():
 
     return json.dumps(retval)
 
+@app.route('/delurl')
+def delurl():
+    if not ADMIN:
+        return 'Admin access currently disabled.'
+
+    success = True
+    error = ""
+    #try
+    if True:
+        urlid = request.args['urlid']
+        
+        urls = Urls()
+        urls.delete(urlid)
+    #except:
+    #    success = False
+    # error = "An error occured while parsing arguments.  Did you include urlid in the url?"
+    
+    retval = {}
+    retval['success'] = success
+    retval['error'] = error
+
+    return json.dumps(retval)
+
+@app.route('/addurl')
+def addurl():
+    if not ADMIN:
+        return 'Admin access currently disabled.'
+
+    success = True
+    error = ""
+    try:
+        targeturl = request.args['targeturl']
+        title = request.args['title']
+        description = request.args['description']
+        maxlinklevel = request.args['maxlinklevel']
+        doctype = request.args['doctype']
+        frequency = request.args['frequency']
+        bodyid = request.args['bodyid']
+        creationdatetime = str(datetime.datetime.now())
+
+        urls = Urls()
+        urlid = urls.add(targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid)
+
+    except:
+        success = False
+        error = "An error occurred while parsing arguments.  Did you include targeturl, title, description, maxlinklevel, doctype, frequency, and bodyid in the url?"
+        urlid = -1
+
+    retval = {}
+    retval['success'] = success
+    retval['error'] = error
+    retval['urlid'] = urlid
+
+    return json.dumps(retval)
+
 @app.route('/addbody')
 def addbody():
+    if not ADMIN:
+        return 'Admin access currently disabled.'
+
     success = True
     error = ""
     try:

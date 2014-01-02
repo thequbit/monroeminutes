@@ -1,0 +1,107 @@
+<html>
+  <head>
+
+    <title>Monroe Minutes</title>
+
+    <meta name="description" content="Meeting Minutes Aggregator and Search Engine for Monroe County, NY">
+    <meta name="keywords" content="Monroe,Minutes,MonroeMinutes,Rochester,Meetings,Agenda,County,Monroe County,NY,New York">
+
+    <link href='http://fonts.googleapis.com/css?family=Gabriela' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+
+    <link href="main.css" rel="stylesheet" type="text/css">
+
+  </head>
+  <body>
+
+    <div id="sitewrapper" class="sitewrapper">
+
+      <div class="titlewrapper">
+        <div id="title" class="title">
+          <div id="logo" class="logo">Monroe Minutes</div>
+          <div id="sublogo" class="sublogo">Meeting Minutes for Monroe County, NY</div>
+        </div>
+      </div>
+
+      <div class="navwrapper">
+        <div id="nav" class="nav">
+          <ul>
+            <li class="active">
+              <a href="/">home</a>
+            </li>
+            <li class="active">
+              <a href="/organizations">organizations</a>
+            </li>
+            <li class="active">
+              <a href="/developers">developers</a>
+            </li>
+            <li class="active">
+              <a href="/about">about</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="contentwrapper">
+
+        There are a number of API calls available within monroeminutes.org - all of which are free to use.</br>
+
+        <hr>
+        <h2>Search API</h2>
+        http://monroeminutes.org/search.json</br>
+        <div style="padding-top: 7px;"><b>Required Fields:</b></div>
+        <div style="padding-left: 10px;">phrase - the phrase you are searching for within the index.</div>
+        <div style="padding-top: 7px;"><b>Optional Fields:</b></div>
+        <div style="padding-left: 10px;">orgid - the ID of the organization you are interested in.  See the getorgs API documentation for more info on OrgID.</div>
+        <div style="padding-left: 10px;">bodyid - the ID of the body you are interested in.  See the getorgs API documentation for more info on BodyID.</div>
+        <div style="padding-top: 7px;"><b>Notes:</b></div>
+        <div style="padding-left: 10px;">orgid <i>or</i> may be spcified, not both</div>
+        <div style="padding-top: 7px;"><b>Example:</b></div>
+        <div style="padding-left: 10px;">Search the entire database for 'welcome' - <a href="http://monroeminutes.org/search.json?phrase=welcome">http://monroeminutes.org/search.json?phrase=welcome</a></div>
+        <div style="padding-left: 10px;">Search only Body ID 2 for 'fracking' - <a href="http://monroeminutes.org/search.json?phrase=fracking&bodyid=2">http://monroeminutes.org/search.json?phrase=fracking&bodyid=2</a></div>
+        <div style="padding-top: 7px;"><b>Structure:</b></div>
+        <div style="padding-left: 10px;">{</div>
+        <div style="padding-left: 20px;">"count": 3,</div>
+        <div style="padding-left: 20px;">"phrase": "welcome",</div>
+        <div style="padding-left: 20px;">"results": [</div>
+        <div style="padding-left: 30px;">{</div>
+        <div style="padding-left: 40px;">"scrapedatetime": "2013-12-31 14:04:32",</div>
+        <div style="padding-left: 40px;">"docurl": "http://www.scottsvilleny.org/SpringSummer2007.pdf",</div>
+        <div style="padding-left: 40px;">"score": 0.052930556,</div>
+        <div style="padding-left: 40px;">"docid": "abd45196-a65e-4de9-990d-08725dfdf898",</div>
+        <div style="padding-left: 40px;">"linktext": "Spring - Summer 2007 Newsletter",</div>
+        <div style="padding-left: 40px;">"targeturl": "http://www.scottsvilleny.org/",</div>
+        <div style="padding-left: 40px;">"docname": "SpringSummer2007.pdf",</div>
+        <div style="padding-left: 40px;">"previewtext": "... or obtain free mulch please call DPW at 889-1584 Main Street Welcomes New Businesses P A G E 3 During the last several... The fire department is currently looking for new recruits and welcomes the chance to meet with you Located at 385... the Scottville Fire Department 385 Scottsville-Mumford Rd All welcome! Saturday May 5 Chicken BBQ hosted by the American... march Food and activities following at Johnson Park All are welcome! For more info about SAA programs and activities call ..."</div>
+        <div style="padding-left: 30px;">},</div>
+        <div style="padding-left: 30px;">{</div>       
+        <div style="padding-left: 40px;">... etc</div>
+        <div style="padding-left: 30px;">}</div>
+        <div style="padding-left: 20px;">]</div>        
+        <div style="padding-left: 10px;">}</div>
+
+        <br>
+        <hr>
+
+        <h2>Get Organization List</h2>
+
+      </div>
+
+
+
+      <div class="footerwrapper">
+        <div id="footer" class="footer">
+          Timothy Duffy | West Henrietta, NY | <a href="https://github.com/thequbit/monroeminutes">Source Code</a>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+
+    </script>
+
+  </body
+</html>
+

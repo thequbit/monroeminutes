@@ -43,8 +43,18 @@
       </div>
       
       <div class="contentwrapper">
-        
+       
+        <h3>Bodies and Organizations</h3> 
         <div id="bodies">
+          Loading ...
+        </div>
+
+        </br>
+        <hr>
+
+        <h3>URLs to be Scraped</h3>
+        <div id="urls">
+          Loading ...
         </div>
 
         </br>
@@ -57,6 +67,28 @@
           Description:</br>
           <input id="bodydescription" size="40"></input></br>
           <button onclick="addbody()">Add Body</button></br>
+        </div>
+
+        </br>
+        <hr>
+
+        <div>
+          <h3>Add New URL</h3>
+          Target URL:</br>
+          <input id="urltargeturl" size="100"></input></br>
+          Title:</br>
+          <input id="urltitle" size="40"></input></br>
+          Description:</br>
+          <input id="urldescription" size="40"></input></br>
+          Max Link Level:</br>
+          <input id="urlmaxlinklevel" size="10"></input></br>
+          Doc Type:</br>
+          <input id="urldoctype" size="30"></input></br>
+          Scrape Frequency:</br>
+          <input id="urlfrequency" size="10"></input></br>
+          Body ID:</br>
+          <input id="urlbodyid" size="10"></input></br>
+          <button onclick="addurl()">Add URL</button></br>
         </div>
 
         </br>
@@ -106,6 +138,25 @@
         });
       }
 
+      function addurl() {
+        var url = "addurl?targeturl=" + encodeURIComponent($("#urltargeturl").val());
+        url += "&title=" + $("#urltitle").val();
+        url += "&description=" + $("#urldescription").val();
+        url += "&maxlinklevel=" + $("#urlmaxlinklevel").val();
+        url += "&doctype=" + $("#urldoctype").val();
+        url += "&frequency=" + $("#urlfrequency").val();
+        url += "&bodyid=" + $("#urlbodyid").val();
+        $.getJSON(url,function(data) {
+          if( data.success == true ) {
+            alert("URL Added Successfully.  URL ID = " + data.urlid);
+          }
+          else {
+            alert("An error has occured while trying to add the URL to the database, please try again later.");
+          }
+          geturls();
+        });
+      }
+
       function addorg() {
         var url = "addorg?name=" + $("#orgname").val();
         url += "&description=" + $("orgdescription").val();
@@ -124,14 +175,12 @@
       }
 
       function getorgs() {
-        console.log("getorgs()");
         var url = "getorgs";
         $.getJSON(url,function(data) {
-          console.log("async callback");
           var html = "<div>"
           for(var i=0;i<data.bodies.length;i++)
           {
-            html += '<div class="body">' + data.bodies[i].name + '</div>';
+            html += '<div class="body">[' + data.bodies[i].bodyid + '] ' + data.bodies[i].name + '</div>';
             for(var j=0;j<data.bodies[i].orgs.length;j++)
             {
               html += '<div class="org">[' + data.bodies[i].orgs[j].orgid + "] " +data.bodies[i].orgs[j].name + '</div>';
@@ -139,12 +188,41 @@
             //html += '</br>';
           }
           html += "</div>";
-          console.log(html);
           $("#bodies").html(html);
         });
       }
 
+      function geturls() {
+        var url = "geturls";
+        $.getJSON(url,function(data) {
+          var html = "<div>";
+          for(var i=0;i<data.urls.length;i++)
+          {
+            html += '<div class="urltitle">[' + data.urls[i].urlid + '] <b>' + data.urls[i].title + '</b>';
+            html += '<button onclick="delurl(' + data.urls[i].urlid + ')">delete</button></div>';
+            html += '<div class="urlproperty">Description: ' + data.urls[i].description + '</div>';
+            html += '<div class="urlproperty">URL: ' + data.urls[i].targeturl + '</div>';
+            html += '<div class="urlproperty">Link Level: ' + data.urls[i].maxlinklevel + '</div>';
+            html += '<div class="urlproperty">Created: ' + data.urls[i].creationdatetime + '</div>';
+            html += '<div class="urlproperty">Doc Type: ' + data.urls[i].doctype + '</div>';
+            html += '<div class="urlproperty">Frequency: ' + data.urls[i].frequency + ' minutes</div>';
+            html += '<div class="urlproperty">Body ID: ' + data.urls[i].bodyid + '</div>';
+          }
+          html += '</div>'
+          $("#urls").html(html);
+        });
+      }
+
+      function delurl(urlid)
+      {
+          var url = "delurl?urlid=" + urlid;
+          $.getJSON(url,function(data) {
+            geturls();
+          });
+      }
+
       getorgs();
+      geturls();
 
     </script>
 
