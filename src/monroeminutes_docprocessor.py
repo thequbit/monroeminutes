@@ -52,7 +52,7 @@ class DocProcessor(threading.Thread):
 
                 if success == False:
                     if self.DEBUG:
-                        print "Document NOT processed successfully."
+                        print "PDF->Text conversion Failed.  Document NOT processed successfully."
                 else:
 
                     # Save text doc to file store
@@ -194,17 +194,17 @@ class DocProcessor(threading.Thread):
             print "Trying to convert document to text ..."
 
         unpdfer = UnPDFer(filename)
-        created,pdftext,pdfhash,success = unpdfer.unpdf(filename,SCRUB=SCRUB)
+        created,pdftext,pdfhash,success = unpdfer.unpdf(filename,SCRUB=SCRUB,verbose=self.DEBUG)
         if success:
             retval = (created,pdftext,pdfhash,True)
+
+            if self.DEBUG:
+                print "Document successfully converted from PDF to Text."
         else:
             #raise Exception("Error in PDF->Text conversion")
             if self.DEBUG:
-                print "Error in PDF->Text conversion"
+                print "Error in PDF->Text conversion:"
             retval = (None,None,None,False)
-
-        if self.DEBUG:
-            print "Document successfully converted from PDF to Text."
 
         return retval
 

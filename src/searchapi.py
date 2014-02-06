@@ -142,6 +142,11 @@ class Search():
         return body 
 
     def checkexists(self,pdfhash):
+
+        # handle misfit case
+        if pdfhash == "":
+            return False
+
         body = {
             "query": {
                 "match": {
