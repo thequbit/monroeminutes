@@ -5,7 +5,7 @@ The Monroe Minutes Scraper interfaces with the BarkingOwl sub-system and collect
 ####Sub-Repos####
 
     > cd src/
-    git clone https://github.com/thequbit/BarkingOwl
-    git clone https://github.com/thequbit/unpdfer
-    git clone https://github.com/thequbit/dler
+    > git clone https://github.com/thequbit/BarkingOwl
+    > git clone https://github.com/thequbit/unpdfer
+    > git clone https://github.com/thequbit/dler
     
