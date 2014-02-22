@@ -10,7 +10,7 @@ import elasticsearch
 from unpdfer import Unpdfer
 
 from searchapi import Search
-from dbapi import Access
+from access import Access
 
 class Converter():
 
@@ -102,8 +102,14 @@ class Converter():
                     #'bodyid': org['bodyid']
                 }
 
-                # index the document
-                self.sendtoelasticsearch(body)
+                #
+                # The document shouldn't be put into elastic search yet, since
+                # we haven't processed the pdftext to see who the document 
+                # belongs to.
+                #
+                # #index the document
+                # self.sendtoelasticsearch(body)
+                #
 
                 # reset the converting flag
                 self.setconverted(docurl)

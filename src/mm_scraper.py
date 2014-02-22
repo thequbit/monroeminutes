@@ -1,4 +1,6 @@
-from BarkingOwl.scraper.scraperwrapper import *
+#from BarkingOwl.scraper.scraperwrapper import *
+
+from barking_owl import ScraperWrapper
 
 if __name__ == '__main__':
 

@@ -72,10 +72,22 @@ class Archiver(object):
                 return
 
             # save doc to the database
-            self.access.adddoc(docurl,linktext,filename,scrapedatetime,urldata)
+            docid = self.access.adddoc(docurl,linktext,filename,scrapedatetime,urldata)
 
+            # report
+            if docid == None:
+                if self.DEBUG:
+                    print "Document already in database."
+            else:
+                if self.DEBUG:
+                    print "New document added to the database."
+
+        elif response['command'] == 'scraper_finished':
             if self.DEBUG:
-                print "New document added to the database."
+                print "Scraper Finished, Logging Run."
+
+            # log scraper run within the database
+            self.access.logrun(response['message'])
 
         elif response['command'] == 'global_shutdown':
             if self.DEBUG:
@@ -118,16 +130,18 @@ if __name__ == '__main__':
 
     print "Archiver Starting ..."
 
+    #
+    # TODO: pass in download dir from command line or config file
+    #
+
     downloaddir="/home/administrator/dev/monroeminutes/downloads/"
 
     DEBUG = True
     standalone = False
 
-    archiver = Archiver(address='localhost',exchange='monroeminutes',downloaddir=downloaddir,DEBUG=DEBUG)
-    #try:
-    if True:
+    try:
+        archiver = Archiver(address='localhost',exchange='monroeminutes',downloaddir=downloaddir,DEBUG=DEBUG)
         archiver.start()
-    #except:
-    #    if DEBUG:
-    #        print "Archiver Exited."
+    except:
+        print "Archiver Exited."
 

@@ -1,9 +1,0 @@
-[submodule "src/BarkingOwl"]
-	path = src/BarkingOwl
-	url = https://github.com/thequbit/BarkingOwl
-[submodule "src/dler"]
-	path = src/dler
-	url = https://github.com/thequbit/dler
-[submodule "src/unpdfer"]
-	path = src/unpdfer
-	url = https://github.com/thequbit/unpdfer

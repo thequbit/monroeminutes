@@ -1,4 +1,4 @@
-from BarkingOwl.tools.globalshutdown import GlobalShutdown
+from barking_owl import GlobalShutdown
 
 if __name__ == '__main__':
 
