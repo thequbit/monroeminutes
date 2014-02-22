@@ -17,7 +17,7 @@ setup(
     ],
     keywords="",
     author="Tim Duffy",
-    author_email="dxa4481@rit.edu",
+    author_email="tim@timduffy.me",
     license="GPLv3+",
     packages=find_packages(
     ),
