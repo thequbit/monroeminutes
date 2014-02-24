@@ -4,7 +4,7 @@ from barking_owl import ScraperWrapper
 
 if __name__ == '__main__':
 
-    print "Monroe Minutes Scraper Starting ..."
+    print " -- Monroe Minutes Scraper --"
 
     exchange = "monroeminutes"
     try:

@@ -3,6 +3,8 @@ import json
 from time import strftime
 from pymongo import MongoClient
 
+from searchapi import Search
+
 class Access(object):
 
     def __init__(self,uri='mongodb://localhost:27017/',db='monroeminutesdb'):
@@ -11,6 +13,8 @@ class Access(object):
         self.db = self.dbclient[db]
         self.documents = self.db['documents']
         self.entities = self.db['entities']
+
+        self.searchapi = Search()
 
     def addentity(self,entity):
     
@@ -21,13 +25,10 @@ class Access(object):
         """
         
         entity = {
-            'name':'Brighton',
+            'name':'Brighton, NY',
             'description':'Town of Brighton, NY',
             'website':'http://www.townofbrighton.org/',
-            'urls': [
-                'http://www.townofbrighton.org/index.aspx?nid=78',
-            ],
-            'creationdatetime':'',
+            'creationdatetime':'2014-02-23 21:24:26',
         }
 
         """
@@ -57,24 +58,30 @@ class Access(object):
             docs.append(result['website'])
         return docs
 
-    def adddoc(self,docurl,linktext,docfilename,scrapedatetime,urldata):
+    def adddoc(self,docurl,linktext,docname,filename,scrapedatetime,urldata):
 
         # see if we already have the doc in the database
         result = self.documents.find_one({'docurl': docurl})
 
+        # if the doc doesn't exist, create it
         if result == None:
             doc = {
                 'docurl': docurl,
                 'linktext': linktext,
-                'docfilename': docfilename,
+                'docname': filename,
+                'filename': docname,
                 'scrapedatetime': scrapedatetime,
                 'being_converted': False,
                 'converted': False,
                 'being_processed': False,
                 'processed': False,
-                'urldata': urldata,
                 'pdftext': '',
                 'pdfhash': '',
+                'created': '',
+                'minutesdate': '',
+                'orgid': '',
+                'entityid': urldata['entityid'],
+                'urldata': urldata,
             }
             docid = self.documents.insert(doc)
         else:
@@ -110,57 +117,176 @@ class Access(object):
     def getunprocessed(self):
 
         # get the doc, and mark the 'being_processed' flag
-        doc = self.documents.find_and_modify(query={'being_processed': False, 'processed': False},
-                                              update={ '$set': {'being_processed': True} },
-                                              full_response=False,
-                                              multi=False,
+        doc = self.documents.find_and_modify(
+            query={
+                'being_processed': False,
+                'processed': False
+            },
+            update={
+                '$set':{
+                    'being_processed': True
+                },
+            },
+            full_response=False,
+            multi=False,
         )
         return doc
 
     def setprocessed(self,docurl):
 
         # get the doc, and mark the 'being_processed' flag
-        doc = self.documents.find_and_modify(query={ 'docurl':docurl },
-                                              update={ '$set': {'being_processed': False, 'processed': True} },
-                                              full_response=False,
-                                              multi=False,
+        doc = self.documents.find_and_modify(
+            query={
+                'docurl':docurl
+            },
+            update={
+                '$set': {
+                    'being_processed': False,
+                    'processed': True
+                },
+            },
+            full_response=False,
+            multi=False,
         )
         return doc
+
+    def setprocessdata(self,entityid,orgid,minutesdate):
+
+       # update the doc with the pdftext, and return the new doc
+        doc = self.documents.find_and_modify(
+            query={
+                'docurl': docurl
+            },
+            update={
+                '$set': {
+                    'entityid': entityid,
+                    'orgid': orgid,
+                    'minutesdate': minutesdate,
+                }
+            },
+            full_response=False,
+            multi=False,
+        )
+        return doc
+ 
 
     def getunconverted(self):
     
         # get the doc, and mark the 'being_processed' flag
-        doc = self.documents.find_and_modify(query={ 'being_converted': False, 'converted': False},
-                                              update={ '$set': {'being_converted': True} },
-                                              full_response=False,
-                                              multi=False,
+        doc = self.documents.find_and_modify(
+            query={
+                'being_converted': False,
+                'converted': False
+            },
+            update={
+                '$set':{
+                    'being_converted': True
+                }
+            },
+            full_response=False,
+            multi=False,
         )
         return doc
 
     def setconverted(self,docurl):
 
         # get the doc, and mark the 'being_processed' flag
-        doc = self.documents.find_and_modify(query={ 'docurl':docurl },
-                                              update={ '$set': {'being_converted': False, 'converted': True} },
-                                              full_response=False,
-                                              multi=False,
+        doc = self.documents.find_and_modify(
+            query={
+                'docurl': docurl
+            },
+            update={
+                '$set': {
+                    'being_converted': False, 
+                    'converted': True,
+                }
+            },
+            full_response=False,
+            multi=False,
         )
         return doc
 
-    def setpdfdata(self,docurl,pdftext,pdfhash):
+    def setconvertdata(self,docurl,pdftext,pdfhash,created):
 
         # update the doc with the pdftext, and return the new doc
-        doc = self.documents.find_and_modify(query={'docurl': docurl},
-                                              update={ '$set': {'pdftext': pdftext, 'converted': True} },
-                                              full_response=False,
-                                              multi=False,
+        doc = self.documents.find_and_modify(
+            query={
+                'docurl': docurl
+            },
+            update={
+                '$set': {
+                    'pdftext': pdftext,
+                    'pdfhash': pdfhash,
+                    'created': created,
+                }
+            },
+            full_response=False,
+            multi=False,
         )
         return doc
+
+    # 
+    # elastic search functions
+    # 
+
+    def search(self,phrase,orgid='',entityid='',pagesize=20,page=0):
+
+       results = self.searchapi.search(
+           phrase=phrase,
+           orgid=orgid,
+           entityid=entityid,
+           pagesize=pagesize,
+           page=page
+       )
+
+       return results
+
+    def indexdoc(self,doc):
+
+        """
+
+        Note: orgid and entityid are mongodb str( ObjectID() )
+
+        doc = {
+            'docurl': 'http://henrietta.org/minutes/town_board/town_board_minutes_2014_01_23.pdf',
+            'linktext': 'Minutes for Jan 23rd, 2014',
+            'docname': 'town_board_minutes_2014_01_23.pdf',
+            'filename: '/downloads/town_board_minutes_2014_01_23.pdf_423062309486.download',
+            'scrapedatetime': '2014-02-23 21:24:26',
+            'being_converted': False,
+            'converted': True,
+            'being_processed': False,
+            'processed': True,
+            'pdftext': ' ... ',
+            'pdfhash': ' ... ',
+            'created': '???',
+            'minutesdate': '2014-01-30',
+            'orgid': '507f1f77bcf86cd799439011',
+            'entityid': '507f191e810c19729de860ea',
+            'urldata': {
+                'targeturl': 'http://henrietta.org/',
+                'title': 'Henrietta, NY',
+                'description': 'Town of Henrietta, NY',
+                'maxlinklevel': 4,
+                'creationdatetime': '2014-02-16 07:13:46',
+                'doctype': 'application/pdf',
+                'frequency': 10080,
+            },
+        }
+
+        """
+
+        success = self.searchapi.index(
+            body=doc,
+        )
+
+        return success
 
 if __name__ == '__main__':
 
     docurl='http://timduffy.me/Resume-TimDuffy-20130813.pdf'
     linktext='resume'
+    docname='Resume-TimDuffy-20130813.pdf'
     filename='Resume-TimDuffy-20130813.pdf_341236213461.download'
     scrapedatetime=str(strftime("%Y-%m-%d %H:%M:%S"))
     urldata = {
@@ -169,11 +295,11 @@ if __name__ == '__main__':
         'targeturl': 'http://timduffy.me',
     }
 
-    access = Access(db='testdb',documents='documents')
+    access = Access(db='testdb')
 
     access.documents.remove()
 
-    doc = access.adddoc(docurl,linktext,filename,scrapedatetime,urldata)
+    doc = access.adddoc(docurl,linktext,docname,filename,scrapedatetime,urldata)
 
     result = access.getunconverted()
 
@@ -187,8 +313,10 @@ if __name__ == '__main__':
 
     result = access.setprocessed(docurl)
 
-    result = access.setpdfdata(docurl=docurl,pdftext="some pdf text",pdfhash='0000')
+    result = access.setconvertdata(docurl=docurl,pdftext="some pdf text",pdfhash='0000',created=str(strftime("%Y-%m-%d %H:%M:%S")))
 
     result = access.getdoc(result['docurl'])
+
+    result = access.setprocessdata(orgid="0000",entityid="1111",minutesdate=str(strftime("%Y-%m-%d %H:%M:%S")))
 
     print 'done'

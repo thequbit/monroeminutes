@@ -5,6 +5,7 @@ from time import strftime
 import time
 import threading
 import urllib
+import urllib2
 
 import elasticsearch
 
@@ -71,8 +72,11 @@ class Archiver(object):
                     print "Unable to download PDF."
                 return
 
+            # decode document name
+            docname = urllib2.unquote(docurl.split('/')[-1])
+
             # save doc to the database
-            docid = self.access.adddoc(docurl,linktext,filename,scrapedatetime,urldata)
+            docid = self.access.adddoc(docurl,linktext,docname,filename,scrapedatetime,urldata)
 
             # report
             if docid == None:
@@ -128,7 +132,7 @@ class Archiver(object):
 
 if __name__ == '__main__':
 
-    print "Archiver Starting ..."
+    print " -- Monroe Minutes Archiver --"
 
     #
     # TODO: pass in download dir from command line or config file
@@ -140,6 +144,7 @@ if __name__ == '__main__':
     standalone = False
 
     try:
+    #if True:
         archiver = Archiver(address='localhost',exchange='monroeminutes',downloaddir=downloaddir,DEBUG=DEBUG)
         archiver.start()
     except:

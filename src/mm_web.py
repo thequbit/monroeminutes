@@ -5,12 +5,13 @@ from flask import request
 import elasticsearch
 
 import json
-
 import datetime
 
-from db.models import *
+from access import Access
 
-from searchapi import Search
+#from db.models import *
+
+#from searchapi import Search
 
 ##
 ##
@@ -65,30 +66,30 @@ def developers():
 def about():
     return render_template('about.html')
 
-@app.route('/geturls')
-def geturls():
-    urls = Urls()
-
-    allurls = urls.getall()
-
-    retval = {}
-    retval['urls'] = []
-    for url in allurls:
-        urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid = url
-        
-        u = {}
-        u['urlid'] = urlid
-        u['targeturl'] = targeturl
-        u['title'] = title
-        u['description'] = description
-        u['maxlinklevel'] = maxlinklevel
-        u['creationdatetime'] = str(creationdatetime)
-        u['doctype'] = doctype
-        u['frequency'] = frequency
-        u['bodyid'] = bodyid
-        retval['urls'].append(u)
-
-    return json.dumps(retval)
+#@app.route('/geturls')
+#def geturls():
+#    urls = Urls()
+#
+#    allurls = urls.getall()
+#
+#    retval = {}
+#    retval['urls'] = []
+#    for url in allurls:
+#        urlid,targeturl,title,description,maxlinklevel,creationdatetime,doctype,frequency,bodyid = url
+#        
+#        u = {}
+#        u['urlid'] = urlid
+#        u['targeturl'] = targeturl
+#        u['title'] = title
+#        u['description'] = description
+#        u['maxlinklevel'] = maxlinklevel
+#        u['creationdatetime'] = str(creationdatetime)
+#        u['doctype'] = doctype
+#        u['frequency'] = frequency
+#        u['bodyid'] = bodyid
+#        retval['urls'].append(u)
+#
+#    return json.dumps(retval)
 
 @app.route('/getorgs')
 def getorgs():

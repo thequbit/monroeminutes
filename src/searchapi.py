@@ -9,7 +9,7 @@ class Search():
 
         self.es = elasticsearch.Elasticsearch()
 
-    def search(self,phrase,orgid=0,bodyid=0,page=0):
+    def search(self,phrase,orgid=0,bodyid=0,pagesize=20,page=0):
 
         # create our response
         response = {}
@@ -24,11 +24,12 @@ class Search():
             return response
 
         # build the search query body
-        body = self.buildbody(phrase,page,orgid,bodyid)
+        body = self._buildbody(phrase,pagesize,page,orgid,bodyid)
 
         # perform the search
-        results = self.es.search(index="monroeminutes",
-                                 body=body
+        results = self.es.search(
+            index="monroeminutes",
+            body=body
         )
 
         # create our return object to send back
@@ -40,7 +41,7 @@ class Search():
             
             # build preview text
             pdftext = hit['_source']['pdftext']
-            previewtext = self.buildpreviewtext(phrase,pdftext)
+            previewtext = self._buildpreviewtext(phrase,pdftext)
             
             # build result response
             response['results'].append({
@@ -57,7 +58,7 @@ class Search():
 
         return response
 
-    def buildpreviewtext(self,phrase,pdftext):
+    def _buildpreviewtext(self,phrase,pdftext):
 
         BEFORE_LEN = 64
         AFTER_LEN = 64
@@ -95,7 +96,7 @@ class Search():
         text += " ..."
         return text
 
-    def buildbody(self,phrase,page,orgid,bodyid):
+    def _buildbody(self,phrase,pagesize,page,orgid,bodyid):
         
         if orgid == 0 and bodyid == 0:
             #create the search query
@@ -108,7 +109,7 @@ class Search():
         else:
             # create the query
             body = {
-                'size': 10,
+                'size': pagesize,
                 'from': page*10,
                 'query': {
                     'filtered': {
@@ -141,7 +142,7 @@ class Search():
 
         return body 
 
-    def checkexists(self,pdfhash):
+    def _checkexists(self,pdfhash):
 
         # handle misfit case
         if pdfhash == "":
@@ -167,21 +168,22 @@ class Search():
 
         return exists
 
-    def sendtoindex(self,body):
-        es = elasticsearch.Elasticsearch() # TODO: implement server definition rather than just localhost
+    def indexdoc(self,body):
 
-        if not self.checkexists(body['pdfhash']):
-            retval = True
-            es.index(
+        # if not in the index already, pass document to elastic search to be indexed
+        success = False
+        if not self._checkexists(body['pdfhash']):
+            self.es.index(
                 index="monroeminutes",
                 doc_type="pdfdoc",
                 id=uuid.uuid4(),
                 body=body,
             )
+            success = True
         else:
-            retval = False
+            pass
 
-        return retval
+        return success
 
 if __name__ == '__main__':
 
