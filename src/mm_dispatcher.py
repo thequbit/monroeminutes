@@ -49,12 +49,12 @@ class Dispatch(object):
         print "Starting Dispatcher ..."
 
         # start the dispatcher with the URL list
-        try:
-        #if True:
+        #try:
+        if True:
             self.dispatcher.start()
-        except:
-            # all done!
-            print "Exiting Dispatcher." 
+        #except:
+        #    # all done!
+        #    print "Exiting Dispatcher." 
 
 if __name__ == '__main__':
     
