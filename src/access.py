@@ -77,7 +77,7 @@ class Access(object):
             success = False
         return success
 
-    def _getruns(self):
+    def getruns(self):
 
         # get all the runs
         try:
@@ -128,7 +128,7 @@ class Access(object):
         result = self.documents.find_one( {'docurl': docurl} )
         return result
 
-    def _getall(self):
+    def getdocs(self):
 
         # return all docs in the database
         results = self.documents.find()
