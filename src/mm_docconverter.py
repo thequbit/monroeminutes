@@ -9,6 +9,8 @@ import urllib2
 #from dler.dler import DLer
 from unpdfer import Unpdfer
 
+from barking_owl import BusAccess
+
 #from searchapi import Search
 from access import Access
 
@@ -26,23 +28,74 @@ class Converter():
         self.unpdfer = Unpdfer()
 
         #self.searchapi = Search()
-        self.access = Access()
+        self.myid = str(uuid.uuid4())
+        self.dbaccess = Access(DEBUG=True)
+
+        # setup access layer
+        #self.myid = str(uuid.uuid4())
+        #self.busaccess = BusAccess(myid=self.myid,DEBUG=True)
+        #self.busaccess.setcallback(self._callback)
+        
+        # start seperate thread with listener in it
+        #self.listenthread = threading.Thread(target=self.busaccess.listen)
+        #self.listenthread.start()
+
+        if self.DEBUG:
+            print "Converter INIT completed successfully."
+
+    #def _callback(self,response):
+    #
+    #    if self.DEBUG:
+    #        print "Callback called."
+    #
+    #    if response['command'] == 'global_shutdown':
+    #        if self.DEBUG:
+    #            print "Global Shutdown Recieved"
+    #        self.busaccess.stoplistening()
+    #        self.stop()
 
     def start(self):
         if self.DEBUG:
             print "Converter thread started."
 
+        #self.busaccess.sendmsg(
+        #    command='mm_converter_online',
+        #    destinationid='broadcast',
+        #    message={
+        #        'datetime': str(strftime("%Y-%m-%d %H:%M:%S"))
+        #    },
+        #)
+
         # start a timer to see if we should be exiting
         threading.Timer(self._interval,self.convertdoc).start()
+
+        if self.DEBUG:
+            print "start() exiting."
 
     def stop(self):
         if self.DEBUG:
             print "Converter thread is stopping."
 
+        self.busaccess.sendmsg(
+            command='mm_converter_offline',
+            destinationid='broadcast',
+            message={
+                'datetime': str(strftime("%Y-%m-%d %H:%M:%S"))
+            },
+        )
+
+        self.listenthread.stop()
+
         # set our stop flag
         self._stop.set()
 
     def convertdoc(self):
+
+        if self.DEBUG:
+            print "Entering convertdoc() ..."
+
+        #print "exiting convertdoc() because of debug."
+        #return
           
         #try: 
         if True: 
@@ -114,15 +167,15 @@ class Converter():
                 print "Stop seen - not firing timer event."
 
     def getunconverted(self):
-        doc = self.access.getunconverted()
+        doc = self.dbaccess.getunconverted()
         return doc
 
     def setconverted(self,docurl):
-        doc = self.access.setconverted(docurl)
+        doc = self.dbaccess.setconverted(docurl)
         return doc
 
     def setpdfdata(self,pdftext,pdfhash,created):
-        doc = self.access.setpdfdata(pdftext,pdfhash,created)
+        doc = self.dbaccess.setpdfdata(pdftext,pdfhash,created)
         return doc
 
     def savetext(self,filename,text):
@@ -164,5 +217,6 @@ if __name__ == '__main__':
     try:
         dc.start()
     except:
+        print "Exiting."
         pass
 

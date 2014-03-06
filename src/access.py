@@ -7,7 +7,12 @@ from searchapi import Search
 
 class Access(object):
 
-    def __init__(self,uri='mongodb://localhost:27017/',db='monroeminutesdb'):
+    def __init__(self,uri='mongodb://localhost:27017/',db='monroeminutesdb',DEBUG=False):
+
+        self.DEBUG = DEBUG
+
+        if self.DEBUG:
+            print "Starting Access() INIT ..."
 
         self.dbclient = MongoClient(uri)
         self.db = self.dbclient[db]
@@ -16,6 +21,9 @@ class Access(object):
         self.runs = self.db['runs']
 
         self.searchapi = Search()
+
+        if self.DEBUG:
+            print "Access() INIT completed successfully."
 
     def addentity(self,entity):
     
