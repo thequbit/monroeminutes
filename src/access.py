@@ -18,6 +18,7 @@ class Access(object):
         self.db = self.dbclient[db]
         self.documents = self.db['documents']
         self.entities = self.db['entities']
+        self.runs = self.db['runs']
 
         self.searchapi = Search()
 
@@ -65,6 +66,28 @@ class Access(object):
         for result in results:
             docs.append(result['website'])
         return docs
+
+    def logrun(self,stats):
+
+        # log the scraper run tot he database
+        success = True
+        try:
+            self.runs.insert(stats)
+        except:
+            success = False
+        return success
+
+    def _getruns(self):
+
+        # get all the runs
+        try:
+            data = self.runs.find()
+            scraperruns = []
+            for d in data:
+                scraperruns.append(d)
+        except:
+            scraperruns = None
+        return scraperruns
 
     def adddoc(self,docurl,linktext,docname,filename,scrapedatetime,urldata):
 
@@ -119,6 +142,7 @@ class Access(object):
         # blow away the entire database
         self.documents.remove()
         self.entities.remove()
+        self.runs.remove()
 
         return True
 

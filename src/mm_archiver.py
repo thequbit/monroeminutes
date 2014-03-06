@@ -52,7 +52,7 @@ class Archiver(object):
 
         # This means that a pdf document has been found, we need to put it in the database
         if response['command'] == 'found_doc':
-            
+        
             if self.DEBUG:
                 print "Processing new document ..."
 
@@ -61,7 +61,7 @@ class Archiver(object):
             linktext = response['message']['linktext']
             scrapedatetime = response['message']['scrapedatetime']
             urldata = response['message']['urldata']
-
+    
             if self.DEBUG:
                 print "Document meta data decoded ..."
 
@@ -74,7 +74,7 @@ class Archiver(object):
 
             # decode document name
             docname = urllib2.unquote(docurl.split('/')[-1])
-
+  
             # save doc to the database
             docid = self.access.adddoc(docurl,linktext,docname,filename,scrapedatetime,urldata)
 
@@ -100,20 +100,23 @@ class Archiver(object):
 
     def download(self,docurl):
         success = True
-        #try:
-        if True: 
+        try:
+        #if True: 
             urlfile = docurl[docurl.rfind("/")+1:]
             t = time.time() 
             _filename = "{0}/{1}_{2}.download".format(self.downloaddir,urlfile,t)
             while self._fileexists(_filename):
                 _filename = "{0}/{1}_{2}.download".format(dest,urlfile,t)
+            
             filename,_headers = urllib.urlretrieve(docurl,_filename)
             if self.DEBUG:
                 print "Download Successful: '{0}'".format(_filename)
 
-        #except:
-        #    filename = ""
-        #    success = False
+        except:
+            filename = ""
+            success = False
+            if self.DEBUG:
+                print "Error trying to download document."
         isodatetime = str(strftime("%Y-%m-%d %H:%M:%S"))
         return (filename,isodatetime,success)
 
@@ -138,15 +141,15 @@ if __name__ == '__main__':
     # TODO: pass in download dir from command line or config file
     #
 
-    downloaddir="/home/administrator/dev/monroeminutes/downloads/"
+    downloaddir="/mnt/sas/monroeminutes/downloads/"
 
     DEBUG = True
     standalone = False
 
-    try:
-    #if True:
+    #try:
+    if True:
         archiver = Archiver(address='localhost',exchange='monroeminutes',downloaddir=downloaddir,DEBUG=DEBUG)
         archiver.start()
-    except:
-        print "Archiver Exited."
+    #except:
+    #    print "Archiver Exited."
 
