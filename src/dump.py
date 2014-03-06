@@ -20,6 +20,7 @@ if __name__ == '__main__':
     docsdata = []
     for doc in docs:
         doc['_id'] = str(doc['_id'])
+        doc['created'] = str(doc['created'])
         docsdata.append(doc)
 
     entitiesdata = []
@@ -27,13 +28,13 @@ if __name__ == '__main__':
         entity['_id'] = str(entity['_id'])
         entitiesdata.append(entity)
 
-    with open('runs.json','w') as f:
+    with open('backup/runs.json','w') as f:
         f.write(json.dumps(runsdata))
 
-    with open('docs.json','w') as f:
+    with open('backup/docs.json','w') as f:
         f.write(json.dumps(docsdata))
 
-    with open('entities.json','w') as f:
+    with open('backup/entities.json','w') as f:
         f.write(json.dumps(entitiesdata))
 
 

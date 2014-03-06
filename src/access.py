@@ -137,6 +137,17 @@ class Access(object):
             docs.append(result)
         return docs
 
+    def getconverted(self):
+
+        # return all docs in the database
+        results = self.documents.find({
+            'converted':True,
+        })
+        docs = []
+        for result in results:
+            docs.append(result)
+        return docs
+
     def _clearall(self):
 
         # blow away the entire database
