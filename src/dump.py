@@ -8,8 +8,9 @@ if __name__ == '__main__':
 
     a = Access()
 
-    runs = a._getruns()
-    docs = a._getall()
+    runs = a.getruns()
+    docs = a.getdocs()
+    entities = a.getentities()
 
     runsdata = []
     for run in runs:
@@ -21,11 +22,20 @@ if __name__ == '__main__':
         doc['_id'] = str(doc['_id'])
         docsdata.append(doc)
 
+    entitiesdata = []
+    for entity in entities:
+        entity['_id'] = str(entity['_id'])
+        entitiesdata.append(entity)
+
     with open('runs.json','w') as f:
         f.write(json.dumps(runsdata))
 
     with open('docs.json','w') as f:
         f.write(json.dumps(docsdata))
+
+    with open('entities.json','w') as f:
+        f.write(json.dumps(entitiesdata))
+
 
     print "Done."
 
