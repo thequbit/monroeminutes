@@ -76,13 +76,13 @@ class Converter():
         if self.DEBUG:
             print "Converter thread is stopping."
 
-        self.busaccess.sendmsg(
-            command='mm_converter_offline',
-            destinationid='broadcast',
-            message={
-                'datetime': str(strftime("%Y-%m-%d %H:%M:%S"))
-            },
-        )
+        #self.busaccess.sendmsg(
+        #    command='mm_converter_offline',
+        #    destinationid='broadcast',
+        #    message={
+        #        'datetime': str(strftime("%Y-%m-%d %H:%M:%S"))
+        #    },
+        #)
 
         self.listenthread.stop()
 
@@ -117,8 +117,10 @@ class Converter():
                 if self.DEBUG:
                     print 'Found a document to convert.'
 
+                print doc
+
                 # decode fields
-                pdffilename    = doc['docfilename']
+                pdffilename    = doc['docname']
                 docurl         = doc['docurl']
                 linktext       = doc['linktext']
                 urldata        = doc['urldata']
@@ -138,7 +140,7 @@ class Converter():
                 else:
 
                     if self.DEBUG:
-                        print "Updating the document in the database ..."
+                        print "Saving document text to file store ..."
 
                     # Save text doc to file store
                     textfilename = "%s.txt" % pdffilename
@@ -147,11 +149,19 @@ class Converter():
                     # decode the document name
                     docname = urllib2.unquote(docurl.split('/')[-1])
 
+                    if self.DEBUG:
+                        print "Document saved: {0}".format(textfilename)
+
+                    #raise Exception('debug')
+
+                    if self.DEBUG:
+                        print "Placing document text into database ..."
+
                     # reset the converting flag
                     self.setconverted(docurl)
 
                     # set the pdf data for the doc
-                    self.setpdfdata(pdftext,pdfhash,created)
+                    self.setconvertdata(docurl,pdftext,pdfhash,created)
 
                     if self.DEBUG:
                         print "New document converted successfully."
@@ -174,8 +184,8 @@ class Converter():
         doc = self.dbaccess.setconverted(docurl)
         return doc
 
-    def setpdfdata(self,pdftext,pdfhash,created):
-        doc = self.dbaccess.setpdfdata(pdftext,pdfhash,created)
+    def setconvertdata(self,docurl,pdftext,pdfhash,created):
+        doc = self.dbaccess.setconvertdata(docurl,pdftext,pdfhash,created)
         return doc
 
     def savetext(self,filename,text):
@@ -183,6 +193,7 @@ class Converter():
         if self.DEBUG:
             print "Saving document text to filestore ..."
 
+        # note: will overwrite any existing file
         with open(filename,"w") as f:
             f.write(text)
 

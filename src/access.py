@@ -257,6 +257,44 @@ class Access(object):
         )
         return doc
 
+    def resetflags(self):
+
+        # get the doc, and mark the 'being_processed' flag
+        docs = self.documents.find_and_modify(
+            query={
+            },
+            update={
+                '$set':{
+                    'being_converted': False,
+                    'being_processed': False,
+                },
+            },
+            full_response=False,
+            multi=True,
+        )
+
+        return len(docs)
+
+    def _resetstates(self):
+
+        # get the doc, and mark the 'being_processed' flag
+        docs = self.documents.find_and_modify(
+            query={
+            },
+            update={
+                '$set':{
+                    'being_converted': False,
+                    'converted': False,
+                    'being_processed': False,
+                    'processed': False,
+                },
+            },
+            full_response=False,
+            multi=True,
+        )
+
+        return len(docs)
+
     # 
     # elastic search functions
     # 
