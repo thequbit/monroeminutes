@@ -16,6 +16,10 @@ You can read about the story of Monroe Minutes, it's evolution  along side [Bark
 
 [MonroeMinutes - Flow](http://timduffy.me/posts/monroe_minutes_flow.html)
 
+I have decided to submit MonroeMinutes to the Rochester Civic Apps Challenge.  You can read about the work I've done for that here:
+
+[MonroeMinutes - RCAC](http://timduffy.me/posts/monroeminutes_rcac.html)
+
 Setup and Configuration
 -----------------------
 
