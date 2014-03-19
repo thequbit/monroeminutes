@@ -18,6 +18,7 @@ class Access(object):
         self.db = self.dbclient[db]
         self.documents = self.db['documents']
         self.entities = self.db['entities']
+        self.entities = self.db['orgs']
         self.runs = self.db['runs']
 
         self.searchapi = Search()
@@ -51,8 +52,43 @@ class Access(object):
 
     def getentities(self):
 
-         # get all of the URLs from the engities
+         # get all of the entities
         results = self.entities.find()
+        docs = []
+        for result in results:
+            docs.append(result)
+        return docs
+
+    def addorg(self,org):
+
+        #
+        # TODO: snity check org input has correct fields within dict
+        #
+
+        """
+
+        org = {
+            'name': 'Brighton Town Board',
+            'description': 'Brighton, NY Town Board',
+            'matchs': [
+                'town board',
+                'brighton',
+            ]
+            'entityid': ObjectID(' ... '),
+            'creationdatetime': '2014-03-14 22:01:30',
+        }
+
+        """
+
+        org['creationdatetime'] = str(strftime("%Y-%m-%d %H:%M:%S"))
+        self.orgs.insert(org)
+
+        return true
+
+    def getorgs(self):
+
+        # get all of the orgs from the database
+        results = self.orgs.find()
         docs = []
         for result in results:
             docs.append(result)
