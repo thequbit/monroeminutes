@@ -131,7 +131,7 @@ class Search():
             if orgid != '':
                 body['query']['filtered']['filter']['query']['field']['orgid'] = orgid
             if entityid != '':
-                body['query']['filtered']['filter']['query']['field']['bodyid'] = entityid
+                body['query']['filtered']['filter']['query']['field']['entityid'] = entityid
 
         return body 
 
