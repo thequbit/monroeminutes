@@ -18,7 +18,7 @@ class Access(object):
         self.db = self.dbclient[db]
         self.documents = self.db['documents']
         self.entities = self.db['entities']
-        self.entities = self.db['orgs']
+        self.orgs = self.db['orgs']
         self.runs = self.db['runs']
 
         self.searchapi = Search()
