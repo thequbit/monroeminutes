@@ -1,74 +1,46 @@
-<html>
-  <head>
+{% extends "master.html" %}
 
-    <title>Monroe Minutes</title>
+{% block body %}
+<div class="searchwrapper">
 
-    <meta name="description" content="Meeting Minutes Aggregator and Search Engine for Monroe County, NY">
-    <meta name="keywords" content="Monroe,Minutes,MonroeMinutes,Rochester,Meetings,Agenda,County,Monroe County,NY,New York">
-
-    <link href='http://fonts.googleapis.com/css?family=Gabriela' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
-
-    <link href="main.css" rel="stylesheet" type="text/css">
-
-  </head>
-  <body>
-
-    <div id="sitewrapper" class="sitewrapper">
-      
-      <div class="titlewrapper">
-        <div id="title" class="title">
-          <div id="logo" class="logo">Monroe Minutes</div>
-          <div id="sublogo" class="sublogo">Meeting Minutes for Monroe County, NY</div>
-        </div>
-      </div>
-      
-      <div class="navwrapper">
-        <div id="nav" class="nav">
-          <ul>
-            <li class="active">
-              <a href="/">home</a>
-            </li>
-            <li class="active">
-              <a href="/organizations">organizations</a>
-            </li>
-            <li class="active">
-              <a href="/developers">developers</a>
-            </li>
-            <li class="active">
-              <a href="/about">about</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="contentwrapper">
-        
-        <div class="searchwrapper">
-          <div class="searchbox">
-            Enter a Search Term</br>
-            <input type="text" id="phrase" name="phrase" size="80" value=""></br>
-          </div>
-        </div>
-        
-        </br>
-        <!-- <hr> -->
-        <div class="searchresults" id="searchresults">
-          <!-- results go here -->  
-        </div>        
-      </div>
-      
-      <div class="footerwrapper">
-        <div id="footer" class="footer">
-          Timothy Duffy | West Henrietta, NY | <a href="https://github.com/thequbit/monroeminutes">Source Code</a>
-        </div>
-      </div>
-
+    <div class="searchbox">
+        Enter a Search Term</br>
+        <input type="text" id="phrase" name="phrase" size="80" value=""></br>
     </div>
+
+    <div id="selectentitybox" class="selectentitybox" >
+    </div>
+
+</div>
+        
+</br>
+        
+<div class="searchresults" id="searchresults">
+</div>        
     
-    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-    <script>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
    
+      function loadentities() {
+          
+          var html = 'Entity</br><select id="entity">';
+
+          var url = "entities.json"
+          $.getJSON(url,function(response) {
+              for(var i=0;i<response.length;i++) {
+                  html += '<option value="' + response[i]['_id'] + '">' + response[i].name + '</option>';
+              }
+
+               html += "</select>";
+
+               $( '#selectentitybox' ).html(html);
+
+          });
+
+      }
+
+      loadentities();
+
       /*
        * This taken from here: http://dumpsite.com/forum/index.php?topic=4.msg8#msg8
        * from user: qwerty
@@ -78,37 +50,46 @@
       {
 	return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
       }
+
+      function comp(a, b) {
+          return new Date(b.created).getTime() - new Date(a.created).getTime();
+      }
  
       $("#phrase").bind("keypress", {}, keypressInBox);
       
       function keypressInBox(e) {
+
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code == 13) { //Enter keycode                    
           e.preventDefault();
 
-          var url = "search.json?phrase=" + $("#phrase").val();
+          var url = "search.json?phrase=" + $("#phrase").val() + "&entityid=" + $("#entity").val();
           $.getJSON(url, function (data) {
             
+            // sort results by date
+            data.results.sort(comp);
+
             var html = "";
 
             html += "Result Count: " + data.count;
             for(var i=0; i<data.results.length; i++) {
-              console.log("linktext: " + data.results[i].linktext + ", docname: " + data.results[i].linktext);
-              html += "<div class=\"searchresult\">";
-              //html += "[" + data.results[i].scrapedatetime + "]";
-              html += "<div class=\"resultheader\"><a href=\"" + data.results[i].docurl + "\">";
-              //if(data.results[i].linktext == "None") {
-                html += data.results[i].docname + "</a>";
-              //}
-              //else {
-              //  html += data.results[i].linktext + "</a></br>";
-              //}
-              //html += "<b>" + data.results[i].docname + "</b></br>";
-              html += " - " + data.results[i].scrapedatetime.split(' ')[0] + "</br></div>";
+ 
+              var parts = data.results[i].docurl.split('/')
+              var filename = parts[parts.length-1].replace(/%20/g,' ').replace('(1)','').replace('(2)','').replace('(3)','');
+              var linktext =  filename;
+              
               var phrase = data.phrase.toLowerCase();
-              var previewtext = data.results[i].previewtext.toLowerCase();
+              var previewtext = data.results[i].previewtext.toLowerCase();             
               previewtext = previewtext.replaceAll(phrase,"<b>" + phrase + "</b>");
+ 
+              html += "<div class=\"searchresult\">";
+              
+              html += "<div class=\"resultheader\"><a href=\"" + data.results[i].docurl + "\">";
+              html += linktext + "</a>";
+              html += "<div>[ " + data.results[i].created.split('T')[0] + " ]</div>";
+              html += "</div>";
               html += previewtext + "</br>";
+              
               html += "</div>";
             }
 
@@ -116,9 +97,9 @@
             
           });
         }
+
       };
     
-    </script>
+</script>
 
-  </body
-</html>
+{% endblock %}

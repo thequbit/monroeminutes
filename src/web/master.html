@@ -1,0 +1,73 @@
+<html>
+  <head>
+
+    <title>Monroe Minutes</title>
+
+    <meta name="description" content="Meeting Minutes Indexer for Municipalities and Organizations in Monroe County, NY">
+    <meta name="keywords" content="MonroeMinutes,Minutes,Rochester,Meetings,County,Monroe County,NY,New York">
+
+    <link href='http://fonts.googleapis.com/css?family=Gabriela' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+
+    <link href="main.css" rel="stylesheet" type="text/css">
+
+  </head>
+  <body>
+
+    <div id="sitewrapper" class="sitewrapper">
+      
+      <div class="titlewrapper">
+        <div id="title" class="title">
+          <div id="logo" class="logo">Monroe Minutes</div>
+          <div id="sublogo" class="sublogo">Meeting Minutes for Municipalities and Organizations in Monroe County, NY</div>
+        </div>
+      </div>
+      
+      <div class="navwrapper">
+        <div id="nav" class="nav">
+          <ul>
+            <li class="active">
+              <a href="/">Search</a>
+            </li>
+            <li class="active">
+              <a href="/entities">Entities</a>
+            </li>
+            <li class="active">
+              <a href="/developers">Developers</a>
+            </li>
+            <li class="active">
+              <a href="/about">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="contentwrapper">
+        
+        {% block body %}{% endblock %}
+
+        <!--
+        <div class="searchwrapper">
+          <div class="searchbox">
+            Enter a Search Term</br>
+            <input type="text" id="phrase" name="phrase" size="80" value=""></br>
+          </div>
+        </div>
+        
+        </br>
+        <div class="searchresults" id="searchresults">
+        </div>
+        -->
+ 
+      </div>
+      
+      <div class="footerwrapper">
+        <div id="footer" class="footer">
+          Timothy Duffy | <a href="mailto:tim@timduffy.me">tim@timduffy.me</a> | Rochester, NY | <a href="https://github.com/thequbit/monroeminutes">Source Code</a>
+        </div>
+      </div>
+
+    </div>
+    
+  </body
+</html>
