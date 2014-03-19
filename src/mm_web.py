@@ -15,28 +15,46 @@ app.debug = True
 def index():
     return render_template('index.html')
 
-@app.route('/entities.json')
+@app.route('/entities')
 def entities():
+    return render_template('entities.html')
+
+@app.route('/developers')
+def developers():
+    return render_template('developers.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/entities.json')
+def getentities():
     access = Access()
     entities = access.getentities()
     for i in range(0,len(entities)):
         entities[i]['_id'] = str(entities[i]['_id'])
     return json.dumps(entities)
 
+@app.route('/orgs.json')
+def getorgs():
+    access = Access()
+    orgs = access.getorgs()
+    return json.dumps(orgs)
+
 @app.route('/urls.json')
-def urls():
+def geturls():
     access = Access()
     urls = access.geturls()
     return json.dumps(urls)
 
 @app.route('/runs.json')
-def runs():
+def getruns():
     access = Access()
     runs = access.getruns()
     return json.dumps(runs)
 
 @app.route('/doc.json', methods=['GET'])
-def doc():
+def getdoc():
     try:
         docurl = request.args['docurl']
         access = Access()
@@ -47,8 +65,62 @@ def doc():
         doc = {}
     return json.dumps(doc)
 
+@app.route('/docs.json')
+def getdocs():
+
+    """
+    doc = {
+        "scrapedatetime": "2014-02-22 03:25:49",
+        "docfilename": "/home/administrator/dev/monroeminutes/downloads//4028_1393057549.41.download",
+        "being_processed": false,
+        "being_converted": true,
+        "pdfhash": "",
+        "docurl": "http://www.townofbrighton.org/DocumentCenter/View/4028",
+        "linktext": "View here",
+        "converted": false,
+        "pdftext": "",
+        "_id": "53085f0ea70f9e0e63aeb15a",
+        "urldata": {
+            "maxlinklevel": 4,
+            "status": "running",
+            "runs": [],
+            "description": "Brighton, NY",
+            "title": "Town of Brighton",
+            "scraperid": "2aeaa63f-bef9-4362-a7b3-e8c6c6a92913",
+            "doctype": "application/pdf",
+            "frequency": 604800,
+            "startdatetime": "2014-02-22 03:25:31",
+            "targeturl": "http://www.townofbrighton.org/",
+            "finishdatetime": "",
+            "creationdatetime": "2014-02-22 03:25:09"
+        },
+        "processed": false
+    }
+    """
+
+    try:
+        access = Access()
+        docs = access.getdocs()
+        for i in range(0,len(docs)):
+            docs[i]['_id'] = str(docs[i]['_id'])
+    except:
+        docs = []
+    return json.dumps(docs)
+
 @app.route('/search.json')
 def search():
+
+    """
+    return {
+        "count": 0, 
+        "phrase": "test", 
+        "results": [
+            {},
+        ], 
+        "success": true, 
+        "error": ""
+    }
+    """
 
     error = 'None'
     success = True
@@ -111,11 +183,22 @@ def search():
 # These functions are administrative functiosn
 #
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    return render_template('logout.html')
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
+
 @app.route('/addorg.json')
 def addorg():
 
     """
-
     org = {
         'name': 'Brighton Town Board',
         'description': 'Brighton, NY Town Board',
@@ -126,7 +209,6 @@ def addorg():
         'entityid': ObjectID(' ... '),
         'creationdatetime': '2014-03-14 22:01:30',
     }
-
     """
 
     success = True
@@ -152,14 +234,12 @@ def addorg():
 def addentity():
 
     """
-
     entity = {
         'name':'Brighton, NY',
         'description':'Town of Brighton, NY',
         'website':'http://www.townofbrighton.org/',
         'creationdatetime':'2014-02-23 21:24:26',
     }
-
 
     """
 
