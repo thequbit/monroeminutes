@@ -9,7 +9,7 @@ class Search():
 
         self.es = elasticsearch.Elasticsearch()
 
-    def search(self,phrase,orgid=0,bodyid=0,pagesize=20,page=0):
+    def search(self,phrase,orgid=0,entityid=0,pagesize=20,page=0):
 
         # create our response
         response = {}
@@ -19,12 +19,8 @@ class Search():
         response['phrase'] = ""
         response['results'] = []
 
-        if orgid !=0 and bodyid != 0:
-            response['error'] = "orgid and bodyid both specified, only one can be used at a time."
-            return response
-
         # build the search query body
-        body = self._buildbody(phrase,pagesize,page,orgid,bodyid)
+        body = self._buildbody(phrase,orgid,entityid,pagesize,page)
 
         # perform the search
         results = self.es.search(
@@ -58,10 +54,7 @@ class Search():
 
         return response
 
-    def _buildpreviewtext(self,phrase,pdftext):
-
-        BEFORE_LEN = 64
-        AFTER_LEN = 64
+    def _buildpreviewtext(self,phrase,pdftext,beforelen=64,afterlen=64):
 
         regexstr = "( +)?"
         for i in range(0,len(phrase)):
@@ -81,12 +74,12 @@ class Search():
         text = ""
         for index in indexes:
             #print "index = %i" % index
-            if index < BEFORE_LEN:
+            if index < beforelen:
                 beforeindex = 0
             else:
                 beforeindex = index - BEFORE_LEN
             #print "before index: {0}, len: {1}".format(beforeindex,AFTER_LEN)
-            preview = pdftext[beforeindex:(beforeindex+BEFORE_LEN+AFTER_LEN)]
+            preview = pdftext[beforeindex:(beforeindex+beforelen+afterlen)]
             preview = " ".join(preview.split(' ')[1:-1])
             preview = preview.replace('\t','').replace('\n','').replace('\f','')
             #print "preview text: {0}".format(preview)
@@ -96,12 +89,12 @@ class Search():
         text += " ..."
         return text
 
-    def _buildbody(self,phrase,pagesize,page,orgid,bodyid):
+    def _buildbody(self,phrase,orgid,entityid,pagesize=25,page=0):
         
-        if orgid == 0 and bodyid == 0:
+        if orgid == '' and entityid == '':
             #create the search query
-            body = {"size": 10,
-                    "from": page*10,
+            body = {"size": int(pagesize),
+                    "from": int(page)*int(pagesize),
                     "query": {
                         "match": {
                             "pdftext": phrase
@@ -109,8 +102,8 @@ class Search():
         else:
             # create the query
             body = {
-                'size': pagesize,
-                'from': page*10,
+                'size': int(pagesize),
+                'from': int(page)*10,
                 'query': {
                     'filtered': {
                         'query': {
@@ -135,10 +128,10 @@ class Search():
             }
 
             # add the 'where clauses'
-            if orgid != 0:
+            if orgid != '':
                 body['query']['filtered']['filter']['query']['field']['orgid'] = orgid
-            if bodyid != 0:
-                body['query']['filtered']['filter']['query']['field']['bodyid'] = bodyid
+            if entityid != '':
+                body['query']['filtered']['filter']['query']['field']['bodyid'] = entityid
 
         return body 
 
