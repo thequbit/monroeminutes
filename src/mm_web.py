@@ -11,6 +11,8 @@ app = Flask(__name__, static_folder='web/static', static_url_path='')
 app.template_folder = "web"
 app.debug = True
 
+ADMIN = False
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -39,6 +41,8 @@ def getentities():
 def getorgs():
     access = Access()
     orgs = access.getorgs()
+    for i in range(0,len(orgs)):
+        orgs[i]['_id'] = str(orgs[i]['_id'])
     return json.dumps(orgs)
 
 @app.route('/urls.json')
@@ -100,11 +104,22 @@ def getdocs():
 
     try:
         access = Access()
-        docs = access.getdocs()
-        for i in range(0,len(docs)):
-            docs[i]['_id'] = str(docs[i]['_id'])
+
+        try:
+            entityid = request.args['entityid']
+        except:
+            entityid = ''
+
+        if entityid != '':
+            docs = access.getdocsbyentityid(entityid)
+            for i in range(0,len(docs)):
+                docs[i]['_id'] = str(docs[i]['_id'])
+                docs[i]['created'] = str(docs[i]['created'])
+        else:
+            docs = []
     except:
         docs = []
+
     return json.dumps(docs)
 
 @app.route('/search.json')
@@ -185,18 +200,33 @@ def search():
 
 @app.route('/login')
 def login():
+    if not ADMIN:
+        return ''
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
+    if not ADMIN:
+        return ''
     return render_template('logout.html')
 
 @app.route('/admin')
 def admin():
+    if not ADMIN:
+        return ''
     return render_template('admin.html')
+
+@app.route('/displaydocs')
+def displaydocs():
+    if not ADMIN:
+        return ''
+    return render_template('displaydocs.html')
 
 @app.route('/addorg.json')
 def addorg():
+
+    if not ADMIN:
+        return ''
 
     """
     org = {
@@ -232,6 +262,9 @@ def addorg():
 
 @app.route('/addentity.json')
 def addentity():
+
+    if not ADMIN:
+        return ''
 
     """
     entity = {
