@@ -1,230 +1,178 @@
-<html>
-  <head>
+{% extends "master.html" %}
 
-    <title>Monroe Minutes</title>
+{% block body %}
+<div>
+  <div>
+    <h3>Add New Entity</h3>
+    Name:</br>
+    <input id="entityname" size="40"></input></br>
+    Description:</br>
+    <input id="entitydescription" size="80"></input></br>
+    Website:</br>
+    <input id="entitywebsite" size="40"></input></br>
+    <button onclick="addentity()">Add Entity</button></br>
+  </div>
 
-    <meta name="description" content="Meeting Minutes Aggregator and Search Engine for Monroe County, NY">
-    <meta name="keywords" content="Monroe,Minutes,MonroeMinutes,Rochester,Meetings,Agenda,County,Monroe County,NY,New York">
+  </br>
+  <hr>
 
-    <link href='http://fonts.googleapis.com/css?family=Gabriela' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+  <div>
+    <h3>Add New Organization</h3>
+    Parent Entity:
+    <div id="parententityselect"></div>
+    Name:</br>
+    <input id="orgname" size="40"></input></br>
+    Description:</br>
+    <input id="orgdescription" size="80"></input></br>
 
-    <link href="main.css" rel="stylesheet" type="text/css">
+    Match Text:</br>
+    <input id="orgmatchtext0" size="40"></input></br>
+    Match Text:</br>
+    <input id="orgmatchtext1" size="40"></input></br>
+    Match Text:</br>
+    <input id="orgmatchtext2" size="40"></input></br>
+    Match Text:</br>
+    <input id="orgmatchtext3" size="40"></input></br>
+ 
+    <button onclick="addorg()">Add Organization</button>
+  </div>
 
-  </head>
-  <body>
+  </br>
+  <hr>
 
-    <div id="sitewrapper" class="sitewrapper">
-      
-      <div class="titlewrapper">
-        <div id="title" class="title">
-          <div id="logo" class="logo">Monroe Minutes</div>
-          <div id="sublogo" class="sublogo">Meeting Minutes for Monroe County, NY</div>
-        </div>
-      </div>
-      
-      <div class="navwrapper">
-        <div id="nav" class="nav">
-          <ul>
-            <li class="active">
-              <a href="/">home</a>
-            </li>
-            <li class="active">
-              <a href="/organizations">organizations</a>
-            </li>
-            <li class="active">
-              <a href="/developers">developers</a>
-            </li>
-            <li class="active">
-              <a href="/about">about</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="contentwrapper">
-       
-        <h3>Bodies and Organizations</h3> 
-        <div id="bodies">
-          Loading ...
-        </div>
+  <h3>Entities and Organizations</h3>
+  <div id="entities">
+    Loading ...
+  </div>
 
-        </br>
-        <hr>
-
-        <h3>URLs to be Scraped</h3>
-        <div id="urls">
-          Loading ...
-        </div>
-
-        </br>
-        <hr>
-
-        <div>
-          <h3>Add New Body</h3>
-          Name:</br>
-          <input id="bodyname" size="40"></input></br>
-          Description:</br>
-          <input id="bodydescription" size="40"></input></br>
-          <button onclick="addbody()">Add Body</button></br>
-        </div>
-
-        </br>
-        <hr>
-
-        <div>
-          <h3>Add New URL</h3>
-          Target URL:</br>
-          <input id="urltargeturl" size="100"></input></br>
-          Title:</br>
-          <input id="urltitle" size="40"></input></br>
-          Description:</br>
-          <input id="urldescription" size="40"></input></br>
-          Max Link Level:</br>
-          <input id="urlmaxlinklevel" size="10"></input></br>
-          Doc Type:</br>
-          <input id="urldoctype" size="30"></input></br>
-          Scrape Frequency:</br>
-          <input id="urlfrequency" size="10"></input></br>
-          Body ID:</br>
-          <input id="urlbodyid" size="10"></input></br>
-          <button onclick="addurl()">Add URL</button></br>
-        </div>
-
-        </br>
-        <hr>
-
-        <div>
-          <h3>Add New Organization</h3>
-          Name:</br>
-          <input id="orgname" size="40"></input></br>
-          Description:</br>
-          <input id="orgdescription" size="40"></input></br>
-          Match Text:</br>
-          <input id="orgmatchtext" size="40"></input></br>
-          URL ID:</br>
-          <input id="orgurlid" size="10"></input></br>
-          Body ID:</br>
-          <input id="orgbodyid" size="10"></input></br>
-          <button onclick="addorg()">Add Organization</button>
-        </div>
-
-        </br>
-        <hr>
-
-      </div>
-      
-      <div class="footerwrapper">
-        <div id="footer" class="footer">
-          Timothy Duffy | West Henrietta, NY | <a href="https://github.com/thequbit/monroeminutes">Source Code</a>
-        </div>
-      </div>
-
-    </div>
-    
+</div>
+ 
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script>
-   
-      function addbody() {
-        var url = "addbody?name=" + $("#bodyname").val() + "&description=" + $("bodydescription").val();
-        $.getJSON(url,function(data) {
-          if( data.success == true ) {
-            alert("Body Added Successfully.  BodyID = " + data.bodyid);
+ 
+      function refreshentitylist() {
+        var url = "entities.json";
+        $.getJSON( url, function( data ) {
+          
+          console.log('refreshing entity list in combobox ...');
+
+          var html = '<select id="entities">';
+          for(var i=0;i<data.length;i++) {
+            html += '<option value="' + data[i]['_id'] + '">' + data[i]['name'] + '</option>';
           }
-          else {
-            alert("An error has occured while trying to add the Body to the database, please try again later.");
+          html += '</select>';
+          html += '<button id="refreshparententitylist" onclick="refreshentitylist();" style="margin-left: 15px;">Refresh List</button>';
+          $( '#parententityselect' ).html(html);
+
+        });
+      }
+ 
+      function populateentities() {
+        var url = "entities.json";
+        $.getJSON( url, function( data ) {
+
+          console.log('updating entity list ...');
+          console.log(data);
+
+          var html = '<div>';
+          for(var i=0;i<data.length;i++) {
+            var id = data[i]['_id']
+            html += '<button id="button_' + id + '" onclick="populateorgs(\'' + id + '\')">+</button>'
+            html += '' + data[i]['name'] + '</br>';
+            html += '<div id="entity_' + id + '"></div></br>';
           }
-          getorgs();
+          html += '</div>';
+          console.log('updating page html ...');
+          $( '#entities' ).html(html);
+          console.log(' ... done.');
+
         });
       }
 
-      function addurl() {
-        var url = "addurl?targeturl=" + encodeURIComponent($("#urltargeturl").val());
-        url += "&title=" + $("#urltitle").val();
-        url += "&description=" + $("#urldescription").val();
-        url += "&maxlinklevel=" + $("#urlmaxlinklevel").val();
-        url += "&doctype=" + $("#urldoctype").val();
-        url += "&frequency=" + $("#urlfrequency").val();
-        url += "&bodyid=" + $("#urlbodyid").val();
-        $.getJSON(url,function(data) {
+      function populateorgs(entityid) {
+        if( $( '#button_' + entityid ).text() == '+' ) {
+          var url="orgs.json";
+          $.getJSON( url, function( data ) {
+            var html = '';
+            for(var i=0; i<data.length; i++) {
+              if ( data[i]['entityid'] == entityid  ) {
+                html += '<div style="padding-left: 35px;">';
+                html += '<b>' + data[i]['name'] + '</b></br>';
+                html += '<div style="padding-left: 35px;">' + data[i]['description'] + '</div>';
+                for(var j=0; j<data[i]['matches'].length; j++) {
+                  html += '<div style="padding-left: 35px;">Match: "' + data[i]['matches'][j] + '"</div>';
+                }
+                html += '</div></br>';
+              }
+            }
+     
+            if ( html == '' ) {
+              html += '<div style="padding-left: 35px;">';
+              html += ' -- none -- ';
+              html += '</div>';
+            }
+
+            $( '#entity_' + entityid ).html(html);
+            $( '#button_' + entityid ).text('-');
+          });
+        }
+        else {
+          $( '#button_' + entityid ).text('+');
+          $( '#entity_' + entityid ).html('');
+        } 
+      }
+
+      function addentity() {
+        var entity = {};
+        entity['name'] = $( '#entityname' ).val();
+        entity['description'] = $( '#entitydescription' ).val();
+        entity['website'] = $( '#entitywebsite' ).val();
+        var url = 'addentity.json?entity=' + JSON.stringify( entity );
+        $.getJSON( url, function( data ) {
           if( data.success == true ) {
-            alert("URL Added Successfully.  URL ID = " + data.urlid);
+            alert( "'" + entity['name'] + "'" + ' Added Successfully.');
+
+            // pull in the new entity list?
+            populateentities();
           }
           else {
-            alert("An error has occured while trying to add the URL to the database, please try again later.");
+            alert("An error has occured while trying to add the Entity to the database, please try again later.");
           }
-          geturls();
         });
+        
       }
 
       function addorg() {
-        var url = "addorg?name=" + $("#orgname").val();
-        url += "&description=" + $("#orgdescription").val();
-        url += "&matchtext=" + $("#orgmatchtext").val();
-        url += "&urlid=" + $("#orgurlid").val();
-        url += "&bodyid=" + $("#orgbodyid").val();
-        $.getJSON(url,function(data) {
+        var org = {};
+        org['name'] = $( '#orgname' ).val();
+        org['description'] = $( '#orgdescription' ).val();
+        org['entityid'] = $( '#entities option:selected' ).val();
+        org['matches'] = [];
+
+        var text = '';
+        for(var i=0;i<4;i++) {
+          text = $( '#orgmatchtext' + i ).val();
+          if ( text != '' ) {
+            org['matches'].push(text);
+          }
+        }
+
+        var url = 'addorg.json?org=' + JSON.stringify( org );
+        $.getJSON( url, function( data ) {
           if( data.success == true ) {
-            alert("Organization Added Successfully.  Org ID = " + data.orgid);
+            alert( "'" + org['name'] + "'" + ' Added Successfully.');
           }
           else {
-            alert("An error has occured while trying to add the Organization to the database, please try again later.");
+            alert("An error has occured while trying to add the Entity to the database, please try again later.");
           }
-          getorgs();
         });
       }
 
-      function getorgs() {
-        var url = "getorgs";
-        $.getJSON(url,function(data) {
-          var html = "<div>"
-          for(var i=0;i<data.bodies.length;i++)
-          {
-            html += '<div class="body">[' + data.bodies[i].bodyid + '] ' + data.bodies[i].name + '</div>';
-            for(var j=0;j<data.bodies[i].orgs.length;j++)
-            {
-              html += '<div class="org">[' + data.bodies[i].orgs[j].orgid + "] " +data.bodies[i].orgs[j].name + '</div>';
-            }
-            //html += '</br>';
-          }
-          html += "</div>";
-          $("#bodies").html(html);
-        });
-      }
-
-      function geturls() {
-        var url = "geturls";
-        $.getJSON(url,function(data) {
-          var html = "<div>";
-          for(var i=0;i<data.urls.length;i++)
-          {
-            html += '<div class="urltitle">[' + data.urls[i].urlid + '] <b>' + data.urls[i].title + '</b>';
-            html += '<button onclick="delurl(' + data.urls[i].urlid + ')">delete</button></div>';
-            html += '<div class="urlproperty">Description: ' + data.urls[i].description + '</div>';
-            html += '<div class="urlproperty">URL: ' + data.urls[i].targeturl + '</div>';
-            html += '<div class="urlproperty">Link Level: ' + data.urls[i].maxlinklevel + '</div>';
-            html += '<div class="urlproperty">Created: ' + data.urls[i].creationdatetime + '</div>';
-            html += '<div class="urlproperty">Doc Type: ' + data.urls[i].doctype + '</div>';
-            html += '<div class="urlproperty">Frequency: ' + data.urls[i].frequency + ' minutes</div>';
-            html += '<div class="urlproperty">Body ID: ' + data.urls[i].bodyid + '</div>';
-          }
-          html += '</div>'
-          $("#urls").html(html);
-        });
-      }
-
-      function delurl(urlid)
-      {
-          var url = "delurl?urlid=" + urlid;
-          $.getJSON(url,function(data) {
-            geturls();
-          });
-      }
-
-      getorgs();
-      geturls();
+      $( document ).ready(function() {
+        refreshentitylist();
+        populateentities();
+      });
 
     </script>
 
-  </body
-</html>
+{% endblock %}
