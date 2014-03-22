@@ -1,0 +1,71 @@
+{% extends "master.html" %}
+
+{% block body %}
+
+  <div>
+
+    <div id="parententityselect"></div></br>
+    <button onclick="displaydocs();">Display Documents</button></br>
+    </br>
+
+    <hr>
+    </br>
+
+    <div id="docs"></div>
+
+  </div>
+
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script>
+
+      function refreshentitylist() {
+        var url = "entities.json";
+        $.getJSON( url, function( data ) {
+
+          console.log('refreshing entity list in combobox ...');
+
+          var html = '<select id="entities">';
+          for(var i=0;i<data.length;i++) {
+            html += '<option value="' + data[i]['_id'] + '">' + data[i]['name'] + '</option>';
+          }
+          html += '</select>';
+          //html += '<button id="refreshparententitylist" onclick="refreshentitylist();" style="margin-left: 15px;">Refresh List</button>';
+          $( '#parententityselect' ).html(html);
+
+        });
+      }
+
+      function displaydocs() {
+        
+        $( '#docs' ).html('Loading, please wait ...');
+
+        var entityid = $( '#entities' ).val();
+        var url = "docs.json?entityid=" + entityid;
+        $.getJSON( url, function( data ) {
+          var html = '';
+          for(var i=0; i<data.length; i++) {
+
+            if ( data[i]['converted'] == true && data[i]['pdftext'] != '' ) {
+              html += '<a target="_blank" href="' + data[i]['docurl'] + '">' + data[i]['docurl']  + '</a></br>';
+              html += '<div style="margin-left: 35px; borader: 1px solid #000000;">';
+              html += data[i]['pdftext'].substring(0,2048);
+              html += '</div></br>';
+            }
+
+          }
+          $( '#docs' ).html(html);
+
+        });
+        
+      }
+
+      $( document ).ready( function() {
+        
+        refreshentitylist();
+        
+      });
+
+
+  </script>
+
+{% endblock %}
