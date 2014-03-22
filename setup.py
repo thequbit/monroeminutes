@@ -6,14 +6,22 @@ use_setuptools()
 
 from setuptools import setup, find_packages
 
-version = "0.0.0"
+version = "0.0.1"
 
 setup(
     name="MonroeMinutes",
     version=version,
-    description="Scrapes minutes, tik tik tok",
+    description="Scrapes Meeting Minutes for Monroe County, NY and provides a web front-end for searching.",
     classifiers=[
-        "Intended Audience :: Monroe",
+    	"Development Status :: 3 - Alpha",
+    	"Natural Language :: English",
+    	"Operating System :: POSIX :: Linux",
+    	"Programming Language :: Python :: 2.7",
+    	
+    	"Framework :: Flask",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Other Audience",
+        "Intended Audience :: System Administrators",
     ],
     keywords="",
     author="Tim Duffy",
@@ -25,12 +33,9 @@ setup(
     zip_safe=False,
     install_requires=[
         "flask",
-        "pdfminer==20110515",
-        "BeautifulSoup4",
+        "barking-owl",
         "elasticsearch",
-        "python-magic",
         "pymongo",
-	"mysql-python",
     ],
     #TODO: Deal with entry_points
     #entry_points="""
