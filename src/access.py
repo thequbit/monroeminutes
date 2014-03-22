@@ -83,7 +83,7 @@ class Access(object):
         org['creationdatetime'] = str(strftime("%Y-%m-%d %H:%M:%S"))
         self.orgs.insert(org)
 
-        return true
+        return True
 
     def getorgs(self):
 
@@ -164,6 +164,15 @@ class Access(object):
         result = self.documents.find_one( {'docurl': docurl} )
         return result
 
+    def getdocsbyentityid(self,entityid):
+       
+        # get the entries based on the entity
+        results = self.documents.find( {'entityid': entityid} )
+        docs = []
+        for result in results:
+            docs.append(result)
+        return docs
+
     def getdocs(self):
 
         # return all docs in the database
@@ -190,6 +199,7 @@ class Access(object):
         self.documents.remove()
         self.entities.remove()
         self.runs.remove()
+        self.orgs.remove()
 
         return True
 
