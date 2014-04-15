@@ -56,7 +56,7 @@
           
           console.log('refreshing entity list in combobox ...');
 
-          var html = '<select id="entities">';
+          var html = '<select id="entitylist">';
           for(var i=0;i<data.length;i++) {
             html += '<option value="' + data[i]['_id'] + '">' + data[i]['name'] + '</option>';
           }
@@ -146,7 +146,7 @@
         var org = {};
         org['name'] = $( '#orgname' ).val();
         org['description'] = $( '#orgdescription' ).val();
-        org['entityid'] = $( '#entities option:selected' ).val();
+        org['entityid'] = $( '#entitylist option:selected' ).val();
         org['matches'] = [];
 
         var text = '';
