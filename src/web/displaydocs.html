@@ -43,6 +43,7 @@
         var url = "docs.json?entityid=" + entityid;
         $.getJSON( url, function( data ) {
           var html = '';
+          var dispcount = 0;
           for(var i=0; i<data.length; i++) {
 
             if ( data[i]['converted'] == true && data[i]['pdftext'] != '' ) {
@@ -50,9 +51,13 @@
               html += '<div style="margin-left: 35px; borader: 1px solid #000000;">';
               html += data[i]['pdftext'].substring(0,2048);
               html += '</div></br>';
+              dispcount++;
             }
 
           }
+          
+          html = "Displaying " + dispcount + " out of " + data.length + " documents.</br></br>" + html;
+
           $( '#docs' ).html(html);
 
         });
