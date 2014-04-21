@@ -31,6 +31,7 @@ class Dispatch(object):
                 'creationdatetime':  now,                   # current ISO date/time
                 'doctype':           'application/pdf',     # pdf documents
                 'frequency':         10080,                 # in minutes
+                'allowdomains':      [],
             }
             urls.append(pkg)
         
