@@ -1,0 +1,111 @@
+{% extends "master.html" %}
+
+{% block body %}
+
+<div>
+
+    <div>
+        <h4>The Monroe Minutes System</h4>
+        <p>
+        The Monroe Minutes system has a number of parts.  The heart of the system is a library called
+        <a href="https://github.com/thequbit/BarkingOwl">Barking Owl</a>.  BarkingOwl has built into it
+        a web scraper that will go out to a website and find all of the documents of a specified time.
+        Monroe Minutes uses the BarkingOwl scraper to find Adobe PDF documents on websites within 
+        Monroe County, NY.
+        </p>
+
+        <p>
+        Here is the Monroe Minutes scrapers crunching the millions of lines of website code across all
+        of Monroe County, NY:
+        </p>
+
+        <center><iframe width="420" height="315" src="//www.youtube.com/embed/Xfo2xVPPU5s" frameborder="0" allowfullscreen></iframe></center>
+
+        <h4>About</h4>
+        <p>
+        Below is the status of the scraper(s) running within the Monroe Minutes system right now.  There is
+        a great deal of information available for each scraper, however only a small portion is displayed below.
+        </p>
+        <p id="scrapercount"></p>
+
+        <h4>Scraper Status</h4>
+    </div>
+
+    <div id="statuses" class="statuses">Please wait ...</div>
+
+</div>
+
+<script>
+
+    function getstatus() {
+
+        /*
+
+        {
+            "processedlinkcount": 2,
+            "busy": true,
+            "badlinkcount": 0,
+            "scraperid": "d4e14a70-3bcf-4e01-98d2-510d1e50f8a8",
+            "statusdatetime": "2014-04-20 22:42:31",
+            "targeturl": "http://www.villageofwebster.com/",
+            "time": "22:43:05",
+            "date": "2014-04-20",
+            "_id": "5354857e99b626ab53f6492f",
+            "linkcount": 36
+        }
+
+        */
+
+        var url = 'statuses.json';
+        $.getJSON( url, function( data ) {
+        
+
+
+            html = '';
+
+            var activecount = 0;
+            var workingcount = 0;
+            for( var i=0; i<data.length; i++) {
+           
+                if ( data[i]['targeturl'] != 'null' ) {
+ 
+                    html += '<div class="statuswrapper">';
+
+                    html += 'Target URL: <b>' + data[i]['targeturl'] + '</b><br>';
+                    html += 'Processed Link Count: <b>' + data[i]['processedlinkcount'] + '</b></br>';
+                    html += 'Link Count: <b>' + data[i]['linkcount'] + '</b></br>';
+                    html += 'Bad Link Count: <b>' + data[i]['badlinkcount'] + '</b></br>';
+                    html += 'Date Time: <b>' + data[i]['statusdatetime'] + '</b></br>';
+                    var color = '#FF0000'; // red for false
+                    if ( data[i]['busy'] == true ) {
+                        color = '#008000'; // green for true
+                        workingcount+=1;
+                    }
+                    html += 'Busy: <b style="color: ' + color + ';">' + data[i]['busy'] + '</b><br>';
+                    html += 'Scraper ID: <b>' + data[i]['scraperid'] + '</b><br>';
+
+                    html += '</div>';
+
+                    activecount+=1;
+                }
+
+            }
+
+            $('#statuses').html(html);
+
+            var html = '';
+            html += 'There are currently ' + data.length + ' scrapers within the Monroe Minutes system, with ';
+            html += '' + activecount + ' of them currently active.</br></br><b style="color: #008000;">Of the ' + activecount + ' active scrapers, ';
+            html += '' + workingcount + ' of them are scraping URLs</b>.';
+
+            $('#scrapercount').html(html);
+
+        });
+
+    }
+
+    getstatus();
+
+</script>
+
+{% endblock %}
