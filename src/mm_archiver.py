@@ -20,7 +20,7 @@ class Archiver(object):
 
     def __init__(self,
                  address='localhost',
-                 exchange='barkingowl',
+                 exchange='monroeminutes',
                  downloaddir="./downloads",
                  DEBUG=False):
 
@@ -85,6 +85,13 @@ class Archiver(object):
             else:
                 if self.DEBUG:
                     print "New document added to the database."
+
+        elif response['command'] == 'scraper_status_simple':
+            if self.DEBUG:
+                print "Logging scraper simple status packet."
+            scraperid = response['sourceid']
+            statuspacket = response['message']
+            self.access.logstatus(scraperid,statuspacket)
 
         elif response['command'] == 'scraper_finished':
             if self.DEBUG:
