@@ -234,6 +234,22 @@ div.righttext
 */
 
 /**************************/
+/* Status Page            */
+/**************************/
+
+div.statuses {
+    padding: 10px 10px 10px 10px;
+}
+
+div.statuswrapper {
+    padding: 10px 10px 10px 10px;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    background: #DDDDDD;
+    margin-bottom: 15px;
+}
+
+/**************************/
 /* Admin Section          */
 /**************************/
 
