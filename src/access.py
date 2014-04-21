@@ -20,6 +20,7 @@ class Access(object):
         self.entities = self.db['entities']
         self.orgs = self.db['orgs']
         self.runs = self.db['runs']
+        self.statuses = self.db['statuses']
 
         self.searchapi = Search()
 
@@ -124,6 +125,48 @@ class Access(object):
         except:
             scraperruns = None
         return scraperruns
+
+    def logstatus(self, scraperid, statuspacket):
+
+        #try:
+        if True:
+
+            # update the dict to include the scraper id, as we will be
+            # querying off of that
+            statuspacket['scraperid'] = scraperid
+            statuspacket['date'] = str(strftime("%Y-%m-%d"))
+            statuspacket['time'] = str(strftime("%H:%M:%S"))
+
+            # log the status of the scraper
+            result = self.statuses.update(
+                { 'scraperid': scraperid },
+                statuspacket,
+                True, # upsert
+            )
+
+            success = True
+
+        #except:
+        #    success = False
+
+        return success
+
+    def getstatuses(self):
+
+        #try:
+        if True:    
+            results = self.statuses.find()
+            statuses = []
+            for result in results:
+                statuses.append(result)
+
+            #success = True
+
+        #except:
+        #    statuses = []
+        #    #success = False
+
+        return statuses
 
     def adddoc(self,docurl,linktext,docname,filename,scrapedatetime,urldata):
 
@@ -257,7 +300,6 @@ class Access(object):
             multi=False,
         )
         return doc
- 
 
     def getunconverted(self):
     
