@@ -21,6 +21,10 @@ def index():
 def entities():
     return render_template('entities.html')
 
+@app.route('/status')
+def status():
+    return render_template('status.html')
+
 @app.route('/developers')
 def developers():
     return render_template('developers.html')
@@ -193,6 +197,15 @@ def search():
         results['success'] = False
 
     return json.dumps(results)
+
+@app.route('/statuses.json')
+def statuses():
+    access = Access()
+    statuses = access.getstatuses()
+    for i in range(0,len(statuses)):
+        statuses[i]['_id'] = str(statuses[i]['_id'])
+    return json.dumps(statuses)
+
 
 #
 # These functions are administrative functiosn
