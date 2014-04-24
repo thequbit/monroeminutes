@@ -75,12 +75,16 @@ class Search():
         #print "pdftext length: {0}".format(len(pdftext))
 
         text = ""
-        for index in indexes:
+        if len(indexes) > 4:
+            length = 4
+        else:
+            length = len(indexes)
+        for i in range(0,length): #indexes:
             #print "index = %i" % index
-            if index < beforelen:
+            if indexes[i] < beforelen:
                 beforeindex = 0
             else:
-                beforeindex = index - BEFORE_LEN
+                beforeindex = indexes[i] - BEFORE_LEN
             #print "before index: {0}, len: {1}".format(beforeindex,AFTER_LEN)
             preview = pdftext[beforeindex:(beforeindex+beforelen+afterlen)]
             preview = " ".join(preview.split(' ')[1:-1])
