@@ -200,10 +200,13 @@ def search():
 
 @app.route('/statuses.json')
 def statuses():
-    access = Access()
-    statuses = access.getstatuses()
-    for i in range(0,len(statuses)):
-        statuses[i]['_id'] = str(statuses[i]['_id'])
+    try:
+        access = Access()
+        statuses = access.getstatuses()
+        for i in range(0,len(statuses)):
+            statuses[i]['_id'] = str(statuses[i]['_id'])
+    except:
+        statuses = []
     return json.dumps(statuses)
 
 

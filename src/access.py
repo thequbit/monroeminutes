@@ -86,6 +86,21 @@ class Access(object):
 
         return True
 
+    def setdocorg(self,doc,orgid):
+
+        # update the orgid field
+        doc['orgid'] = orgid
+
+        origdoc = doc
+
+        # update the doc in the database
+        newdoc = self.documents.update(
+            { 'docurl': doc['docurl'] },
+            doc,
+        );
+
+        return origdoc
+
     def getorgs(self):
 
         # get all of the orgs from the database
@@ -168,6 +183,17 @@ class Access(object):
 
         return statuses
 
+    def getdocbydocurl(self,docurl):
+
+        # get the document by docurl.  If it does not exist, it will be None
+
+        try:
+            result = self.documents.find_one({'docurl': docurl})
+        except:
+            result = None
+
+        return result
+
     def adddoc(self,docurl,linktext,docname,filename,scrapedatetime,urldata):
 
         # see if we already have the doc in the database
@@ -246,14 +272,23 @@ class Access(object):
 
         return True
 
-    def getunprocessed(self):
+    def getunprocessed(self,entityid=None):
+
+        if entityid == None:
+            query = {
+                'being_processed': False,
+                'processed': False,
+            }
+        else:
+            query = {
+                'being_processed': False,
+                'processed': False,
+                'entityid': entityid,
+            }
 
         # get the doc, and mark the 'being_processed' flag
         doc = self.documents.find_and_modify(
-            query={
-                'being_processed': False,
-                'processed': False
-            },
+            query=query,
             update={
                 '$set':{
                     'being_processed': True
@@ -301,14 +336,23 @@ class Access(object):
         )
         return doc
 
-    def getunconverted(self):
-    
+    def getunconverted(self,entityid=None):
+   
+        if entityid == None:
+            query = {
+                'being_converted': False,
+                'converted': False,
+            }
+        else:
+            query = {
+                'being_converted': False,
+                'converted': False,
+                'entityid': entityid,
+            }
+ 
         # get the doc, and mark the 'being_processed' flag
         doc = self.documents.find_and_modify(
-            query={
-                'being_converted': False,
-                'converted': False
-            },
+            query=query,
             update={
                 '$set':{
                     'being_converted': True
@@ -318,6 +362,45 @@ class Access(object):
             multi=False,
         )
         return doc
+
+    def resetprocessed(self):
+
+        docs = self.getdocs()
+
+        for d in docs:
+
+            doc = self.documents.find_and_modify(
+                query = {
+                    '_id': d['_id']
+                },
+                update={
+                    '$set':{
+                        'being_processed': False,
+                        'processed': False,
+                    }
+                },
+                full_response=False,
+                multi=True,
+            )
+
+        return True
+
+    def resetconverted(self,entityid):
+
+        doc = self.documents.find_and_modify(
+            query={
+                'entityid': entityid
+            },
+            update={
+                '$set':{
+                    'being_converted': False,
+                    'converted': False,
+                }
+            },
+            full_response=False,
+            multi=True,
+        )
+        return True
 
     def setconverted(self,docurl):
 
@@ -445,7 +528,11 @@ class Access(object):
 
         """
 
-        success = self.searchapi.index(
+	doc.pop('_id',None) # = str(doc['_id'])
+        #doc['orgid'] = " " + doc['orgid']
+        #doc['entityid'] = " " + doc['entityid']
+
+        success = self.searchapi.indexdoc(
             body=doc,
         )
 

@@ -6,9 +6,9 @@ from access import Access
 
 class Dispatch(object):
 
-    def __init__(self,address='localhost',exchange='monroeminutes'):
+    def __init__(self,address='localhost',exchange='monroeminutes',DEBUG=False):
 
-        self.dispatcher = Dispatcher(address=address,exchange=exchange)
+        self.dispatcher = Dispatcher(address=address,exchange=exchange, DEBUG=DEBUG)
         self.access = Access()
 
         self.urls = []
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     
     print " -- Monroe Minutes Dispatcher --"
 
-    dispatch = Dispatch(address='localhost',exchange='monroeminutes')
+    dispatch = Dispatch(address='localhost',exchange='monroeminutes', DEBUG=True)
 
     dispatch.updateurls()
 

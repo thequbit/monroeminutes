@@ -65,26 +65,35 @@ class Archiver(object):
             if self.DEBUG:
                 print "Document meta data decoded ..."
 
-            # download the document
-            filename,datetime,success = self.download(docurl)
-            if not success:
-                if self.DEBUG:
-                    print "Unable to download PDF."
-                return
+            # check to see if the URL exists in the database
+            docid = self.access.getdocbydocurl(docurl)
 
-            # decode document name
-            docname = urllib2.unquote(docurl.split('/')[-1])
-  
-            # save doc to the database
-            docid = self.access.adddoc(docurl,linktext,docname,filename,scrapedatetime,urldata)
-
-            # report
             if docid == None:
-                if self.DEBUG:
-                    print "Document already in database."
+
+                # download the document
+                filename,datetime,success = self.download(docurl)
+                if not success:
+                    if self.DEBUG:
+                        print "Unable to download PDF."
+                    return
+
+                # decode document name
+                docname = urllib2.unquote(docurl.split('/')[-1])
+  
+                # save doc to the database
+                docid = self.access.adddoc(docurl,linktext,docname,filename,scrapedatetime,urldata)
+
+                # report
+                if docid == None:
+                    if self.DEBUG:
+                        print "Document already in database."
+                else:
+                    if self.DEBUG:
+                        print "New document added to the database."
+
             else:
                 if self.DEBUG:
-                    print "New document added to the database."
+                     print "Document already in database, not downloading."
 
         elif response['command'] == 'scraper_status_simple':
             if self.DEBUG:

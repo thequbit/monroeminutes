@@ -47,7 +47,7 @@ class Search():
                 'docname': hit['_source']['docname'],
                 'scrapedatetime': hit['_source']['scrapedatetime'],
                 'linktext': hit['_source']['linktext'],
-                'targeturl': hit['_source']['targeturl'],
+                'targeturl': hit['_source']['urldata']['targeturl'],
                 'previewtext': previewtext,
                 #'pdftext': pdftext
             })
@@ -55,6 +55,9 @@ class Search():
         return response
 
     def _buildpreviewtext(self,phrase,pdftext,beforelen=64,afterlen=64):
+
+        BEFORE_LEN = 64
+        AFTER_LEN = 64
 
         regexstr = "( +)?"
         for i in range(0,len(phrase)):
@@ -165,7 +168,10 @@ class Search():
 
         # if not in the index already, pass document to elastic search to be indexed
         success = False
-        if not self._checkexists(body['pdfhash']):
+
+        #print "Working with: '{0}'".format(body)
+
+        if self._checkexists(body['pdfhash']) == False:
             self.es.index(
                 index="monroeminutes",
                 doc_type="pdfdoc",

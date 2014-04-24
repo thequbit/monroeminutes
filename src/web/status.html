@@ -37,6 +37,23 @@
 
 <script>
 
+    var urlids = {};
+
+    function togglescraperdata(id) {
+
+        if ( urlids[''+id+''] == false ) {
+            $('#scraper_' + id).show();
+            $('#link_' + id).html('Less');
+        }
+        else {
+            $('#scraper_' + id).hide();
+            $('#link_' + id).html('More');
+        }
+
+        urlids[''+id+''] = !urlids[''+id+''];
+
+    }
+
     function getstatus() {
 
         /*
@@ -59,30 +76,44 @@
         var url = 'statuses.json';
         $.getJSON( url, function( data ) {
         
-
+            var now = new Date();
+            var fiveago = now.setSeconds(now.getSeconds() - 15); // subtract 15 seconds
 
             html = '';
 
             var activecount = 0;
             var workingcount = 0;
             for( var i=0; i<data.length; i++) {
-           
-                if ( data[i]['targeturl'] != 'null' ) {
- 
-                    html += '<div class="statuswrapper">';
+          
+                //console.log(Date.parse(data[i]['statusdatetime']));
+                //console.log(fiveago);
+                //console.log('--------\n\n');
 
-                    html += 'Target URL: <b>' + data[i]['targeturl'] + '</b><br>';
-                    html += 'Processed Link Count: <b>' + data[i]['processedlinkcount'] + '</b></br>';
-                    html += 'Link Count: <b>' + data[i]['linkcount'] + '</b></br>';
-                    html += 'Bad Link Count: <b>' + data[i]['badlinkcount'] + '</b></br>';
-                    html += 'Date Time: <b>' + data[i]['statusdatetime'] + '</b></br>';
-                    var color = '#FF0000'; // red for false
+                // we want to make sure we don't display null targeturls (scrapers that are unused)
+                // nor stale scraper status information (statuses that are older thatn 15 seconds)
+ 
+                if ( data[i]['targeturl'] != 'null' && Date.parse(data[i]['statusdatetime']) > fiveago ) {
+ 
+                    var color = '#800000'; // red for false
                     if ( data[i]['busy'] == true ) {
                         color = '#008000'; // green for true
                         workingcount+=1;
                     }
+
+                    html += '<div class="statuswrapper">';
+
+                    html += '<b style="color: ' + color + '">' + data[i]['targeturl'] + '</b>';
+                    html += '<a id="link_' + i + '" style="margin-left:25px;" onclick="togglescraperdata(' + i + ');" href="javascript:void(0);">More</a></br>';
+                    urlids[''+i+''] = false;
+
+                    html += '<div id="scraper_' + i + '" style="display: none;"></br>';
+                    html += 'Processed Link Count: <b>' + data[i]['processedlinkcount'] + '</b></br>';
+                    html += 'Link Count: <b>' + data[i]['linkcount'] + '</b></br>';
+                    html += 'Bad Link Count: <b>' + data[i]['badlinkcount'] + '</b></br>';
+                    html += 'Date Time: <b>' + data[i]['statusdatetime'] + '</b></br>';
                     html += 'Busy: <b style="color: ' + color + ';">' + data[i]['busy'] + '</b><br>';
                     html += 'Scraper ID: <b>' + data[i]['scraperid'] + '</b><br>';
+                    html += '</div>';
 
                     html += '</div>';
 

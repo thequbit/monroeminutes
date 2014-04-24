@@ -1,9 +1,10 @@
 #!/bin/bash
 
-for i in {1..32}
+# launch 32 scrapers
+for i in {1..31}
 do
 
     # launch the scraper
-    python mm_scraper.py &
+    python mm_scraper.py 2>&1 > scraper_$i.log &
 
 done

@@ -67,9 +67,11 @@
           $.getJSON(url, function (data) {
             
             // sort results by date
-            data.results.sort(comp);
+            //data['results'].sort(comp);
 
             var html = "";
+
+            console.log(data)
 
             html += "Result Count: " + data.count;
             for(var i=0; i<data.results.length; i++) {
