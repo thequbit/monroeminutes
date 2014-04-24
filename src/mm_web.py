@@ -144,7 +144,7 @@ def search():
     error = 'None'
     success = True
     results = {}
-    try:
+    if True:
 
         # grab the phrase that we are looking for
         try:
@@ -192,9 +192,9 @@ def search():
             results['error'] = 'Invalid Input'
             results['success'] = False
 
-    except:
-        results['error'] = 'General Error'
-        results['success'] = False
+    #except:
+    #    results['error'] = 'General Error'
+    #    results['success'] = False
 
     return json.dumps(results)
 
