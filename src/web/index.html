@@ -71,10 +71,12 @@
 
             var html = "";
 
-            console.log(data)
+            //console.log(data)
 
             html += "Result Count: " + data.count;
             for(var i=0; i<data.results.length; i++) {
+
+              console.log(data.results[i])
  
               var parts = data.results[i].docurl.split('/')
               var filename = parts[parts.length-1].replace(/%20/g,' ').replace('(1)','').replace('(2)','').replace('(3)','');
@@ -88,7 +90,7 @@
               
               html += "<div class=\"resultheader\"><a href=\"" + data.results[i].docurl + "\">";
               html += linktext + "</a>";
-              html += "<div>[ " + data.results[i].created.split('T')[0] + " ]</div>";
+              //html += "<div>[ " + data.results[i].created.split('T')[0] + " ]</div>";
               html += "</div>";
               html += previewtext + "</br>";
               
