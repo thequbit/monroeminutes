@@ -30,7 +30,8 @@ div.titlewrapper
 
 div.title
 {
-	background: -webkit-linear-gradient(top, rgba(96,108,136,1) 0%,rgba(63,76,107,1) 100%); /* Chrome10+,Safari5.1+ */
+	/*background: -webkit-linear-gradient(top, rgba(96,108,136,1) 0%,rgba(63,76,107,1) 100%); */ /* Chrome10+,Safari5.1+ */
+        background: rgba(96,108,136,1);
 	height: 70px;
 	width: 1000px;
 	margin: auto;

@@ -21,6 +21,7 @@ class Access(object):
         self.orgs = self.db['orgs']
         self.runs = self.db['runs']
         self.statuses = self.db['statuses']
+        self.searches = self.db['searches']
 
         self.searchapi = Search()
 
@@ -491,7 +492,26 @@ class Access(object):
            page=page
        )
 
+       search = {
+           'phrase': phrase,
+           'orgid': orgid,
+           'entityid': entityid,
+           'datetime': str(strftime("%Y-%m-%d %H:%M:%S")),
+       }
+       self.searches.insert(search)
+
        return results
+
+    def getsearches(self):
+
+        docs = self.searches.find()
+
+        results = []
+        for d in docs:
+            d['_id'] = str(d['_id'])
+            results.append(d)
+
+        return results
 
     def indexdoc(self,doc):
 
