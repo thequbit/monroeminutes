@@ -7,7 +7,7 @@ class Search():
 
     def __init__(self):
 
-        self.es = elasticsearch.Elasticsearch()
+        self.es = elasticsearch.Elasticsearch(hosts=[{"host": "localhost", "port": 9200}])
 
     def search(self,phrase,orgid=0,entityid=0,pagesize=20,page=0):
 
@@ -195,7 +195,7 @@ if __name__ == '__main__':
     phrase = "hello"
     pdftext = "I don't know how many times I need to tell her that I prefere hello over a simple hi."
 
-    response = search.buildpreviewtext(phrase,pdftext)
+    response = search._buildpreviewtext(phrase,pdftext)
 
     #response = search.search('today',orgid=1,bodyid=0)
 
