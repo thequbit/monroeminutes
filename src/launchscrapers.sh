@@ -5,6 +5,6 @@ for i in {1..31}
 do
 
     # launch the scraper
-    python mm_scraper.py 2>&1 > scraper_$i.log &
+    python mm_scraper.py &
 
 done
