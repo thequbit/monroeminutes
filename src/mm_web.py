@@ -156,6 +156,7 @@ def search():
     success = True
     results = {}
     try:
+    #if True:
 
         # grab the phrase that we are looking for
         try:

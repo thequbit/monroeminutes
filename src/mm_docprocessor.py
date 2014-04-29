@@ -1,12 +1,13 @@
 from access import Access
 import threading
+from time import strftime
 
 class Processor(object):
 
     def __init__(self,DEBUG=False):
 
         self._stop = threading.Event()
-        self._interval = .01 # 10 miliseconds
+        self._interval = 1
 
         self.DEBUG = DEBUG
         self.access = Access()
@@ -45,7 +46,7 @@ class Processor(object):
         if True:
 
             if self.DEBUG:
-                print "Checking for unprocessed documents ..."
+                print "[{0}] Checking for unprocessed documents ...".format(str(strftime("%Y-%m-%d %H:%M:%S")))
 
             # get the next unprocessed doc
             doc = self.getunprocessed()

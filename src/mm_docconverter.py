@@ -4,6 +4,8 @@ import simplejson
 import threading
 import urllib2
 
+from time import strftime
+
 #import elasticsearch
 
 #from dler.dler import DLer
@@ -20,7 +22,7 @@ class Converter():
         #threading.Thread.__init__(self)
 
         self._stop = threading.Event()
-        self._interval = .01 # 10 milisseconds
+        self._interval = 1
 
         self.downloaddir = downloaddir
         self.entityid = entityid
@@ -96,8 +98,8 @@ class Converter():
 
     def convertdoc(self):
 
-        if self.DEBUG:
-            print "Entering convertdoc() ..."
+        #if self.DEBUG:
+        #    print "Entering convertdoc() ..."
 
         #print "exiting convertdoc() because of debug."
         #return
@@ -106,7 +108,7 @@ class Converter():
         if True: 
                 
             if self.DEBUG:
-                print 'Checking for unconverted documents ...'
+                print '[{0}] Checking for unconverted documents ...'.format(str(strftime("%Y-%m-%d %H:%M:%S")))
 
             # get the next unconverted document
             doc = self.getunconverted(self.entityid)
